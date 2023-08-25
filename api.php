@@ -398,7 +398,7 @@ switch ($apicall) {
         }
         break;
       case 'readTelSede':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readsede') {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readTelSede') {
           $db = new ControllerJson();
           $id = $_GET['id'];
         

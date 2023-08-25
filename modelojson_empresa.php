@@ -92,7 +92,7 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function readSedeModel($id = null){
-		$Consulta = "SELECT ID_S, dIC_S, Sec_V, id_e FROM sede";
+		$query = "SELECT ID_S, dIC_S, Sec_V, id_e FROM sede";
 		
 		if ($id !== null) {
 			$query .= " WHERE id_e = :id";
@@ -111,8 +111,8 @@ class DatosEmpresa extends Database
 			return array(); // Devuelve un array vacío en caso de error
 		}
 	}
-	public function readPhomeSedeModel($id = null){
-		$Consulta = "SELECT en.N_En, TEL.tel FROM `telefono_encargado` AS TEL JOIN encargado AS en ON en.ID_En = TEL.ID_En JOIN encargado_estado AS es ON en.ID_En = es.ID_En JOIN sede AS s ON es.ID_S = s.ID_S";
+	public function readPhoneSedeModel($id = null){
+		$query = "SELECT en.N_En, TEL.tel FROM `telefono_encargado` AS TEL JOIN encargado AS en ON en.ID_En = TEL.ID_En JOIN encargado_estado AS es ON en.ID_En = es.ID_En JOIN sede AS s ON es.ID_S = s.ID_S";
 		
 		if ($id !== null) {
 			$query .= " WHERE s.ID_S = :id";
