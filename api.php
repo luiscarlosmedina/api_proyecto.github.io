@@ -351,14 +351,29 @@ switch ($apicall) {
         break;
     
       //http://localhost/../api.php?apicall=readusuario
-      case 'readempresas':
+      case 'readempresa':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempresa') {
         $db = new ControllerJson();
-        $response = array(
-          'error' => false,
-          'message' => 'Solicitud completada correctamente',
-          'contenido' => $db->readEmpresasController(),
-        );
-        break;
+        $id = $_GET['id'];
+      
+        if (!empty($id)) {
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readEmpresasController($id) ;
+          //forma de llamar al api
+          //http://localhost/../api.php?apicall=readusuario&id=2
+        } else {
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readEmpresasController();
+          //forma de llamar al api
+          //http://localhost/../api.php?apicall=readusuario
+        }
+      } else {
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+      break;
       case 'readsedes':
         $db = new ControllerJson();
         $response = array(

@@ -3,9 +3,9 @@ class Database{
 
     public function getConnection(){
 		$localhost = 'localhost';
-		$database = 'id20370749_asocivica';
-		$user = 'id20370749_ljjft';
-		$password = 'Adso*2522';
+		$database = 'asocivica';
+		$user = 'root';
+		$password = 'admin';
 
 		$link = new PDO("mysql:host=$localhost;dbname=$database",$user,$password);
 

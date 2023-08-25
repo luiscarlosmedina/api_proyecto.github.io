@@ -1,5 +1,5 @@
 <?php
-require_once './database/database.php';
+require_once 'database.php';
 
 class DatosEmpresa extends Database
 {
@@ -69,22 +69,30 @@ class DatosEmpresa extends Database
 			return false;
 		}
 	}
-
-	public function readEmpresaModel(){
-		$Consulta = "SELECT id_e, Nit_E, Nom_E, Eml_E, Nom_Rl, td.N_TDoc, CC_Rl, telefonoGeneral, Est_E from empresa JOIN tipo_doc td ON empresa.ID_Doc = td.ID_Doc";
-
-		$stmt = Database::getConnection()->prepare($Consulta);
-        $stmt->execute();
-
-        $empresas = array();
-        
-        while ($registro = $stmt->fetch(PDO::FETCH_OBJ)) {
-
-            $empresas[] = $registro;
-        }
-        
-        return $empresas;
+	public function readEmpresaModel($id = null) {
+		$query = "SELECT em.id_e, em.Nit_E, em.Nom_E, em.Eml_E, em.Nom_Rl, td.N_TDoc, em.CC_Rl, em.telefonoGeneral, em.Val_E, em.Est_E, em.Fh_Afi, em.fechaFinalizacion, em.COD_SE, em.COD_AE 
+				  FROM empresa AS em 
+				  JOIN tipo_doc td ON em.ID_Doc = td.ID_Doc";
+	
+		if ($id !== null) {
+			$query .= " WHERE em.id_e = :id";
+		}
+	
+		$stmt = Database::getConnection()->prepare($query);
+	
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			echo "Hubo un error al obtener las empresas.";
+			return array(); // Devuelve un array vacío en caso de error
+		}
 	}
+	
+
 	public function readSedeModel(){
 		$Consulta = "SELECT ID_S, dIC_S, Sec_V, id_e FROM sede";
 		$stmt = Database::getConnection()->prepare($Consulta);
@@ -98,22 +106,6 @@ class DatosEmpresa extends Database
         }
         
         return $sedes;
-	}
-	public function readEmpresaIdModel($id){
-		$Consulta = "SELECT em.id_e, em.Nit_E, em.Nom_E, em.Eml_E, em.Nom_Rl, td.N_TDoc, em.CC_Rl, em.telefonoGeneral, em.Val_E, em.Est_E, em.Fh_Afi, em.fechaFinalizacion, em.COD_SE, em.COD_AE FROM empresa AS em JOIN tipo_doc td ON em.ID_Doc = td.ID_Doc WHERE em.id_e = :id";
-
-        $stmt = Database::getConnection()->prepare($Consulta);
-        $stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		if($stmt->execute()){
-			$empresas = array();
-        	while ($registro = $stmt->fetch(PDO::FETCH_OBJ)) {
-
-            	$empresas[] = $registro;
-        	}
-        	return $empresas;
-		}else{
-			echo "La empresa no se encontro";
-		}
 	}
 	public function readPhoneSedeIdModel($id) {
 		$stmt = Database::getConnection()->prepare("SELECT en.N_En, TEL.tel FROM `telefono_encargado` AS TEL JOIN encargado AS en ON en.ID_En = TEL.ID_En JOIN encargado_estado AS es ON en.ID_En = es.ID_En JOIN sede AS s ON es.ID_S = s.ID_S WHERE s.ID_S = :id");

@@ -1,8 +1,8 @@
 <?php
 
-require_once 'Empleado/modelojson_empleado.php';
-require_once 'Empresa/modelojson_empresa.php';
-require_once 'Novedad/modelojson_novedad.php';
+require_once 'modelojson_empleado.php';
+require_once 'modelojson_empresa.php';
+require_once 'modelojson_novedad.php';
 /**
  *
  */
@@ -139,22 +139,20 @@ class ControllerJson
 		return $respuesta;
 
 	}
-	public function readEmpresasController(){
-		
+	public function readEmpresasController($id = null) {
 		$datos = new DatosEmpresa();
-		$respuesta = $datos->readEmpresaModel();
-		return $respuesta;
+		if ($id !== null) {
+			$respuesta = $datos->readEmpresaModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readEmpresaModel();
+			return $respuesta;
+		}
 	}
 	public function readSedeController(){
 		
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->readSedeModel();
-		return $respuesta;
-	}
-	public function readEmpresaIdController($id){
-		
-		$datos = new DatosEmpresa();
-		$respuesta = $datos->readEmpresaIdModel($id);
 		return $respuesta;
 	}
 	public function readSedeIdController($id) {
