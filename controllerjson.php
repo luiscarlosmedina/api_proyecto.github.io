@@ -159,10 +159,15 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-	public function readPhoneSedeIdController($id) {
+	public function readPhoneSedeController($id = null){
 		$datos = new DatosEmpresa();
-		$respuesta = $datos->readPhoneSedeIdModel($id);
-		return $respuesta;
+		if ($id !== null) {
+			$respuesta = $datos->readPhoneSedeModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readPhoneSedeModel();
+			return $respuesta;
+		}
 	}
 	public function updateEmpresaController($id, $nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono, $valor, $estado, $fecha, $sector, $actividad){
 

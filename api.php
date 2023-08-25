@@ -397,39 +397,27 @@ switch ($apicall) {
           $response['message'] = 'Método de solicitud no válido';
         }
         break;
-      case 'readTelSedeId':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
+      case 'readTelSede':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readsede') {
+          $db = new ControllerJson();
+          $id = $_GET['id'];
+        
+          if (!empty($id)) {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readPhoneSedeController($id) ;
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readusuario&id=2
           } else {
-            $id = $data['id'];
-            $db = new ControllerJson();
-            $result = $db->readPhoneSedeIdController($id);
-    
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Aqui esta lo que pide',
-                'contenido' => $db->readPhoneSedeIdController($id),
-              );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error, intenta nuevamente',
-              );
-            }
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readPhoneSedeController();
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readusuario
           }
         } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
         }
         break;
       //http://localhost/../api.php?apicall=updateusuario + body (Json)
