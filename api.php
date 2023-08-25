@@ -33,12 +33,12 @@ switch ($apicall) {
           $tel_em = $data['tel_em'];
           $barloc_em = $data['barloc_em'];
           $id_doc = $data['id_doc'];
-		  $id_pens = $data['id_pens'];
-		  $id_eps = $data['id_eps'];
-		  $id_arl = $data['id_arl'];
-		  $id_ces = $data['id_ces'];
-		  $id_rh = $data['id_rh'];
-		  $id_rol = $data['id_rol'];
+		      $id_pens = $data['id_pens'];
+		      $id_eps = $data['id_eps'];
+		      $id_arl = $data['id_arl'];
+		      $id_ces = $data['id_ces'];
+		      $id_rh = $data['id_rh'];
+		      $id_rol = $data['id_rol'];
 
 		  
           $db = new ControllerJson();
@@ -374,84 +374,27 @@ switch ($apicall) {
         $response['message'] = 'Método de solicitud no válido';
       }
       break;
-      case 'readsedes':
-        $db = new ControllerJson();
-        $response = array(
-          'error' => false,
-          'message' => 'Solicitud completada correctamente',
-          'contenido' => $db->readSedeController(),
-        );
-        break;
-      case 'readidempresa':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
+      case 'readsede':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readsede') {
+          $db = new ControllerJson();
+          $id = $_GET['id'];
+        
+          if (!empty($id)) {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readSedeController($id) ;
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readusuario&id=2
           } else {
-            $id = $data['id'];
-    
-            $db = new ControllerJson();
-            $result = $db->readEmpresaIdController($id);
-    
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Aqui esta la empresa que pide',
-                'contenido' => $db->readEmpresaIdController($id),
-              );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error, intenta nuevamente',
-              );
-            }
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readSedeController();
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readusuario
           }
         } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
-        }
-        break;
-      case 'readidsede':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
-          } else {
-            $id = $data['id'];
-    
-            $db = new ControllerJson();
-            $result = $db->readSedeIdController($id);
-    
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Aqui esta la empresa que pide',
-                'contenido' => $db->readSedeIdController($id),
-              );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error, intenta nuevamente',
-              );
-            }
-          }
-        } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
         }
         break;
       case 'readTelSedeId':

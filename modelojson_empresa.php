@@ -91,21 +91,25 @@ class DatosEmpresa extends Database
 			return array(); // Devuelve un array vacío en caso de error
 		}
 	}
-	
-
-	public function readSedeModel(){
+	public function readSedeModel($id = null){
 		$Consulta = "SELECT ID_S, dIC_S, Sec_V, id_e FROM sede";
-		$stmt = Database::getConnection()->prepare($Consulta);
-        $stmt->execute();
-
-        $sedes = array();
-        
-        while ($registro = $stmt->fetch(PDO::FETCH_OBJ)) {
-
-            $sedes[] = $registro;
-        }
-        
-        return $sedes;
+		
+		if ($id !== null) {
+			$query .= " WHERE id_e = :id";
+		}
+	
+		$stmt = Database::getConnection()->prepare($query);
+	
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			echo "Hubo un error al obtener las empresas.";
+			return array(); // Devuelve un array vacío en caso de error
+		}
 	}
 	public function readPhoneSedeIdModel($id) {
 		$stmt = Database::getConnection()->prepare("SELECT en.N_En, TEL.tel FROM `telefono_encargado` AS TEL JOIN encargado AS en ON en.ID_En = TEL.ID_En JOIN encargado_estado AS es ON en.ID_En = es.ID_En JOIN sede AS s ON es.ID_S = s.ID_S WHERE s.ID_S = :id");
@@ -119,20 +123,6 @@ class DatosEmpresa extends Database
         	return $telefonos;
 		}else{
 			echo "No se encontraron telefonos asociados a esta sede";
-		}
-	}
-	public function readSedeIdModel($id) {
-		$stmt = Database::getConnection()->prepare("SELECT ID_S, Dic_S, Sec_V FROM sede WHERE id_e = :id");
-		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		if($stmt->execute()){
-			$sedes = array();
-        	while ($registro = $stmt->fetch(PDO::FETCH_OBJ)) {
-
-            	$sedes[] = $registro;
-        	}
-        	return $sedes;
-		}else{
-			echo "No se encontraron sedes asociados a esta empresa";
 		}
 	}
 	

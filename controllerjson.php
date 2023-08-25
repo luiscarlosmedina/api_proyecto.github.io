@@ -149,16 +149,15 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-	public function readSedeController(){
-		
+	public function readSedeController($id = null){
 		$datos = new DatosEmpresa();
-		$respuesta = $datos->readSedeModel();
-		return $respuesta;
-	}
-	public function readSedeIdController($id) {
-		$datos = new DatosEmpresa();
-		$respuesta = $datos->readSedeIdModel($id);
-		return $respuesta;
+		if ($id !== null) {
+			$respuesta = $datos->readSedeModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readSedeModel();
+			return $respuesta;
+		}
 	}
 	public function readPhoneSedeIdController($id) {
 		$datos = new DatosEmpresa();
