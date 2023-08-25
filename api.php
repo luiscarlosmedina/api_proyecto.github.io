@@ -762,7 +762,51 @@ case 'deletenovedad':
         'message' => 'Llamado Inválido del API',
       );
       break;
-}
+
+      //----------LOGIN----------//
+      //http://localhost/../api.php?apicall=createuser + body (Json)
+    case 'createuser':
+
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+      
+        if ($data === null) {
+          $response = array(
+            'error' => true,
+            'message' => 'Error en el contenido JSON',
+          );
+        } else {
+          $ID_log = $data['ID_log'];
+          $passw = $data['passw'];
+          $id_em = $data['id_em'];
+      
+        
+          $db = new ControllerJson();
+          $result = $db->createUserController($ID_log, $passw, $id_em);
+      
+          if ($result) {
+            $response = array(
+              'error' => false,
+              'message' => 'Usuario agregado correctamene'
+            );
+          } else {
+            $response = array(
+              'error' => true,
+              'message' => 'Ocurrió un error, intenta nuevamente',
+            );
+          }
+        }
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Método de solicitud no válido',
+        );
+      }
+      break;
+    }
+    
+
 
 echo json_encode($response);
 ?>
