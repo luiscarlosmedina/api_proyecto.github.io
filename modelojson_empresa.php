@@ -71,8 +71,7 @@ class DatosEmpresa extends Database
 	}
 	public function readEmpresaModel($id = null) {
 		$query = "SELECT em.id_e, em.Nit_E, em.Nom_E, em.Eml_E, em.Nom_Rl, td.N_TDoc, em.CC_Rl, em.telefonoGeneral, em.Val_E, em.Est_E, em.Fh_Afi, em.fechaFinalizacion, em.COD_SE, em.COD_AE 
-				  FROM empresa AS em 
-				  JOIN tipo_doc td ON em.ID_Doc = td.ID_Doc";
+				  FROM empresa AS em"
 	
 		if ($id !== null) {
 			$query .= " WHERE em.id_e = :id";
