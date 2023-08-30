@@ -21,19 +21,25 @@ class DatosLogin extends Database
 		
 	}
 
-	public function createSedeModel($datosModel){
-		$stmt = Database::getConnection()->prepare("INSERT INTO sede (Dic_S,Sec_V, id_e) VALUES (:direccion, :area, :idEmpresa)");
+	public function loginModel($datosModel){
+		$stmt = Database::getConnection()->prepare('SELECT a.ID_log, a.passw, b.documento FROM login AS a INNER JOIN empleado AS b WHERE a.passw = :passw and b.estado < 1 and b.documento = :documento ;');
 		
-		$stmt->bindParam(":direccion", $datosModel["direccion"], PDO::PARAM_STR);
-		$stmt->bindParam(":area", $datosModel["area"], PDO::PARAM_INT);
-		$stmt->bindParam(":idEmpresa", $datosModel["idEmpresa"], PDO::PARAM_INT);
+		$stmt->bindParam(":passw", $datosModel["passw"], PDO::PARAM_STR);
+		$stmt->bindParam(":documento", $datosModel["documento"], PDO::PARAM_STR);
 		
 		if($stmt->execute()){
-			return true;
-		}else{
+			$rowCount = $stmt->rowCount(); // Obtenemos el número de filas afectadas
+	
+			if ($rowCount > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
 			return false;
 		}
 	}
+	
 	public function createEncargadoModel($datosModel){
 		$stmt = Database::getConnection()->prepare("INSERT INTO encargado (N_En) VALUES (:encargado); INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (LAST_INSERT_ID(), :sedeId, :encargadoEst)");
 		
@@ -199,4 +205,4 @@ class DatosLogin extends Database
 		
 	}
 }
-?>+
+?>

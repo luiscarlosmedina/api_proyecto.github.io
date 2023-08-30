@@ -266,17 +266,15 @@ class ControllerJson
 	}
 
 	//----------Login----------//
-
-	//CREATE
-	public function createUserController($ID_log, $passw, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){
+	//login
+	public function loginController($passw, $documento)
+	{
 		$datosController = array(
-			"ID_log"=>$ID_log,
-			"passw"=>$passw,
-			"id_em"=>$id_em
-			);
-		
-		$datos = new DatosNovedad();
-		$respuesta = $datos->createUserModel($datosController, "login");
+			"passw"=>$passw, 
+			"documento"=>$documento);
+			
+		$datos = new DatosLogin();
+		$respuesta = $datos->loginModel($datosController);
 		return $respuesta;
 	}
 
