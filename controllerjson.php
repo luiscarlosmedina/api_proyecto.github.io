@@ -91,21 +91,21 @@ class ControllerJson
 	
 	
 
-	public function createEmpresaController($nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono,  $valor, $estado, $fhInicio, $fhFin, $sector, $actividad){
+	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
-		$datosController = array("nit"=>$nit,
-			"nombre"=>$nombre, 
-			"correo"=>$correo, 
-			"rep"=>$rep, 
-			"tp_doc"=>$tp_doc,
-			"repDoc"=>$repDoc,
-			"telefono"=>$telefono, 
-			"valor"=>$valor, 
-			"estado"=>$estado, 
-			"fhInicio"=>$fhInicio, 
-			"fhFin"=>$fhFin,
-			"sector"=>$sector, 
-			"actividad"=>$actividad);
+		$datosController = array("Nit_E"=>$Nit_E,
+			"Nom_E"=>$Nom_E, 
+			"Eml_E"=>$Eml_E, 
+			"Nom_Rl"=>$Nom_Rl, 
+			"ID_Doc"=>$ID_Doc,
+			"CC_Rl"=>$CC_Rl,
+			"telefonoGeneral"=>$telefonoGeneral, 
+			"Val_E"=>$Val_E, 
+			"Est_E"=>$Est_E, 
+			"fh_Afi"=>$fh_Afi, 
+			"fechaFinalizacion"=>$fechaFinalizacion,
+			"COD_SE"=>$COD_SE, 
+			"COD_AE"=>$COD_AE);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->createEmpresaModel($datosController);

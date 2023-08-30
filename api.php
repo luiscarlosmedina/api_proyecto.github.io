@@ -201,22 +201,22 @@ switch ($apicall) {
               'message' => 'Error en el contenido JSON',
             );
           } else {
-            $nit = $data['nit'];
-            $nombre = $data['nombre'];
-            $correo = $data['correo'];
-            $rep = $data['rep'];
-            $tp_doc = $data['tp_doc'];
-            $repDoc = $data['repDoc'];
-            $telefono = $data['telefono'];
-            $valor = $data['valor'];
-            $estado = $data['estado'];
-            $fhInicio = $data['fhInicio'];
-            $fhFin = $data['fhFin'];
-            $sector = $data['sector'];
-            $actividad = $data['actividad'];
+            $Nit_E = $data['Nit_E'];
+            $Nom_E = $data['Nom_E'];
+            $Eml_E = $data['Eml_E'];
+            $Nom_Rl = $data['Nom_Rl'];
+            $ID_Doc = $data['ID_Doc'];
+            $CC_Rl = $data['CC_Rl'];
+            $telefonoGeneral = $data['$telefonoGeneral'];
+            $Val_E = $data['Val_E'];
+            $Est_E = $data['Est_E'];
+            $fh_Afi = $data['fh_Afi'];
+            $fechaFinalizacion = $data['fechaFinalizacion'];
+            $COD_SE = $data['COD_SE'];
+            $COD_AE = $data['COD_AE'];
     
             $db = new ControllerJson();
-            $result = $db->createEmpresaController($nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono, $valor, $estado, $fhInicio, $fhFin, $sector, $actividad);
+            $result = $db->createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE);
     
             if ($result) {
               $response = array(
@@ -434,22 +434,23 @@ switch ($apicall) {
               'message' => 'Error en el contenido JSON',
             );
           } else {
-            $id = $data['id'];
-            $nit = $data['nit'];
-            $nombre = $data['nombre'];
-            $correo = $data['correo'];
-            $rep = $data['rep'];
-            $tp_doc = $data['tp_doc'];
-            $repDoc = $data['repDoc'];
-            $telefono = $data['telefono'];
-            $valor = $data['valor'];
-            $estado = $data['estado'];
-            $fecha = $data['fecha'];
-            $sector = $data['sector'];
-            $actividad = $data['actividad'];
+            $id_e = $data['id_e'];
+            $Nit_E = $data['Nit_E'];
+            $Nom_E = $data['Nom_E'];
+            $Eml_E = $data['Eml_E'];
+            $Nom_Rl = $data['Nom_Rl'];
+            $ID_Doc = $data['ID_Doc'];
+            $CC_Rl = $data['CC_Rl'];
+            $telefonoGeneral = $data['$telefonoGeneral'];
+            $Val_E = $data['Val_E'];
+            $Est_E = $data['Est_E'];
+            $fh_Afi = $data['fh_Afi'];
+            $fechaFinalizacion = $data['fechaFinalizacion'];
+            $COD_SE = $data['COD_SE'];
+            $COD_AE = $data['COD_AE'];
     
             $db = new ControllerJson();
-            $result = $db->updateEmpresaController($id, $nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono, $valor, $estado, $fecha, $sector, $actividad);
+            $result = $db->updateEmpresaController($id_e, $Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE);
             if ($result) {
               $response = array(
                 'error' => false,
