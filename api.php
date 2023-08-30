@@ -441,21 +441,21 @@ switch ($apicall) {
             $Nom_Rl = $data['Nom_Rl'];
             $ID_Doc = $data['ID_Doc'];
             $CC_Rl = $data['CC_Rl'];
-            $telefonoGeneral = $data['$telefonoGeneral'];
+            $telefonoGeneral = $data['telefonoGeneral'];
             $Val_E = $data['Val_E'];
             $Est_E = $data['Est_E'];
-            $fh_Afi = $data['fh_Afi'];
+            $Fh_Afi = $data['Fh_Afi'];
             $fechaFinalizacion = $data['fechaFinalizacion'];
             $COD_SE = $data['COD_SE'];
             $COD_AE = $data['COD_AE'];
     
             $db = new ControllerJson();
-            $result = $db->updateEmpresaController($id_e, $Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE);
+            $result = $db->updateEmpresaController($id_e, $Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE);
             if ($result) {
               $response = array(
                 'error' => false,
                 'message' => 'Usuario actualizado correctamente',
-                'contenido' => $db->readEmpresasController(),
+                'contenido' => $db->readEmpresasController($id_e),
               );
             } else {
               $response = array(

@@ -91,7 +91,7 @@ class ControllerJson
 	
 	
 
-	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
+	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
 		$datosController = array("Nit_E"=>$Nit_E,
 			"Nom_E"=>$Nom_E, 
@@ -102,7 +102,7 @@ class ControllerJson
 			"telefonoGeneral"=>$telefonoGeneral, 
 			"Val_E"=>$Val_E, 
 			"Est_E"=>$Est_E, 
-			"fh_Afi"=>$fh_Afi, 
+			"Fh_Afi"=>$fh_Afi, 
 			"fechaFinalizacion"=>$fechaFinalizacion,
 			"COD_SE"=>$COD_SE, 
 			"COD_AE"=>$COD_AE);
@@ -169,9 +169,22 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-	public function updateEmpresaController($id, $nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono, $valor, $estado, $fecha, $sector, $actividad){
+	public function updateEmpresaController($id_e, $Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
-		$datosController = array("id"=>$id, "nit"=>$nit, "nombre"=>$nombre, "correo"=>$correo, "rep"=>$rep,  "tp_doc"=>$tp_doc, "repDoc"=>$repDoc, "telefono"=>$telefono, "valor"=>$valor, "estado"=>$estado, "fecha"=>$fecha, "sector"=>$sector, "actividad"=>$actividad);
+		$datosController = array("id_e"=>$id_e,
+		"Nit_E"=>$Nit_E,
+		"Nom_E"=>$Nom_E, 
+		"Eml_E"=>$Eml_E, 
+		"Nom_Rl"=>$Nom_Rl, 
+		"ID_Doc"=>$ID_Doc,
+		"CC_Rl"=>$CC_Rl,
+		"telefonoGeneral"=>$telefonoGeneral, 
+		"Val_E"=>$Val_E, 
+		"Est_E"=>$Est_E, 
+		"Fh_Afi"=>$Fh_Afi, 
+		"fechaFinalizacion"=>$fechaFinalizacion,
+		"COD_SE"=>$COD_SE, 
+		"COD_AE"=>$COD_AE);
 		
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->updateEmpresaModel($datosController);

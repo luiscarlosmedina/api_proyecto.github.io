@@ -7,10 +7,10 @@ class DatosEmpresa extends Database
 	//----------------------------------------------------------------------------------
 
 	public function createEmpresaModel($datosModel) {
-		$stmt = Database::getConnection()->prepare("INSERT INTO empresa (Nit_E, Nom_E, Eml_E, Nom_Rl, ID_Doc, CC_Rl, telefonoGeneral, Val_E, Est_E, fh_Afi, fechaFinalizacion, COD_SE, COD_AE) VALUES (:Nit_E, :Nom_E, :Eml_E, :Nom_Rl, :ID_Doc, :CC_Rl, :telefonoGeneral, :Val_E, :Est_E, :fh_Afi, :fechaFinalizacion, :COD_SE, :COD_AE)");
+		$stmt = Database::getConnection()->prepare("INSERT INTO empresa (Nit_E, Nom_E, Eml_E, Nom_Rl, ID_Doc, CC_Rl, telefonoGeneral, Val_E, Est_E, Fh_Afi, fechaFinalizacion, COD_SE, COD_AE) VALUES (:Nit_E, :Nom_E, :Eml_E, :Nom_Rl, :ID_Doc, :CC_Rl, :telefonoGeneral, :Val_E, :Est_E, :Fh_Afi, :fechaFinalizacion, :COD_SE, :COD_AE)");
 
-		$stmt->bindParam(":Nit_E", :$datosModel["Nit_E"], :PDO::PARAM_STR);
-		$stmt->bindParam(":Nom_E", :$datosModel["Nom_E"], PDO::PARAM_STR);
+		$stmt->bindParam(":Nit_E", $datosModel["Nit_E"], PDO::PARAM_STR);
+		$stmt->bindParam(":Nom_E", $datosModel["Nom_E"], PDO::PARAM_STR);
 		$stmt->bindParam(":Eml_E", $datosModel["Eml_E"], PDO::PARAM_STR);
 		$stmt->bindParam(":Nom_Rl", $datosModel["Nom_Rl"], PDO::PARAM_STR);
 		$stmt->bindParam(":ID_Doc", $datosModel["ID_Doc"], PDO::PARAM_INT);
@@ -18,7 +18,7 @@ class DatosEmpresa extends Database
 		$stmt->bindParam(":telefonoGeneral", $datosModel["telefonoGeneral"], PDO::PARAM_STR);
 		$stmt->bindParam(":Val_E", $datosModel["Val_E"], PDO::PARAM_INT);
 		$stmt->bindParam(":Est_E", $datosModel["Est_E"], PDO::PARAM_STR);
-		$stmt->bindParam(":fh_Afi", $datosModel["fh_Afi"], PDO::PARAM_STR);
+		$stmt->bindParam(":Fh_Afi", $datosModel["Fh_Afi"], PDO::PARAM_STR);
 		$stmt->bindParam(":fechaFinalizacion", $datosModel["fechaFinalizacion"], PDO::PARAM_STR);
 		$stmt->bindParam(":COD_SE", $datosModel["COD_SE"], PDO::PARAM_STR);
 		$stmt->bindParam(":COD_AE", $datosModel["COD_AE"], PDO::PARAM_STR);
@@ -131,21 +131,22 @@ class DatosEmpresa extends Database
 	}
 	
 	public function updateEmpresaModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE empresa AS em SET em.Nit_E = :nit, em.Nom_E = :nombre, em.Eml_E = :correo, em.Nom_Rl = :rep, em.ID_Doc = :tp_doc, em.CC_Rl = :repDoc, em.telefonoGeneral = :telefono, em.Val_E = :valor, em.Est_E = :estado, em.Fh_Afi = :fecha, em.COD_SE = :sector, em.COD_AE = :actividad WHERE em.id_e = :id");
+		$stmt = Database::getConnection()->prepare("UPDATE empresa AS em SET em.Nit_E = :Nit_E, em.Nom_E = :Nom_E, em.Eml_E = :Eml_E, em.Nom_Rl = :Nom_Rl, em.ID_Doc = :ID_Doc, em.CC_Rl = :CC_Rl, em.telefonoGeneral = :telefonoGeneral, em.Val_E = :Val_E, em.Est_E = :Est_E, em.Fh_Afi = :Fh_Afi, em.fechaFinalizacion = :fechaFinalizacion, em.COD_SE = :COD_SE, em.COD_AE = :COD_AE WHERE em.id_e = :id_e");
 
-		$stmt->bindParam(":nit", $datosModel["nit"], PDO::PARAM_STR);
-		$stmt->bindParam(":nombre", $datosModel["nombre"], PDO::PARAM_STR);
-		$stmt->bindParam(":correo", $datosModel["correo"], PDO::PARAM_STR);
-		$stmt->bindParam(":rep", $datosModel["rep"], PDO::PARAM_STR);
-		$stmt->bindParam(":tp_doc", $datosModel["tp_doc"], PDO::PARAM_INT);
-		$stmt->bindParam(":repDoc", $datosModel["repDoc"], PDO::PARAM_STR);
-		$stmt->bindParam(":telefono", $datosModel["telefono"], PDO::PARAM_STR);
-		$stmt->bindParam(":valor", $datosModel["valor"], PDO::PARAM_INT);
-		$stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
-		$stmt->bindParam(":fecha", $datosModel["fecha"], PDO::PARAM_STR);
-		$stmt->bindParam(":sector", $datosModel["sector"], PDO::PARAM_STR);
-		$stmt->bindParam(":actividad", $datosModel["actividad"], PDO::PARAM_STR);
-		$stmt->bindParam(":id", $datosModel["id"], PDO::PARAM_INT);
+		$stmt->bindParam(":Nit_E", $datosModel["Nit_E"], PDO::PARAM_STR);
+		$stmt->bindParam(":Nom_E", $datosModel["Nom_E"], PDO::PARAM_STR);
+		$stmt->bindParam(":Eml_E", $datosModel["Eml_E"], PDO::PARAM_STR);
+		$stmt->bindParam(":Nom_Rl", $datosModel["Nom_Rl"], PDO::PARAM_STR);
+		$stmt->bindParam(":ID_Doc", $datosModel["ID_Doc"], PDO::PARAM_INT);
+		$stmt->bindParam(":CC_Rl", $datosModel["CC_Rl"], PDO::PARAM_STR);
+		$stmt->bindParam(":telefonoGeneral", $datosModel["telefonoGeneral"], PDO::PARAM_STR);
+		$stmt->bindParam(":Val_E", $datosModel["Val_E"], PDO::PARAM_INT);
+		$stmt->bindParam(":Est_E", $datosModel["Est_E"], PDO::PARAM_STR);
+		$stmt->bindParam(":Fh_Afi", $datosModel["Fh_Afi"], PDO::PARAM_STR);
+		$stmt->bindParam(":fechaFinalizacion", $datosModel["fechaFinalizacion"], PDO::PARAM_STR);
+		$stmt->bindParam(":COD_SE", $datosModel["COD_SE"], PDO::PARAM_STR);
+		$stmt->bindParam(":COD_AE", $datosModel["COD_AE"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_e", $datosModel["id_e"], PDO::PARAM_INT);
 		if($stmt->execute()){
 			echo "Actualizacion Exitosa";
 		}else{
