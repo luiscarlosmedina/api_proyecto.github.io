@@ -8,7 +8,7 @@ $apicall = isset($_GET['apicall']) ? $_GET['apicall'] : '';
 
 switch ($apicall) {
     
-    // ---------------------- max empleados --------------------------
+     // ---------------------- max empleados --------------------------
     
     //https://developersaurios.000webhostapp.com/api.php?apicall=createempleado
     case 'createempleado':
@@ -22,6 +22,7 @@ switch ($apicall) {
             'message' => 'Error en el contenido JSON',
           );
         } else {
+          $id_doc = $data['id_doc'];
           $documento = $data['documento'];
           $n_em = $data['n_em'];
           $a_em = $data['a_em'];
@@ -31,18 +32,20 @@ switch ($apicall) {
           $lic_emp = $data['lic_emp'];
           $lib_em = $data['lib_em'];
           $tel_em = $data['tel_em'];
+          $contrato = $data['contrato'];
           $barloc_em = $data['barloc_em'];
-          $id_doc = $data['id_doc'];
-		      $id_pens = $data['id_pens'];
-		      $id_eps = $data['id_eps'];
-		      $id_arl = $data['id_arl'];
-		      $id_ces = $data['id_ces'];
-		      $id_rh = $data['id_rh'];
-		      $id_rol = $data['id_rol'];
+          $id_pens = $data['id_pens'];
+          $id_eps = $data['id_eps'];
+          $id_arl = $data['id_arl'];
+          $id_ces = $data['id_ces'];
+          $id_rh = $data['id_rh'];
+          $id_rol = $data['id_rol'];
+          $estado = $data['estado'];
+          $passw = $data['passw'];
 
 		  
           $db = new ControllerJson();
-          $result = $db->createempleadoController($documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol);
+          $result = $db->createempleadoController($id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw);
 
           if ($result) {
             $response = array(
@@ -77,9 +80,9 @@ switch ($apicall) {
             'message' => 'Error en el contenido JSON',
           );
         } else {
-          $id_em = $data['$id_em'];
+          $id_em = $data['id_em'];
           $documento = $data['documento'];
-		  $n_em = $data['n_em'];
+		      $n_em = $data['n_em'];
           $a_em = $data['a_em'];
           $eml_em = $data['eml_em'];
           $f_em = $data['f_em'];
@@ -87,18 +90,19 @@ switch ($apicall) {
           $lic_emp = $data['lic_emp'];
           $lib_em = $data['lib_em'];
           $tel_em = $data['tel_em'];
+          $contrato = $data['contrato'];
           $barloc_em = $data['barloc_em'];
           $id_doc = $data['id_doc'];
-		  $id_pens = $data['id_pens'];
-		  $id_eps = $data['id_eps'];
-		  $id_arl = $data['id_arl'];
-		  $id_ces = $data['id_ces'];
-		  $id_rh = $data['id_rh'];
-		  $id_rol = $data['id_rol'];
+		      $id_pens = $data['id_pens'];
+		      $id_eps = $data['id_eps'];
+		      $id_arl = $data['id_arl'];
+		      $id_ces = $data['id_ces'];
+		      $id_rh = $data['id_rh'];
+		      $id_rol = $data['id_rol'];
+          $estado = $data['estado'];
 
           $db = new ControllerJson();
-          $result = $db->updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol);
-
+          $result = $db->updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado);
           if ($result) {
             $response = array(
               'error' => false,
@@ -108,7 +112,7 @@ switch ($apicall) {
           } else {
             $response = array(
               'error' => true,
-              'message' => 'Ocurrió un error al actualizar el usuario',
+              'message' => 'Ocurrio un error al actualizar el usuario',
             );
           }
         }
@@ -185,9 +189,7 @@ switch ($apicall) {
       );
       break;
       
-     // ----------------------min empleados --------------------------
-     
-      
+     // ----------------------min empleados --------------------------      
       
       //empresa
       case 'createempresa':

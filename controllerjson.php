@@ -10,9 +10,10 @@ class ControllerJson
 {
 	// ------------------- max empleados --------------------
 	
-	public function createempleadoController($documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol){
+	public function createempleadoController( $id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw){
 		$datosController = array(
 		    
+			"id_doc"=>$id_doc,
 			"documento"=>$documento,		    
 			"n_em"=>$n_em,
 			"a_em"=>$a_em,
@@ -22,6 +23,36 @@ class ControllerJson
 			"lic_emp"=>$lic_emp,
 			"lib_em"=>$lib_em,
 			"tel_em"=>$tel_em,
+			"contrato" =>$contrato,
+			"barloc_em"=>$barloc_em,
+			"id_pens"=>$id_pens,
+			"id_eps"=>$id_eps,
+			"id_arl"=>$id_arl,
+			"id_ces"=>$id_ces,
+			"id_rh"=>$id_rh,
+			"id_rol"=>$id_rol,
+			"estado"=>$estado,
+			"passw"=>$passw
+			);
+		
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->createEmpleadoModel($datosController, "empleado", "login");
+		return $respuesta;
+	}
+	public function updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado)
+	{
+		$datosController = array(
+			"id_em"=>$id_em,
+			"documento"=>$documento,		    
+			"n_em"=>$n_em,
+			"a_em"=>$a_em,
+			"eml_em"=>$eml_em,
+			"f_em"=>$f_em,
+			"dir_em"=>$dir_em,
+			"lic_emp"=>$lic_emp,
+			"lib_em"=>$lib_em,
+			"tel_em"=>$tel_em,
+			"contrato"=>$contrato,
 			"barloc_em"=>$barloc_em,
 			"id_doc"=>$id_doc,
 			"id_pens"=>$id_pens,
@@ -29,33 +60,9 @@ class ControllerJson
 			"id_arl"=>$id_arl,
 			"id_ces"=>$id_ces,
 			"id_rh"=>$id_rh,
-			"id_rol"=>$id_rol
-			);
-		
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->createEmpleadoModel($datosController, "empleado");
-		return $respuesta;
-	}
-	public function updateEmpleadoController($ID_Em, $N_Em, $A_Em, $Eml_Em, $F_Em, $Dir_Em, $Lic_Emp, $lib_Em, $tel_Em, $barloc_Em, $ID_Doc, $ID_pens, $ID_eps, $ID_arl, $ID_ces, $ID_RH, $ID_rol)
-	{
-		$datosController = array(
-			"ID_Em"=>$ID_Em, 
-			"N_Em"=>$N_Em,
-			"A_Em"=>$A_Em , 
-			"Eml_Em"=>$Eml_Em , 
-			"F_Em"=>$F_Em, 
-			"Dir_Em"=>$Dir_Em,
-			"Lic_Emp"=>$Lic_Emp,
-			"lib_Em"=>$lib_Em, 
-			"tel_Em"=>$tel_Em, 
-			"barloc_Em"=>$barloc_Em,
-			"ID_Doc"=>$ID_Doc, 
-			"ID_pens"=>$ID_pens, 
-			"ID_eps"=>$ID_eps, 
-			"ID_arl"=>$ID_arl, 
-			"ID_ces"=>$ID_ces, 
-			"ID_RH"=>$ID_RH,
-			"ID_rol"=>$ID_rol);
+			"id_rol"=>$id_rol,
+			"estado"=>$estado
+		);
 			
 		$datos = new DatosEmpleado();
 		$respuesta = $datos->updateEmpleadoModel($datosController, "empleado");
@@ -69,10 +76,10 @@ class ControllerJson
 		return $respuesta;
 	}
 
-	public function deleteempleadoController($ID_Em){
+	public function deleteempleadoController($id_em){
 
 		$datos = new DatosEmpleado();
-		$respuesta = $datos->deleteEmpleadoModel($ID_Em, "empleado");
+		$respuesta = $datos->deleteEmpleadoModel($id_em, "empleado");
 		return $respuesta;
 
 	}
@@ -88,24 +95,22 @@ class ControllerJson
 	}
 	
 	//  ------------------- min empleados --------------------
-	
-	
 
-	public function createEmpresaController($nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono,  $valor, $estado, $fhInicio, $fhFin, $sector, $actividad){
+	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
-		$datosController = array("nit"=>$nit,
-			"nombre"=>$nombre, 
-			"correo"=>$correo, 
-			"rep"=>$rep, 
-			"tp_doc"=>$tp_doc,
-			"repDoc"=>$repDoc,
-			"telefono"=>$telefono, 
-			"valor"=>$valor, 
-			"estado"=>$estado, 
-			"fhInicio"=>$fhInicio, 
-			"fhFin"=>$fhFin,
-			"sector"=>$sector, 
-			"actividad"=>$actividad);
+		$datosController = array("Nit_E"=>$Nit_E,
+			"Nom_E"=>$Nom_E, 
+			"Eml_E"=>$Eml_E, 
+			"Nom_Rl"=>$Nom_Rl, 
+			"ID_Doc"=>$ID_Doc,
+			"CC_Rl"=>$CC_Rl,
+			"telefonoGeneral"=>$telefonoGeneral, 
+			"Val_E"=>$Val_E, 
+			"Est_E"=>$Est_E, 
+			"Fh_Afi"=>$fh_Afi, 
+			"fechaFinalizacion"=>$fechaFinalizacion,
+			"COD_SE"=>$COD_SE, 
+			"COD_AE"=>$COD_AE);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->createEmpresaModel($datosController);
@@ -169,9 +174,22 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-	public function updateEmpresaController($id, $nit, $nombre, $correo, $rep, $tp_doc, $repDoc, $telefono, $valor, $estado, $fecha, $sector, $actividad){
+	public function updateEmpresaController($id_e, $Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
-		$datosController = array("id"=>$id, "nit"=>$nit, "nombre"=>$nombre, "correo"=>$correo, "rep"=>$rep,  "tp_doc"=>$tp_doc, "repDoc"=>$repDoc, "telefono"=>$telefono, "valor"=>$valor, "estado"=>$estado, "fecha"=>$fecha, "sector"=>$sector, "actividad"=>$actividad);
+		$datosController = array("id_e"=>$id_e,
+		"Nit_E"=>$Nit_E,
+		"Nom_E"=>$Nom_E, 
+		"Eml_E"=>$Eml_E, 
+		"Nom_Rl"=>$Nom_Rl, 
+		"ID_Doc"=>$ID_Doc,
+		"CC_Rl"=>$CC_Rl,
+		"telefonoGeneral"=>$telefonoGeneral, 
+		"Val_E"=>$Val_E, 
+		"Est_E"=>$Est_E, 
+		"Fh_Afi"=>$Fh_Afi, 
+		"fechaFinalizacion"=>$fechaFinalizacion,
+		"COD_SE"=>$COD_SE, 
+		"COD_AE"=>$COD_AE);
 		
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->updateEmpresaModel($datosController);
