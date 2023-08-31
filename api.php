@@ -312,6 +312,7 @@ switch ($apicall) {
           );
         }
         break;
+
       case 'createencargadotel':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $json = file_get_contents('php://input');
@@ -374,6 +375,7 @@ switch ($apicall) {
         $response['message'] = 'Método de solicitud no válido';
       }
       break;
+
       case 'readsede':
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readsede') {
           $db = new ControllerJson();
@@ -398,7 +400,7 @@ switch ($apicall) {
         }
         break;
       case 'readTelSede':
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readsede') {
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readTelSede') {
           $db = new ControllerJson();
           $id = $_GET['id'];
         
@@ -468,6 +470,7 @@ switch ($apicall) {
           );
         }
         break;
+
       case 'updatesede':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $json = file_get_contents('php://input');
@@ -505,6 +508,7 @@ switch ($apicall) {
           );
         }
         break;
+
       case 'updateencargado':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $json = file_get_contents('php://input');
@@ -579,6 +583,7 @@ switch ($apicall) {
           );
         }
         break;
+        
       case 'updateencargadoTel':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $json = file_get_contents('php://input');
