@@ -5,7 +5,7 @@ class Database{
 		$localhost = 'localhost';
 		$database = 'asocivica';
 		$user = 'root';
-		$password = 'admin';
+		$password = '';
 
 		$link = new PDO("mysql:host=$localhost;dbname=$database",$user,$password);
 
