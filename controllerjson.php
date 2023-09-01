@@ -1,8 +1,8 @@
 <?php
-
 require_once 'modelojson_empleado.php';
 require_once 'modelojson_empresa.php';
 require_once 'modelojson_novedad.php';
+require_once 'modelojson_login.php';
 /**
  *
  */
@@ -277,6 +277,21 @@ class ControllerJson
 		return $respuesta;
 
 	}
+
+	//----------Login----------//
+	//login
+	public function loginController($passw, $documento)
+	{
+		$datosController = array(
+			"passw"=>$passw, 
+			"documento"=>$documento);
+			
+		$datos = new DatosLogin();
+		$respuesta = $datos->loginModel($datosController);
+		return $respuesta;
+	}
+
 	
 }
+
 ?>
