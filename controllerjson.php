@@ -112,9 +112,9 @@ class ControllerJson
 		return $respuesta;
 		
 	}
-	public function createSedeController( $direccion, $area, $idEmpresa){
+	public function createSedeController( $Dic_S,$Sec_V, $id_e){
 
-		$datosController = array("direccion"=>$direccion, "area"=>$area, "idEmpresa"=>$idEmpresa);
+		$datosController = array("Dic_S"=>$Dic_S, "Sec_V"=>$Sec_V, "id_e"=>$id_e);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->createSedeModel($datosController);

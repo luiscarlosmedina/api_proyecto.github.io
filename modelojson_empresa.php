@@ -32,11 +32,11 @@ class DatosEmpresa extends Database
 	}
 
 	public function createSedeModel($datosModel){
-		$stmt = Database::getConnection()->prepare("INSERT INTO sede (Dic_S,Sec_V, id_e) VALUES (:direccion, :area, :idEmpresa)");
+		$stmt = Database::getConnection()->prepare("INSERT INTO sede (Dic_S,Sec_V, id_e) VALUES (:Dic_S, :Sec_V, :id_e)");
 		
-		$stmt->bindParam(":direccion", $datosModel["direccion"], PDO::PARAM_STR);
-		$stmt->bindParam(":area", $datosModel["area"], PDO::PARAM_INT);
-		$stmt->bindParam(":idEmpresa", $datosModel["idEmpresa"], PDO::PARAM_INT);
+		$stmt->bindParam(":Dic_S", $datosModel["Dic_S"], PDO::PARAM_STR);
+		$stmt->bindParam(":Sec_V", $datosModel["Sec_V"], PDO::PARAM_INT);
+		$stmt->bindParam(":id_e", $datosModel["id_e"], PDO::PARAM_INT);
 		
 		if($stmt->execute()){
 			return true;
@@ -90,7 +90,7 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function readSedeModel($id = null){
-		$query = "SELECT ID_S, dIC_S, Sec_V, id_e FROM sede";
+		$query = "SELECT ID_S, Dic_S, Sec_V, id_e FROM sede";
 		
 		if ($id !== null) {
 			$query .= " WHERE id_e = :id";

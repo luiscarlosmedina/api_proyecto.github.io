@@ -248,12 +248,12 @@ switch ($apicall) {
               'message' => 'Error en el contenido JSON',
             );
           } else {
-            $direccion = $data['direccion'];
-            $area = $data['area'];
-            $idEmpresa = $data['idEmpresa'];
+            $Dic_S = $data['Dic_S'];
+            $Sec_V = $data['Sec_V'];
+            $id_e = $data['id_e'];
     
             $db = new ControllerJson();
-            $result = $db->createSedeController( $direccion, $area, $idEmpresa);
+            $result = $db->createSedeController( $Dic_S,$Sec_V, $id_e);
     
             if ($result) {
               $response = array(
