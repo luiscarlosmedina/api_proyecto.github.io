@@ -771,7 +771,6 @@ case 'deletenovedad':
       break;
 
       //----------LOGIN----------//
-      //http://localhost/../api.php?apicall=createuser + body (Json)
 
   //http://localhost/../api.php?apicall=login + body (Json)
   case 'login':
@@ -809,7 +808,8 @@ case 'deletenovedad':
             'message' => 'Método de solicitud no válido',
           );
         }
-        break;  
+        break;
+      //----------LOGIN----------//        
     }
 
 echo json_encode($response);
