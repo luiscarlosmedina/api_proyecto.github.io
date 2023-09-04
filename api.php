@@ -79,7 +79,7 @@ switch ($apicall) {
         } else {
           $id_em = $data['$id_em'];
           $documento = $data['documento'];
-		  $n_em = $data['n_em'];
+		      $n_em = $data['n_em'];
           $a_em = $data['a_em'];
           $eml_em = $data['eml_em'];
           $f_em = $data['f_em'];
@@ -89,12 +89,12 @@ switch ($apicall) {
           $tel_em = $data['tel_em'];
           $barloc_em = $data['barloc_em'];
           $id_doc = $data['id_doc'];
-		  $id_pens = $data['id_pens'];
-		  $id_eps = $data['id_eps'];
-		  $id_arl = $data['id_arl'];
-		  $id_ces = $data['id_ces'];
-		  $id_rh = $data['id_rh'];
-		  $id_rol = $data['id_rol'];
+		      $id_pens = $data['id_pens'];
+		      $id_eps = $data['id_eps'];
+		      $id_arl = $data['id_arl'];
+		      $id_ces = $data['id_ces'];
+		      $id_rh = $data['id_rh'];
+		      $id_rol = $data['id_rol'];
 
           $db = new ControllerJson();
           $result = $db->updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol);
@@ -251,9 +251,14 @@ switch ($apicall) {
             $Dic_S = $data['Dic_S'];
             $Sec_V = $data['Sec_V'];
             $id_e = $data['id_e'];
+            $N_En = $data['N_En'];
+            $Est_en = $data['Est_en'];
+            $tel1 = $data['tel1'];
+            $tel2 = $data['tel2'];
+            $tel3 = $data['tel3'];
     
             $db = new ControllerJson();
-            $result = $db->createSedeController( $Dic_S,$Sec_V, $id_e);
+            $result = $db->createSedeController( $Dic_S,$Sec_V, $id_e, $N_En, $Est_en, $tel1, $tel2, $tel3);
     
             if ($result) {
               $response = array(
@@ -451,17 +456,12 @@ switch ($apicall) {
     
             $db = new ControllerJson();
             $result = $db->updateEmpresaController($id_e, $Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE);
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Usuario actualizado correctamente',
-                'contenido' => $db->readEmpresasController($id_e),
-              );
+            if ($result == true) {
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';         
             } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error al actualizar el usuario',
-              );
+              $response['error'] = true;
+              $response['message'] = 'Solicitud fallida';
             }
           }
         } else {
@@ -492,8 +492,7 @@ switch ($apicall) {
             if ($result) {
               $response = array(
                 'error' => false,
-                'message' => 'Usuario actualizado correctamente',
-                'contenido' => $db->readEmpresasController(),
+                'message' => true,
               );
             } else {
               $response = array(

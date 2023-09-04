@@ -31,19 +31,60 @@ class DatosEmpresa extends Database
 		
 	}
 
-	public function createSedeModel($datosModel){
-		$stmt = Database::getConnection()->prepare("INSERT INTO sede (Dic_S,Sec_V, id_e) VALUES (:Dic_S, :Sec_V, :id_e)");
-		
-		$stmt->bindParam(":Dic_S", $datosModel["Dic_S"], PDO::PARAM_STR);
-		$stmt->bindParam(":Sec_V", $datosModel["Sec_V"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_e", $datosModel["id_e"], PDO::PARAM_INT);
-		
-		if($stmt->execute()){
+	public function createSedeModel($datosModel) {
+		$conn = Database::getConnection();
+	
+		try {
+			$conn->beginTransaction();
+	
+			// Insertar en la tabla "sede"
+			$stmt = $conn->prepare("INSERT INTO sede (Dic_S, Sec_V, id_e) VALUES (:Dic_S, :Sec_V, :id_e)");
+			$stmt->bindParam(":Dic_S", $datosModel["Dic_S"], PDO::PARAM_STR);
+			$stmt->bindParam(":Sec_V", $datosModel["Sec_V"], PDO::PARAM_INT);
+			$stmt->bindParam(":id_e", $datosModel["id_e"], PDO::PARAM_INT);
+			$stmt->execute();
+	
+			// Obtener el último ID insertado en "sede"
+			$idse = $conn->lastInsertId();
+	
+			// Insertar en la tabla "encargado"
+			$stmt = $conn->prepare("INSERT INTO encargado (N_En) VALUES (:N_En)");
+			$stmt->bindParam(":N_En", $datosModel["N_En"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			// Obtener el último ID insertado en "encargado"
+			$iden = $conn->lastInsertId();
+	
+			// Insertar en la tabla "encargado_estado"
+			$stmt = $conn->prepare("INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (:ID_En, :ID_S, :Est_en)");
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":ID_S", $idse, PDO::PARAM_INT);
+			$stmt->bindParam(":Est_en", $datosModel["Est_en"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			// Insertar en la tabla "telefono_encargado"
+			$stmt = $conn->prepare("INSERT INTO telefono_encargado (ID_En, tel) VALUES (:ID_En, :tel)");
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":tel", $datosModel["tel1"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":tel", $datosModel["tel2"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":tel", $datosModel["tel3"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			$conn->commit();
 			return true;
-		}else{
+		} catch (PDOException $e) {
+			// En caso de error, deshacer la transacción
+			$conn->rollBack();
 			return false;
 		}
 	}
+	
 	public function createEncargadoModel($datosModel){
 		$stmt = Database::getConnection()->prepare("INSERT INTO encargado (N_En) VALUES (:encargado); INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (LAST_INSERT_ID(), :sedeId, :encargadoEst)");
 		
@@ -110,10 +151,19 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function readPhoneSedeModel($id = null){
-		$query = "SELECT en.N_En, TEL.tel FROM `telefono_encargado` AS TEL JOIN encargado AS en ON en.ID_En = TEL.ID_En JOIN encargado_estado AS es ON en.ID_En = es.ID_En JOIN sede AS s ON es.ID_S = s.ID_S";
+		$query = "SELECT en.ID_En, en.N_En, TEL.tel AS telefono
+		FROM encargado AS en
+		JOIN (
+			SELECT ID_En, GROUP_CONCAT(tel) AS tel
+			FROM telefono_encargado
+			GROUP BY ID_En
+		) AS TEL ON en.ID_En = TEL.ID_En
+		JOIN encargado_estado AS es ON en.ID_En = es.ID_En
+		JOIN sede AS s ON es.ID_S = s.ID_S";
+		
 		
 		if ($id !== null) {
-			$query .= " WHERE s.ID_S = :id";
+			$query .= " WHERE s.ID_S = :id ";
 		}
 	
 		$stmt = Database::getConnection()->prepare($query);
@@ -148,9 +198,9 @@ class DatosEmpresa extends Database
 		$stmt->bindParam(":COD_AE", $datosModel["COD_AE"], PDO::PARAM_STR);
 		$stmt->bindParam(":id_e", $datosModel["id_e"], PDO::PARAM_INT);
 		if($stmt->execute()){
-			echo "Actualizacion Exitosa";
+			return true;
 		}else{
-			echo "No se pudo hacer la Actualizacion";
+			return false;
 		}
 	}
 	public function updateSedeModel($datosModel){
