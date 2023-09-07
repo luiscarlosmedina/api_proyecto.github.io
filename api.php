@@ -622,8 +622,8 @@ switch ($apicall) {
           );
         }
         break;
-      //----------NOVEDAD----------//
 
+//----------NOVEDAD----------//
 //http://localhost/../api.php?apicall=createnoovedad + body (Json)
 case 'createnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -669,14 +669,30 @@ case 'createnovedad':
   }
   break;
 
-//http://localhost/../api.php?apicall=readnovedad
-  case 'readnovedad':
-  $db = new ControllerJson();
-  $response = array(
-    'error' => false,
-    'message' => 'Solicitud completada correctamente',
-    'contenido' => $db->readNovedadController(),
-  );
+  //caso para VER NOVEDADES
+
+case 'readnovedad':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedad') {
+    $db = new ControllerJson();
+    $id = $_GET['id'];
+  
+    if (!empty($id)) {
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readNovedadController($id) ;
+      //forma de llamar al api
+        //http://localhost/../api.php?apicall=readnovedad&id=1
+    } else {
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readNovedadController();
+      //forma de llamar al api
+        //http://localhost/../api.php?apicall=readnovedad
+    }
+  } else {
+    $response['error'] = true;
+    $response['message'] = 'Método de solicitud no válido';
+  }
   break;
 
 //http://localhost/../api.php?apicall=updateusuario + body (Json)
@@ -769,6 +785,7 @@ case 'deletenovedad':
         'message' => 'Llamado Inválido del API',
       );
       break;
+//---------- FIN NOVEDAD----------//
 
       //----------LOGIN----------//
 
