@@ -228,6 +228,13 @@ class ControllerJson
 		return $respuesta;
 
 	}
+	public function deleteEncargadoController($Est_en, $ID_En){
+		$datosController = array("Est_en"=>$Est_en, "ID_En"=>$ID_En);
+
+		$datos = new DatosEmpresa();
+		$respuesta = $datos->deleteEncargadoModel($datosController);
+		return $respuesta;	
+	}
 
 	//----------Noveddad----------//
 	public function createNovedadController($Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){

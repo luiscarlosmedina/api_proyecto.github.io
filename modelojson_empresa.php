@@ -151,7 +151,7 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function readPhoneSedeModel($id = null){
-		$query = "SELECT en.ID_En, en.N_En, TEL.tel AS telefono
+		$query = "SELECT en.ID_En, en.N_En, es.Est_en, TEL.tel AS telefono
 		FROM encargado AS en
 		JOIN (
 			SELECT ID_En, GROUP_CONCAT(tel) AS tel
@@ -256,6 +256,18 @@ class DatosEmpresa extends Database
 			return true;
 		}
 		
+	}
+	public function deleteEncargadoModel($datosModel){
+		$stmt = Database::getConnection()->prepare("UPDATE encargado_estado SET Est_en = :Est_en WHERE ID_En = :ID_En");
+
+		$stmt->bindParam(":Est_en", $datosModel["Est_en"], PDO::PARAM_STR);
+		$stmt->bindParam(":ID_En", $datosModel["ID_En"], PDO::PARAM_INT);
+
+		if($stmt->execute()){
+			return false;
+		}else{
+			return true;
+		}
 	}
 }
 ?>

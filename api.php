@@ -1,7 +1,7 @@
 <?php
 require_once 'controllerjson.php';
 
-header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: * ");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 $apicall = isset($_GET['apicall']) ? $_GET['apicall'] : '';
@@ -610,6 +610,41 @@ switch ($apicall) {
               $response = array(
                 'error' => true,
                 'message' => 'Ocurrió un error al actualizar el usuario'
+              );
+            }
+          }
+        } else {
+          $response = array(
+            'error' => true,
+            'message' => 'Método de solicitud no válido',
+          );
+        }
+        break;
+      case 'deleteencargado':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          $json = file_get_contents('php://input');
+          $data = json_decode($json, true);
+    
+          if ($data === null) {
+            $response = array(
+              'error' => true,
+              'message' => 'Error en el contenido JSON',
+            );
+          } else {
+            $ID_En = $data['ID_En'];
+            $Est_en = $data['Est_en'];
+
+            $db = new ControllerJson();
+            $result = $db->deleteEncargadoController($Est_en, $ID_En);
+            if ($result) {
+              $response = array(
+                'error' => false,
+                'message' => 'Encargado eliminado correctamente'
+              );
+            } else {
+              $response = array(
+                'error' => true,
+                'message' => 'Ocurrió un error al eliminar el encargado'
               );
             }
           }
