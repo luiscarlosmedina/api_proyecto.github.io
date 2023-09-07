@@ -3,12 +3,13 @@ require_once 'database.php';
 
 class DatosNovedad extends Database
 {
-	//funcion CREATE novedad
-	public function createNovedadModel($datosModel, $tabla){
-		$stmt = Database::getConnection()->prepare("
-		INSERT INTO $tabla (Fe_Nov, T_Nov, Dic_Nov, Des_Nov, id_evi, id_em, ID_S) VALUES (:Fe_Nov, :T_Nov, :Dic_Nov, :Des_Nov, :id_evi, :id_em, :ID_S)");
-		$stmt->bindParam(":Fe_Nov", $datosModel["Fe_Nov"], PDO::PARAM_STR);
-        $stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_STR);
+	//Funcion CREATE tabla Novedad
+	public function createNovedadModel($datosModel){
+		$ahora = "CURRENT_TIMESTAMP()";
+		$stmt = Database::getConnection()->prepare("INSERT INTO novedad (Fe_Nov, T_Nov, Dic_Nov, Des_Nov, id_evi, id_em, ID_S)
+													VALUES (:Fe_Nov, :T_Nov, :Dic_Nov, :Des_Nov, :id_evi, :id_em, :ID_S);");
+        $stmt->bindParam(":Fe_Nov", $datosModel["$ahora"], PDO::PARAM_STR);
+		$stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":Dic_Nov", $datosModel["Dic_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":Des_Nov", $datosModel["Des_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":id_evi", $datosModel["id_evi"], PDO::PARAM_STR);
@@ -21,11 +22,24 @@ class DatosNovedad extends Database
 			return false;
 		}
 	}
-	//Funcion READ Novedad (general y ampladda por id)
+
+	//Funcion READ tabla Novedad
 	public function readNovedadModel($id = null) {
-		$query = "SELECT * FROM novedad";
+		//Consulta General
+		$query = "SELECT 
+		n.ID_Nov AS ID_Novedad,
+		n.Fe_Nov AS Fecha_Novedad,
+		tn.Nombre_Tn AS Tipo_Novedad,
+		COALESCE(n.Dic_Nov, s.Dic_S) AS Direccion,
+		n.Des_Nov AS Descripcion_Novedad,
+		CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado
+	  FROM novedad AS n
+	  JOIN empleado AS em ON n.id_em = em.id_em
+	  LEFT JOIN sede AS s ON n.ID_S = s.ID_S
+	  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov;";
 	
 		if($id !== null) {
+			//Ampliada por id
 			$query = "SELECT 
 			n.ID_Nov AS ID_Novedad,
 			n.Fe_Nov AS Fecha_Novedad,
@@ -57,7 +71,7 @@ class DatosNovedad extends Database
 			return array(); // Devuelve un array vacío en caso de error
 		}
 	}
-
+	//Funcion UPDATE tabla Novedad
 	public function updateNovedadModel($datosModel, $tabla){
 		$stmt = Database::getConnection()->prepare(
 			"UPDATE $tabla set 
@@ -86,17 +100,5 @@ class DatosNovedad extends Database
 			return true;
 		}
 	}
-
-
-
-	public function deleteNovedadModel($ID_Nov, $tabla){
-		$stmt = Database::getConnection()->prepare("DELETE FROM $tabla WHERE ID_Nov = :ID_Nov");
-		$stmt->bindParam(":ID_Nov", $ID_Nov, PDO::PARAM_INT);
-		if($stmt->execute()){
-			echo "Usuario eliminado correctamente";
-		}else{
-			echo "El Usuario no se pudo eliminar";
-		}
-	}	
 }
 ?>

@@ -235,7 +235,8 @@ class ControllerJson
 	}
 
 //----------NOVEDAD----------//
-	//caso CREATE
+
+	//caso CREATE tabla Novedad
 	public function createNovedadController($Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){
 		$datosController = array(
 			"Fe_Nov"=>$Fe_Nov,
@@ -248,10 +249,10 @@ class ControllerJson
 			);
 		
 		$datos = new DatosNovedad();
-		$novedad = $datos->createNovedadModel($datosController, "novedad");
-		return $novedad;
+		$respuesta = $datos->createNovedadModel($datosController);
+		return $respuesta;
 	}
-	// casos READ
+	// casos READ tabla Novedad
 	public function readNovedadController($id = null) {
 		$datos = new DatosNovedad();
 		if ($id !== null) {
@@ -262,7 +263,7 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-
+	//caso UPDATE tabla Novedad
 	public function updateNovedadController($ID_Nov, $Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S)
 	{
 		$datosController = array(
@@ -280,15 +281,6 @@ class ControllerJson
 		$respuesta = $datos->updateNovedadModel($datosController, "novedad");
 		return $respuesta;
 	}
-
-	public function deleteNovedadController($ID_Nov){
-
-		$datos = new DatosNovedad();
-		$respuesta = $datos->deleteNovedadModel($ID_Nov, "Novedad");
-		return $respuesta;
-
-	}
-
 //----------FIN NOVEDAD----------//
 
 	//----------Login----------//

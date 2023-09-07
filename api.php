@@ -624,7 +624,9 @@ switch ($apicall) {
         break;
 
 //----------NOVEDAD----------//
-//http://localhost/../api.php?apicall=createnoovedad + body (Json)
+
+  // caso CREATE tabla Novedad
+    //http:/localhost/.../api.php?apicall=createnoovedad + body (Json)
 case 'createnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
@@ -669,8 +671,7 @@ case 'createnovedad':
   }
   break;
 
-  //caso para VER NOVEDADES
-
+  //caso READ tabla Novedad
 case 'readnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedad') {
     $db = new ControllerJson();
@@ -694,8 +695,8 @@ case 'readnovedad':
     $response['message'] = 'Método de solicitud no válido';
   }
   break;
-
-//http://localhost/../api.php?apicall=updateusuario + body (Json)
+  //caso UPDATE tabla Novedad
+    //http://localhost/../api.php?apicall=updateusuario + body (Json)
 case 'updatenovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
@@ -739,55 +740,9 @@ case 'updatenovedad':
     );
   }
   break;
-
-
-//http://localhost/../api.php?apicall=deletenovedad + body (Json)
-case 'deletenovedad':
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-
-    if ($data === null) {
-      $response = array(
-        'error' => true,
-        'message' => 'Error en el contenido JSON',
-      );
-    } else {
-      $ID_Nov = $data['ID_Nov'];
-
-      $db = new ControllerJson();
-      $result = $db->deleteNovedadController($ID_Nov);
-
-      if ($result) {
-        $response = array(
-          'error' => false,
-          'message' => 'Novedad eliminada correctamente',
-          'contenido' => $db->readNovedadController(),
-        );
-      } else {
-        $response = array(
-          'error' => true,
-          'message' => 'Ocurrió un error al eliminar el usuario',
-        );
-      }
-    }
-  } else {
-    $response = array(
-      'error' => true,
-      'message' => 'Método de solicitud no válido',
-    );
-  }
-  break;
-
-    default:
-      $response = array(
-        'error' => true,
-        'message' => 'Llamado Inválido del API',
-      );
-      break;
 //---------- FIN NOVEDAD----------//
 
-      //----------LOGIN----------//
+//----------LOGIN----------//
 
   //http://localhost/../api.php?apicall=login + body (Json)
   case 'login':
@@ -826,7 +781,13 @@ case 'deletenovedad':
           );
         }
         break;
-      //----------LOGIN----------//        
+//----------FIN LOGIN----------//  
+      default:
+      $response = array(
+        'error' => true,
+        'message' => 'Llamado Inválido del API',
+      );
+      break;      
     }
 
 echo json_encode($response);
