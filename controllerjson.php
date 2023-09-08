@@ -263,6 +263,16 @@ class ControllerJson
 		$respuesta = $datos->createTpNovedadModel($datosController);
 		return $respuesta;
 	}
+	//caso CREATE tabla evidencia
+	public function createEvidenciaController($adjunto){
+		$datosController = array(
+			"adjunto"=>$adjunto,
+			);
+		
+		$datos = new DatosNovedad();
+		$respuesta = $datos->createEvidenciaModel($datosController);
+		return $respuesta;
+	}
 	// casos READ tabla Novedad
 	public function readNovedadController($id = null) {
 		$datos = new DatosNovedad();
@@ -278,6 +288,12 @@ class ControllerJson
 	public function readTpNovedadController() {
 		$datos = new DatosNovedad();
 		$respuesta = $datos->readTpNovedadModel();
+			return $respuesta;
+	}
+	// casos READ tabla evidencia
+	public function readEvidenciaController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readEvidenciaModel();
 			return $respuesta;
 	}
 	//caso UPDATE tabla tp_novedad
@@ -309,6 +325,18 @@ class ControllerJson
 			
 		$datos = new DatosNovedad();
 		$respuesta = $datos->updateTpNovedadModel($datosController);
+		return $respuesta;
+	}
+	//caso UPDATE tabla tp_novedad
+	public function updateEvidenciaController($id_evi, $adjunto)
+	{
+		$datosController = array(
+			"id_evi"=>$id_evi,
+			"adjunto"=>$adjunto,
+		);
+			
+		$datos = new DatosNovedad();
+		$respuesta = $datos->updateEvidenciaModel($datosController);
 		return $respuesta;
 	}
 //----------FIN NOVEDAD----------//
