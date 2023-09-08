@@ -36,6 +36,20 @@ class DatosNovedad extends Database
 		}else{
 			return false;
 		}
+	}
+	//Funcion CREATE tabla evidenica
+	public function createEvidenciaModel($datosModel){
+
+		$stmt = Database::getConnection()->prepare("INSERT INTO evidencia (adjunto)
+													VALUES (:adjunto);");
+
+		$stmt->bindParam(":adjunto", $datosModel["adjunto"], PDO::PARAM_STR);
+	
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
+		}
 	}	
 	//Funcion READ tabla Novedad
 	public function readNovedadModel($id = null) {
@@ -96,6 +110,17 @@ class DatosNovedad extends Database
 			return true;
 		}
 	}
+	//Funcion READ tabla evidencia
+	public function readEvidenciaModel(){
+		$stmt = Database::getConnection()->prepare(
+			"SELECT id_evi, adjunto FROM evidenica;"
+		);
+		if($stmt->execute()){
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}else{
+			return true;
+		}
+	}
 	//Funcion UPDATE tabla Novedad
 	public function updateNovedadModel($datosModel){
 		$stmt = Database::getConnection()->prepare(
@@ -134,6 +159,20 @@ class DatosNovedad extends Database
 		$stmt->bindParam(":Nombre_Tn", $datosModel["Nombre_Tn"], PDO::PARAM_STR);
 		$stmt->bindParam(":descrip_Tn", $datosModel["descrip_Tn"], PDO::PARAM_STR);
 
+		if($stmt->execute()){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	//Funcion UPDATE tabla evidencia
+	public function updateEvidenciaModel($datosModel){
+		$stmt = Database::getConnection()->prepare(
+			"UPDATE evidencia SET adjunto = :adjunto WHERE id_evi = :id_evi;");
+
+		$stmt->bindParam(":id_evi", $datosModel["id_evi"], PDO::PARAM_INT);
+		$stmt->bindParam(":adjunto", $datosModel["adjunto"], PDO::PARAM_STR);
+		
 		if($stmt->execute()){
 			return false;
 		}else{

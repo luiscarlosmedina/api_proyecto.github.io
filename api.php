@@ -711,6 +711,45 @@ case 'createtpnovedad':
   }
   break;
 
+  // caso CREATE tabla evidencia
+    //http:/localhost/.../api.php?apicall=createevidencia + body (Json)
+case 'createevidencia':
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+
+    if ($data === null) {
+      $response = array(
+        'error' => true,
+        'message' => 'Error en el contenido JSON',
+      );
+    } else {
+      $adjunto = $data['adjunto'];
+
+      $db = new ControllerJson();
+      $result = $db->createEvidenciaController($adjunto);
+
+      if ($result) {
+        $response = array(
+          'error' => false,
+          'message' => 'tipo de novedad agregada correctamente',
+          'contenido' => $db->readEvidenciaController(),
+        );
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Ocurrió un error, intenta nuevamente',
+        );
+      }
+    }
+  } else {
+    $response = array(
+      'error' => true,
+      'message' => 'Método de solicitud no válido',
+    );
+  }
+  break;
+
   //caso READ tabla Novedad
 case 'readnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedad') {
@@ -751,6 +790,22 @@ case 'readnovedad':
       $response['message'] = 'Método de solicitud no válido';
     }
   break;
+
+  //caso READ tabla evidencia
+    //http://localhost/../api.php?apicall=readevidencia
+    case 'readevidencia':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $db = new ControllerJson();
+  
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readEvidenciaController();
+              
+      }else{
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+    break;
 
   //caso UPDATE tabla Novedad
     //http://localhost/../api.php?apicall=updatenovedad + body (Json)
@@ -797,9 +852,49 @@ case 'updatenovedad':
     );
   }
   break;
-  //caso UPDATE tabla tp_novedad
-    //http://localhost/../api.php?apicall=updatetpnovedad + body (Json)
-case 'updatetpnovedad':
+
+  case 'updatetpnovedad':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $json = file_get_contents('php://input');
+      $data = json_decode($json, true);
+  
+      if ($data === null) {
+        $response = array(
+          'error' => true,
+          'message' => 'Error en el contenido JSON',
+        );
+      } else {
+        $T_Nov = $data['T_Nov'];
+        $Nombre_Tn = $data['Nombre_Tn'];
+        $descrip_Tn = $data['descrip_Tn'];
+  
+        $db = new ControllerJson();
+        $result = $db->updateTpNovedadController($T_Nov, $Nombre_Tn, $descrip_Tn);
+  
+        if ($result == false) {
+          $response = array(
+            'error' => false,
+            'message' => 'Tipo de novedad actualizada correctamente',
+            'contenido' => $db->readTpNovedadController(),
+          );
+        } else {
+          $response = array(
+            'error' => true,
+            'message' => 'Ocurrió un error al actualizar la tipo de novedad',
+          );
+        }
+      }
+    }else{
+      $response = array(
+        'error' => true,
+        'message' => 'Método de solicitud no válido',
+      );
+    }
+    break;
+
+  //caso UPDATE tabla evidencia
+    //http://localhost/../api.php?apicall=updateevidencia + body (Json)
+case 'updateevidencia':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
@@ -815,13 +910,13 @@ case 'updatetpnovedad':
       $descrip_Tn = $data['descrip_Tn'];
 
       $db = new ControllerJson();
-      $result = $db->updateTpNovedadController($T_Nov, $Nombre_Tn, $descrip_Tn);
+      $result = $db->updateEvidenciaController($id_evi, $adjunto);
 
       if ($result == false) {
         $response = array(
           'error' => false,
           'message' => 'Tipo de novedad actualizada correctamente',
-          'contenido' => $db->readTpNovedadController(),
+          'contenido' => $db->readEvidenciaController(),
         );
       } else {
         $response = array(
