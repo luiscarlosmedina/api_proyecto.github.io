@@ -252,6 +252,17 @@ class ControllerJson
 		$respuesta = $datos->createNovedadModel($datosController);
 		return $respuesta;
 	}
+	//caso CREATE tabla tpNovedad
+	public function createTpNovedadController($Nombre_Tn, $descrip_Tn){
+		$datosController = array(
+			"Nombre_Tn"=>$Nombre_Tn,
+			"descrip_Tn"=>$descrip_Tn,
+			);
+		
+		$datos = new DatosNovedad();
+		$respuesta = $datos->createTpNovedadModel($datosController);
+		return $respuesta;
+	}
 	// casos READ tabla Novedad
 	public function readNovedadController($id = null) {
 		$datos = new DatosNovedad();
@@ -263,7 +274,13 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-	//caso UPDATE tabla Novedad
+	// casos READ tabla tp_novedad
+	public function readTpNovedadController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readTpNovedadModel();
+			return $respuesta;
+	}
+	//caso UPDATE tabla tp_novedad
 	public function updateNovedadController($ID_Nov, $Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S)
 	{
 		$datosController = array(
@@ -274,11 +291,24 @@ class ControllerJson
 			"Des_Nov"=>$Des_Nov,
 			"id_evi"=>$id_evi,
 			"id_em"=>$id_em,
-			"ID_S"=>$ID_S
+			"ID_S"=>$ID_S,
 		);
 			
 		$datos = new DatosNovedad();
-		$respuesta = $datos->updateNovedadModel($datosController, "novedad");
+		$respuesta = $datos->updateNovedadModel($datosController);
+		return $respuesta;
+	}
+	//caso UPDATE tabla tp_novedad
+	public function updateTpNovedadController($T_Nov, $Nombre_Tn, $descrip_Tn)
+	{
+		$datosController = array(
+			"T_Nov"=>$T_Nov,
+			"Nombre_Tn"=>$Nombre_Tn,
+			"descrip_Tn"=>$descrip_Tn,
+		);
+			
+		$datos = new DatosNovedad();
+		$respuesta = $datos->updateTpNovedadModel($datosController);
 		return $respuesta;
 	}
 //----------FIN NOVEDAD----------//

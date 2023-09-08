@@ -626,7 +626,7 @@ switch ($apicall) {
 //----------NOVEDAD----------//
 
   // caso CREATE tabla Novedad
-    //http:/localhost/.../api.php?apicall=createnoovedad + body (Json)
+    //http:/localhost/.../api.php?apicall=createnovedad + body (Json)
 case 'createnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
@@ -671,6 +671,46 @@ case 'createnovedad':
   }
   break;
 
+  // caso CREATE tabla tp_novedad
+    //http:/localhost/.../api.php?apicall=createtpnovedad + body (Json)
+case 'createtpnovedad':
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+
+    if ($data === null) {
+      $response = array(
+        'error' => true,
+        'message' => 'Error en el contenido JSON',
+      );
+    } else {
+      $Nombre_Tn = $data['Nombre_Tn'];
+      $descrip_Tn = $data['descrip_Tn'];
+
+      $db = new ControllerJson();
+      $result = $db->createTpNovedadController($Nombre_Tn, $descrip_Tn);
+
+      if ($result) {
+        $response = array(
+          'error' => false,
+          'message' => 'tipo de novedad agregada correctamente',
+          'contenido' => $db->readTpNovdadController(),
+        );
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Ocurrió un error, intenta nuevamente',
+        );
+      }
+    }
+  } else {
+    $response = array(
+      'error' => true,
+      'message' => 'Método de solicitud no válido',
+    );
+  }
+  break;
+
   //caso READ tabla Novedad
 case 'readnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedad') {
@@ -692,11 +732,28 @@ case 'readnovedad':
     }
   } else {
     $response['error'] = true;
-    $response['message'] = 'Método de solicitud no válido';
+    $response['message'] = 'Método de solicitud no válido';
   }
   break;
+
+  //caso READ tabla tp_novedad
+    //http://localhost/../api.php?apicall=readtpnovedad
+  case 'readtpnovedad':
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+        $response['error'] = false;
+        $response['message'] = 'Solicitud completada correctamente';
+        $response['contenido'] = $db->readTpNovedadController();
+            
+    }else{
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+    }
+  break;
+
   //caso UPDATE tabla Novedad
-    //http://localhost/../api.php?apicall=updateusuario + body (Json)
+    //http://localhost/../api.php?apicall=updatenovedad + body (Json)
 case 'updatenovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
@@ -734,6 +791,46 @@ case 'updatenovedad':
       }
     }
   } else {
+    $response = array(
+      'error' => true,
+      'message' => 'Método de solicitud no válido',
+    );
+  }
+  break;
+  //caso UPDATE tabla tp_novedad
+    //http://localhost/../api.php?apicall=updatetpnovedad + body (Json)
+case 'updatetpnovedad':
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+
+    if ($data === null) {
+      $response = array(
+        'error' => true,
+        'message' => 'Error en el contenido JSON',
+      );
+    } else {
+      $T_Nov = $data['T_Nov'];
+      $Nombre_Tn = $data['Nombre_Tn'];
+      $descrip_Tn = $data['descrip_Tn'];
+
+      $db = new ControllerJson();
+      $result = $db->updateTpNovedadController($T_Nov, $Nombre_Tn, $descrip_Tn);
+
+      if ($result == false) {
+        $response = array(
+          'error' => false,
+          'message' => 'Tipo de novedad actualizada correctamente',
+          'contenido' => $db->readTpNovedadController(),
+        );
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Ocurrió un error al actualizar la tipo de novedad',
+        );
+      }
+    }
+  }else{
     $response = array(
       'error' => true,
       'message' => 'Método de solicitud no válido',

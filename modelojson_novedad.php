@@ -22,7 +22,21 @@ class DatosNovedad extends Database
 			return false;
 		}
 	}
+	//Funcion CREATE tabla tpNovedad
+	public function createTpNovedadModel($datosModel){
 
+		$stmt = Database::getConnection()->prepare("INSERT INTO tp_novedad (Nombre_Tn, descrip_Tn)
+													VALUES (:Nombre_Tn, :descrip_Tn);");
+
+		$stmt->bindParam(":Nombre_Tn", $datosModel["Nombre_Tn"], PDO::PARAM_STR);
+		$stmt->bindParam(":descrip_Tn", $datosModel["descrip_Tn"], PDO::PARAM_STR);
+	
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}	
 	//Funcion READ tabla Novedad
 	public function readNovedadModel($id = null) {
 		//Consulta General
@@ -71,10 +85,21 @@ class DatosNovedad extends Database
 			return array(); // Devuelve un array vacío en caso de error
 		}
 	}
-	//Funcion UPDATE tabla Novedad
-	public function updateNovedadModel($datosModel, $tabla){
+	//Funcion READ tabla tp_novedad
+	public function readTpNovedadModel(){
 		$stmt = Database::getConnection()->prepare(
-			"UPDATE $tabla set 
+			"SELECT T_Nov, Nombre_Tn AS Tipo_Novedad, descrip_Tn AS descripcion FROM tp_novedad;"
+		);
+		if($stmt->execute()){
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}else{
+			return true;
+		}
+	}
+	//Funcion UPDATE tabla Novedad
+	public function updateNovedadModel($datosModel){
+		$stmt = Database::getConnection()->prepare(
+			"UPDATE novedad set 
 			ID_Nov=:ID_Nov, 
 			Fe_Nov=:Fe_Nov, 
 			T_Nov=:T_Nov, 
@@ -93,6 +118,21 @@ class DatosNovedad extends Database
 		$stmt->bindParam(":id_evi", $datosModel["id_evi"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
 		$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_INT);
+
+		if($stmt->execute()){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	//Funcion UPDATE tabla tp_novedad
+	public function updateTpNovedadModel($datosModel){
+		$stmt = Database::getConnection()->prepare(
+			"UPDATE tp_novedad SET Nombre_Tn = :Nombre_Tn, descrip_Tn = :descrip_Tn WHERE T_Nov = :T_Nov;");
+
+		$stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_INT);
+		$stmt->bindParam(":Nombre_Tn", $datosModel["Nombre_Tn"], PDO::PARAM_STR);
+		$stmt->bindParam(":descrip_Tn", $datosModel["descrip_Tn"], PDO::PARAM_STR);
 
 		if($stmt->execute()){
 			return false;
