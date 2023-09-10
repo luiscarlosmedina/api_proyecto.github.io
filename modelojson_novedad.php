@@ -113,7 +113,7 @@ class DatosNovedad extends Database
 	//Funcion READ tabla evidencia
 	public function readEvidenciaModel(){
 		$stmt = Database::getConnection()->prepare(
-			"SELECT id_evi, adjunto FROM evidenica;"
+			"SELECT id_evi, adjunto FROM evidencia;"
 		);
 		if($stmt->execute()){
 			return $stmt->fetchAll(PDO::FETCH_OBJ);

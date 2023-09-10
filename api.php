@@ -905,9 +905,8 @@ case 'updateevidencia':
         'message' => 'Error en el contenido JSON',
       );
     } else {
-      $T_Nov = $data['T_Nov'];
-      $Nombre_Tn = $data['Nombre_Tn'];
-      $descrip_Tn = $data['descrip_Tn'];
+      $id_evi = $data['id_evi'];
+      $adjunto = $data['adjunto'];
 
       $db = new ControllerJson();
       $result = $db->updateEvidenciaController($id_evi, $adjunto);
