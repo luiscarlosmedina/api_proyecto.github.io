@@ -483,22 +483,18 @@ switch ($apicall) {
               'message' => 'Error en el contenido JSON',
             );
           } else {
-            $sedeId = $data['sedeId'];
-            $direccion = $data['direccion'];
-            $area = $data['area'];
+            $ID_S = $data['ID_S'];
+            $Dic_S = $data['Dic_S'];
+            $Sec_V = $data['Sec_V'];
     
             $db = new ControllerJson();
-            $result = $db->updateSedeController($sedeId, $direccion, $area);
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => true,
-              );
+            $result = $db->updateSedeController($ID_S, $Dic_S, $Sec_V);
+            if ($result == true) {
+                $response['error'] = false;
+                $response['message'] = 'Solicitud completada correctamente';  
             } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error al actualizar el usuario',
-              );
+                $response['error'] = true;
+                $response['message'] = 'Solicitud fallida';
             }
           }
         } else {

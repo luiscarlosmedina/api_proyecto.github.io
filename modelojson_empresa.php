@@ -204,16 +204,16 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function updateSedeModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE sede AS se SET se.Dic_S = :direccion, se.Sec_V = :area WHERE se.ID_S = :sedeId");
+		$stmt = Database::getConnection()->prepare("UPDATE sede AS se SET se.Dic_S = :Dic_S, se.Sec_V = :Sec_V WHERE se.ID_S = :ID_S");
 		
-		$stmt->bindParam(":sedeId", $datosModel["sedeId"], PDO::PARAM_INT);
-		$stmt->bindParam(":direccion", $datosModel["direccion"], PDO::PARAM_STR);
-		$stmt->bindParam(":area", $datosModel["area"], PDO::PARAM_INT);
+		$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_INT);
+		$stmt->bindParam(":Dic_S", $datosModel["Dic_S"], PDO::PARAM_STR);
+		$stmt->bindParam(":Sec_V", $datosModel["Sec_V"], PDO::PARAM_INT);
 		
 		if($stmt->execute()){
-			echo "Actualizacion Exitosa";
+			return true;
 		}else{
-			echo "No se pudo hacer la Actualizacion";
+			return false;
 		}
 	}
 	public function updateEncargadoModel($datosModel){

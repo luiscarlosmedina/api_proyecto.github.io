@@ -192,9 +192,9 @@ class ControllerJson
 
 	}
 	#usuarios	
-	public function updateSedeController($sedeId, $direccion, $area){
+	public function updateSedeController($ID_S, $Dic_S, $Sec_V){
 
-		$datosController = array("sedeId"=>$sedeId, "direccion"=>$direccion, "area"=>$area);
+		$datosController = array("ID_S"=>$ID_S, "Dic_S"=>$Dic_S, "Sec_V"=>$Sec_V);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->updateSedeModel($datosController);
