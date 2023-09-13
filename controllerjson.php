@@ -10,9 +10,10 @@ class ControllerJson
 {
 	// ------------------- max empleados --------------------
 	
-	public function createempleadoController($documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol){
+	public function createempleadoController( $id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw){
 		$datosController = array(
 		    
+			"id_doc"=>$id_doc,
 			"documento"=>$documento,		    
 			"n_em"=>$n_em,
 			"a_em"=>$a_em,
@@ -22,6 +23,36 @@ class ControllerJson
 			"lic_emp"=>$lic_emp,
 			"lib_em"=>$lib_em,
 			"tel_em"=>$tel_em,
+			"contrato" =>$contrato,
+			"barloc_em"=>$barloc_em,
+			"id_pens"=>$id_pens,
+			"id_eps"=>$id_eps,
+			"id_arl"=>$id_arl,
+			"id_ces"=>$id_ces,
+			"id_rh"=>$id_rh,
+			"id_rol"=>$id_rol,
+			"estado"=>$estado,
+			"passw"=>$passw
+			);
+		
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->createEmpleadoModel($datosController, "empleado", "login");
+		return $respuesta;
+	}
+	public function updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado)
+	{
+		$datosController = array(
+			"id_em"=>$id_em,
+			"documento"=>$documento,		    
+			"n_em"=>$n_em,
+			"a_em"=>$a_em,
+			"eml_em"=>$eml_em,
+			"f_em"=>$f_em,
+			"dir_em"=>$dir_em,
+			"lic_emp"=>$lic_emp,
+			"lib_em"=>$lib_em,
+			"tel_em"=>$tel_em,
+			"contrato"=>$contrato,
 			"barloc_em"=>$barloc_em,
 			"id_doc"=>$id_doc,
 			"id_pens"=>$id_pens,
@@ -29,33 +60,9 @@ class ControllerJson
 			"id_arl"=>$id_arl,
 			"id_ces"=>$id_ces,
 			"id_rh"=>$id_rh,
-			"id_rol"=>$id_rol
-			);
-		
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->createEmpleadoModel($datosController, "empleado");
-		return $respuesta;
-	}
-	public function updateEmpleadoController($ID_Em, $N_Em, $A_Em, $Eml_Em, $F_Em, $Dir_Em, $Lic_Emp, $lib_Em, $tel_Em, $barloc_Em, $ID_Doc, $ID_pens, $ID_eps, $ID_arl, $ID_ces, $ID_RH, $ID_rol)
-	{
-		$datosController = array(
-			"ID_Em"=>$ID_Em, 
-			"N_Em"=>$N_Em,
-			"A_Em"=>$A_Em , 
-			"Eml_Em"=>$Eml_Em , 
-			"F_Em"=>$F_Em, 
-			"Dir_Em"=>$Dir_Em,
-			"Lic_Emp"=>$Lic_Emp,
-			"lib_Em"=>$lib_Em, 
-			"tel_Em"=>$tel_Em, 
-			"barloc_Em"=>$barloc_Em,
-			"ID_Doc"=>$ID_Doc, 
-			"ID_pens"=>$ID_pens, 
-			"ID_eps"=>$ID_eps, 
-			"ID_arl"=>$ID_arl, 
-			"ID_ces"=>$ID_ces, 
-			"ID_RH"=>$ID_RH,
-			"ID_rol"=>$ID_rol);
+			"id_rol"=>$id_rol,
+			"estado"=>$estado
+		);
 			
 		$datos = new DatosEmpleado();
 		$respuesta = $datos->updateEmpleadoModel($datosController, "empleado");
@@ -69,10 +76,10 @@ class ControllerJson
 		return $respuesta;
 	}
 
-	public function deleteempleadoController($ID_Em){
+	public function deleteempleadoController($id_em){
 
 		$datos = new DatosEmpleado();
-		$respuesta = $datos->deleteEmpleadoModel($ID_Em, "empleado");
+		$respuesta = $datos->deleteEmpleadoModel($id_em, "empleado");
 		return $respuesta;
 
 	}
@@ -88,8 +95,6 @@ class ControllerJson
 	}
 	
 	//  ------------------- min empleados --------------------
-	
-	
 
 	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
@@ -236,7 +241,9 @@ class ControllerJson
 		return $respuesta;	
 	}
 
-	//----------Noveddad----------//
+//----------NOVEDAD----------//
+
+	//caso CREATE tabla Novedad
 	public function createNovedadController($Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){
 		$datosController = array(
 			"Fe_Nov"=>$Fe_Nov,
@@ -249,9 +256,54 @@ class ControllerJson
 			);
 		
 		$datos = new DatosNovedad();
-		$novedad = $datos->createNovedadModel($datosController, "novedad");
-		return $novedad;
+		$respuesta = $datos->createNovedadModel($datosController);
+		return $respuesta;
 	}
+	//caso CREATE tabla tpNovedad
+	public function createTpNovedadController($Nombre_Tn, $descrip_Tn){
+		$datosController = array(
+			"Nombre_Tn"=>$Nombre_Tn,
+			"descrip_Tn"=>$descrip_Tn,
+			);
+		
+		$datos = new DatosNovedad();
+		$respuesta = $datos->createTpNovedadModel($datosController);
+		return $respuesta;
+	}
+	//caso CREATE tabla evidencia
+	public function createEvidenciaController($adjunto){
+		$datosController = array(
+			"adjunto"=>$adjunto,
+			);
+		
+		$datos = new DatosNovedad();
+		$respuesta = $datos->createEvidenciaModel($datosController);
+		return $respuesta;
+	}
+	// casos READ tabla Novedad
+	public function readNovedadController($id = null) {
+		$datos = new DatosNovedad();
+		if ($id !== null) {
+			$respuesta = $datos->readNovedadModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readNovedadModel();
+			return $respuesta;
+		}
+	}
+	// casos READ tabla tp_novedad
+	public function readTpNovedadController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readTpNovedadModel();
+			return $respuesta;
+	}
+	// casos READ tabla evidencia
+	public function readEvidenciaController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readEvidenciaModel();
+			return $respuesta;
+	}
+	//caso UPDATE tabla tp_novedad
 	public function updateNovedadController($ID_Nov, $Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S)
 	{
 		$datosController = array(
@@ -262,28 +314,39 @@ class ControllerJson
 			"Des_Nov"=>$Des_Nov,
 			"id_evi"=>$id_evi,
 			"id_em"=>$id_em,
-			"ID_S"=>$ID_S
+			"ID_S"=>$ID_S,
 		);
 			
 		$datos = new DatosNovedad();
-		$respuesta = $datos->updateNovedadModel($datosController, "novedad");
+		$respuesta = $datos->updateNovedadModel($datosController);
 		return $respuesta;
 	}
-
-
-	public function readNovedadController(){
+	//caso UPDATE tabla tp_novedad
+	public function updateTpNovedadController($T_Nov, $Nombre_Tn, $descrip_Tn)
+	{
+		$datosController = array(
+			"T_Nov"=>$T_Nov,
+			"Nombre_Tn"=>$Nombre_Tn,
+			"descrip_Tn"=>$descrip_Tn,
+		);
+			
 		$datos = new DatosNovedad();
-		$respuesta = $datos->readNovedadModel("Novedad");
+		$respuesta = $datos->updateTpNovedadModel($datosController);
 		return $respuesta;
 	}
-
-	public function deleteNovedadController($ID_Nov){
-
+	//caso UPDATE tabla tp_novedad
+	public function updateEvidenciaController($id_evi, $adjunto)
+	{
+		$datosController = array(
+			"id_evi"=>$id_evi,
+			"adjunto"=>$adjunto,
+		);
+			
 		$datos = new DatosNovedad();
-		$respuesta = $datos->deleteNovedadModel($ID_Nov, "Novedad");
+		$respuesta = $datos->updateEvidenciaModel($datosController);
 		return $respuesta;
-
 	}
+//----------FIN NOVEDAD----------//
 
 	//----------Login----------//
 	//login

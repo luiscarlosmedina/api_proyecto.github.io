@@ -8,7 +8,7 @@ $apicall = isset($_GET['apicall']) ? $_GET['apicall'] : '';
 
 switch ($apicall) {
     
-    // ---------------------- max empleados --------------------------
+     // ---------------------- max empleados --------------------------
     
     //https://developersaurios.000webhostapp.com/api.php?apicall=createempleado
     case 'createempleado':
@@ -22,6 +22,7 @@ switch ($apicall) {
             'message' => 'Error en el contenido JSON',
           );
         } else {
+          $id_doc = $data['id_doc'];
           $documento = $data['documento'];
           $n_em = $data['n_em'];
           $a_em = $data['a_em'];
@@ -31,18 +32,20 @@ switch ($apicall) {
           $lic_emp = $data['lic_emp'];
           $lib_em = $data['lib_em'];
           $tel_em = $data['tel_em'];
+          $contrato = $data['contrato'];
           $barloc_em = $data['barloc_em'];
-          $id_doc = $data['id_doc'];
-		      $id_pens = $data['id_pens'];
-		      $id_eps = $data['id_eps'];
-		      $id_arl = $data['id_arl'];
-		      $id_ces = $data['id_ces'];
-		      $id_rh = $data['id_rh'];
-		      $id_rol = $data['id_rol'];
+          $id_pens = $data['id_pens'];
+          $id_eps = $data['id_eps'];
+          $id_arl = $data['id_arl'];
+          $id_ces = $data['id_ces'];
+          $id_rh = $data['id_rh'];
+          $id_rol = $data['id_rol'];
+          $estado = $data['estado'];
+          $passw = $data['passw'];
 
 		  
           $db = new ControllerJson();
-          $result = $db->createempleadoController($documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol);
+          $result = $db->createempleadoController($id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw);
 
           if ($result) {
             $response = array(
@@ -77,7 +80,7 @@ switch ($apicall) {
             'message' => 'Error en el contenido JSON',
           );
         } else {
-          $id_em = $data['$id_em'];
+          $id_em = $data['id_em'];
           $documento = $data['documento'];
 		      $n_em = $data['n_em'];
           $a_em = $data['a_em'];
@@ -87,6 +90,7 @@ switch ($apicall) {
           $lic_emp = $data['lic_emp'];
           $lib_em = $data['lib_em'];
           $tel_em = $data['tel_em'];
+          $contrato = $data['contrato'];
           $barloc_em = $data['barloc_em'];
           $id_doc = $data['id_doc'];
 		      $id_pens = $data['id_pens'];
@@ -95,10 +99,10 @@ switch ($apicall) {
 		      $id_ces = $data['id_ces'];
 		      $id_rh = $data['id_rh'];
 		      $id_rol = $data['id_rol'];
+          $estado = $data['estado'];
 
           $db = new ControllerJson();
-          $result = $db->updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol);
-
+          $result = $db->updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado);
           if ($result) {
             $response = array(
               'error' => false,
@@ -108,7 +112,7 @@ switch ($apicall) {
           } else {
             $response = array(
               'error' => true,
-              'message' => 'Ocurrió un error al actualizar el usuario',
+              'message' => 'Ocurrio un error al actualizar el usuario',
             );
           }
         }
@@ -185,9 +189,7 @@ switch ($apicall) {
       );
       break;
       
-     // ----------------------min empleados --------------------------
-     
-      
+     // ----------------------min empleados --------------------------      
       
       //empresa
       case 'createempresa':
@@ -620,44 +622,11 @@ switch ($apicall) {
           );
         }
         break;
-      case 'deleteencargado':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
-          } else {
-            $ID_En = $data['ID_En'];
-            $Est_en = $data['Est_en'];
 
-            $db = new ControllerJson();
-            $result = $db->deleteEncargadoController($Est_en, $ID_En);
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Encargado eliminado correctamente'
-              );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error al eliminar el encargado'
-              );
-            }
-          }
-        } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
-        }
-        break;
-      //----------NOVEDAD----------//
+//----------NOVEDAD----------//
 
-//http://localhost/../api.php?apicall=createnoovedad + body (Json)
+  // caso CREATE tabla Novedad
+    //http:/localhost/.../api.php?apicall=createnovedad + body (Json)
 case 'createnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
@@ -702,17 +671,144 @@ case 'createnovedad':
   }
   break;
 
-//http://localhost/../api.php?apicall=readnovedad
-  case 'readnovedad':
-  $db = new ControllerJson();
-  $response = array(
-    'error' => false,
-    'message' => 'Solicitud completada correctamente',
-    'contenido' => $db->readNovedadController(),
-  );
+  // caso CREATE tabla tp_novedad
+    //http:/localhost/.../api.php?apicall=createtpnovedad + body (Json)
+case 'createtpnovedad':
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+
+    if ($data === null) {
+      $response = array(
+        'error' => true,
+        'message' => 'Error en el contenido JSON',
+      );
+    } else {
+      $Nombre_Tn = $data['Nombre_Tn'];
+      $descrip_Tn = $data['descrip_Tn'];
+
+      $db = new ControllerJson();
+      $result = $db->createTpNovedadController($Nombre_Tn, $descrip_Tn);
+
+      if ($result) {
+        $response = array(
+          'error' => false,
+          'message' => 'tipo de novedad agregada correctamente',
+          'contenido' => $db->readTpNovdadController(),
+        );
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Ocurrió un error, intenta nuevamente',
+        );
+      }
+    }
+  } else {
+    $response = array(
+      'error' => true,
+      'message' => 'Método de solicitud no válido',
+    );
+  }
   break;
 
-//http://localhost/../api.php?apicall=updateusuario + body (Json)
+  // caso CREATE tabla evidencia
+    //http:/localhost/.../api.php?apicall=createevidencia + body (Json)
+case 'createevidencia':
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $json = file_get_contents('php://input');
+    $data = json_decode($json, true);
+
+    if ($data === null) {
+      $response = array(
+        'error' => true,
+        'message' => 'Error en el contenido JSON',
+      );
+    } else {
+      $adjunto = $data['adjunto'];
+
+      $db = new ControllerJson();
+      $result = $db->createEvidenciaController($adjunto);
+
+      if ($result) {
+        $response = array(
+          'error' => false,
+          'message' => 'tipo de novedad agregada correctamente',
+          'contenido' => $db->readEvidenciaController(),
+        );
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Ocurrió un error, intenta nuevamente',
+        );
+      }
+    }
+  } else {
+    $response = array(
+      'error' => true,
+      'message' => 'Método de solicitud no válido',
+    );
+  }
+  break;
+
+  //caso READ tabla Novedad
+case 'readnovedad':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedad') {
+    $db = new ControllerJson();
+    $id = $_GET['id'];
+  
+    if (!empty($id)) {
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readNovedadController($id) ;
+      //forma de llamar al api
+        //http://localhost/../api.php?apicall=readnovedad&id=1
+    } else {
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readNovedadController();
+      //forma de llamar al api
+        //http://localhost/../api.php?apicall=readnovedad
+    }
+  } else {
+    $response['error'] = true;
+    $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+  //caso READ tabla tp_novedad
+    //http://localhost/../api.php?apicall=readtpnovedad
+  case 'readtpnovedad':
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+        $response['error'] = false;
+        $response['message'] = 'Solicitud completada correctamente';
+        $response['contenido'] = $db->readTpNovedadController();
+            
+    }else{
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+    }
+  break;
+
+  //caso READ tabla evidencia
+    //http://localhost/../api.php?apicall=readevidencia
+    case 'readevidencia':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $db = new ControllerJson();
+  
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readEvidenciaController();
+              
+      }else{
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+    break;
+
+  //caso UPDATE tabla Novedad
+    //http://localhost/../api.php?apicall=updatenovedad + body (Json)
 case 'updatenovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
@@ -757,9 +853,48 @@ case 'updatenovedad':
   }
   break;
 
+  case 'updatetpnovedad':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      $json = file_get_contents('php://input');
+      $data = json_decode($json, true);
+  
+      if ($data === null) {
+        $response = array(
+          'error' => true,
+          'message' => 'Error en el contenido JSON',
+        );
+      } else {
+        $T_Nov = $data['T_Nov'];
+        $Nombre_Tn = $data['Nombre_Tn'];
+        $descrip_Tn = $data['descrip_Tn'];
+  
+        $db = new ControllerJson();
+        $result = $db->updateTpNovedadController($T_Nov, $Nombre_Tn, $descrip_Tn);
+  
+        if ($result == false) {
+          $response = array(
+            'error' => false,
+            'message' => 'Tipo de novedad actualizada correctamente',
+            'contenido' => $db->readTpNovedadController(),
+          );
+        } else {
+          $response = array(
+            'error' => true,
+            'message' => 'Ocurrió un error al actualizar la tipo de novedad',
+          );
+        }
+      }
+    }else{
+      $response = array(
+        'error' => true,
+        'message' => 'Método de solicitud no válido',
+      );
+    }
+    break;
 
-//http://localhost/../api.php?apicall=deletenovedad + body (Json)
-case 'deletenovedad':
+  //caso UPDATE tabla evidencia
+    //http://localhost/../api.php?apicall=updateevidencia + body (Json)
+case 'updateevidencia':
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $json = file_get_contents('php://input');
     $data = json_decode($json, true);
@@ -770,41 +905,35 @@ case 'deletenovedad':
         'message' => 'Error en el contenido JSON',
       );
     } else {
-      $ID_Nov = $data['ID_Nov'];
+      $id_evi = $data['id_evi'];
+      $adjunto = $data['adjunto'];
 
       $db = new ControllerJson();
-      $result = $db->deleteNovedadController($ID_Nov);
+      $result = $db->updateEvidenciaController($id_evi, $adjunto);
 
-      if ($result) {
+      if ($result == false) {
         $response = array(
           'error' => false,
-          'message' => 'Novedad eliminada correctamente',
-          'contenido' => $db->readNovedadController(),
+          'message' => 'Tipo de novedad actualizada correctamente',
+          'contenido' => $db->readEvidenciaController(),
         );
       } else {
         $response = array(
           'error' => true,
-          'message' => 'Ocurrió un error al eliminar el usuario',
+          'message' => 'Ocurrió un error al actualizar la tipo de novedad',
         );
       }
     }
-  } else {
+  }else{
     $response = array(
       'error' => true,
       'message' => 'Método de solicitud no válido',
     );
   }
   break;
+//---------- FIN NOVEDAD----------//
 
-    default:
-      $response = array(
-        'error' => true,
-        'message' => 'Llamado Inválido del API',
-      );
-      break;
-
-      //----------LOGIN----------//
-      //http://localhost/../api.php?apicall=createuser + body (Json)
+//----------LOGIN----------//
 
   //http://localhost/../api.php?apicall=login + body (Json)
   case 'login':
@@ -842,7 +971,14 @@ case 'deletenovedad':
             'message' => 'Método de solicitud no válido',
           );
         }
-        break;  
+        break;
+//----------FIN LOGIN----------//  
+      default:
+      $response = array(
+        'error' => true,
+        'message' => 'Llamado Inválido del API',
+      );
+      break;      
     }
 
 echo json_encode($response);
