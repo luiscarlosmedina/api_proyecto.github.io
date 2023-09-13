@@ -291,17 +291,21 @@ switch ($apicall) {
               'message' => 'Error en el contenido JSON',
             );
           } else {
-            $encargado = $data['encargado'];
-            $sedeId = $data['sedeId'];
-            $encargadoEst = $data['encargadoEst'];
+            $ID_S = $data['ID_S'];
+            $N_En = $data['N_En'];
+            $Est_en = $data['Est_en'];
+            $tel1 = $data['tel1'];
+            $tel2 = $data['tel2'];
+            $tel3 = $data['tel3'];
     
             $db = new ControllerJson();
-            $result = $db->createEncargadoController($encargado, $sedeId, $encargadoEst);
+            $result = $db->createEncargadoController($ID_S, $N_En, $Est_en, $tel1, $tel2, $tel3);
     
             if ($result) {
               $response = array(
                 'error' => false,
-                'message' => 'encargado agregado correctamente'
+                'message' => 'Sede agregada correctamente'
+                
               );
             } else {
               $response = array(

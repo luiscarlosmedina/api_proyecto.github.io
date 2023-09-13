@@ -84,8 +84,54 @@ class DatosEmpresa extends Database
 			return false;
 		}
 	}
-	
+
 	public function createEncargadoModel($datosModel){
+		$conn = Database::getConnection();
+
+		try {
+			$conn->beginTransaction();
+
+			// Insertar en la tabla "encargado"
+			$stmt = $conn->prepare("INSERT INTO encargado (N_En) VALUES (:N_En)");
+			$stmt->bindParam(":N_En", $datosModel["N_En"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			// Obtener el último ID insertado en "encargado"
+			$iden = $conn->lastInsertId();
+	
+			// Insertar en la tabla "encargado_estado"
+			$stmt = $conn->prepare("INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (:ID_En, :ID_S, :Est_en)");
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_INT);
+			$stmt->bindParam(":Est_en", $datosModel["Est_en"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			// Insertar en la tabla "telefono_encargado"
+			$stmt = $conn->prepare("INSERT INTO telefono_encargado (ID_En, tel) VALUES (:ID_En, :tel)");
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":tel", $datosModel["tel1"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":tel", $datosModel["tel2"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
+			$stmt->bindParam(":tel", $datosModel["tel3"], PDO::PARAM_STR);
+			$stmt->execute();
+	
+			$conn->commit();
+			return true;
+
+			
+
+		} catch (PDOException $e) {
+			// En caso de error, deshacer la transacción
+			$conn->rollBack();
+			return false;
+		}
+	}
+	/*public function createEncargadoModel($datosModel){
 		$stmt = Database::getConnection()->prepare("INSERT INTO encargado (N_En) VALUES (:encargado); INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (LAST_INSERT_ID(), :sedeId, :encargadoEst)");
 		
 		$stmt->bindParam(":encargado", $datosModel["encargado"], PDO::PARAM_STR);
@@ -109,7 +155,7 @@ class DatosEmpresa extends Database
 		}else{
 			return false;
 		}
-	}
+	}*/
 	public function readEmpresaModel($id = null) {
 		$query = "SELECT em.id_e, em.Nit_E, em.Nom_E, em.Eml_E, em.Nom_Rl, em.ID_Doc, em.CC_Rl, em.telefonoGeneral, em.Val_E, em.Est_E, em.Fh_Afi, em.fechaFinalizacion, em.COD_SE, em.COD_AE FROM empresa AS em";
 	

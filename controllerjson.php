@@ -121,9 +121,9 @@ class ControllerJson
 		return $respuesta;
 
 	}
-	public function createEncargadoController($encargado, $sedeId, $encargadoEst){
+	public function createEncargadoController($ID_S, $N_En, $Est_en, $tel1, $tel2, $tel3){
 
-		$datosController = array("encargado"=>$encargado, "sedeId"=>$sedeId, "encargadoEst"=>$encargadoEst);
+		$datosController = array("ID_S"=>$ID_S, "N_En"=>$N_En, "Est_en"=>$Est_en, "tel1"=>$tel1, "tel2"=>$tel2, "tel3"=>$tel3);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->createEncargadoModel($datosController);
