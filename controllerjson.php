@@ -95,7 +95,7 @@ class ControllerJson
 	}
 	
 	//  ------------------- min empleados --------------------
-
+	//  ------------------- controller modulo empresa --------------------
 	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
 		$datosController = array("Nit_E"=>$Nit_E,
@@ -117,6 +117,7 @@ class ControllerJson
 		return $respuesta;
 		
 	}
+	//crea una sede con un encargado y tres telefonos
 	public function createSedeController( $Dic_S,$Sec_V, $id_e, $N_En, $Est_en, $tel1, $tel2, $tel3){
 
 		$datosController = array("Dic_S"=>$Dic_S, "Sec_V"=>$Sec_V, "id_e"=>$id_e, "N_En"=>$N_En, "Est_en"=>$Est_en, "tel1"=>$tel1, "tel2"=>$tel2, "tel3"=>$tel3);
@@ -145,6 +146,7 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
+	// lee las sedes ya sea el listado general o por id de empresa
 	public function readSedeController($id = null){
 		$datos = new DatosEmpresa();
 		if ($id !== null) {
@@ -155,6 +157,7 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
+	//read los nombres y telefonos de los encargados por id de sede
 	public function readPhoneSedeController($id = null){
 		$datos = new DatosEmpresa();
 		if ($id !== null) {
@@ -186,8 +189,7 @@ class ControllerJson
 		$respuesta = $datos->updateEmpresaModel($datosController);
 		return $respuesta;
 
-	}
-	#usuarios	
+	}	
 	public function updateSedeController($ID_S, $Dic_S, $Sec_V){
 
 		$datosController = array("ID_S"=>$ID_S, "Dic_S"=>$Dic_S, "Sec_V"=>$Sec_V);
@@ -197,30 +199,12 @@ class ControllerJson
 		return $respuesta;
 
 	}
-	public function updateEncargadoController($encargadoId, $encargado){
+	public function updateEncargadoController($ID_En,$N_En, $id_tel1, $tel1,$id_tel2, $tel2,$id_tel3, $tel3){
 
-		$datosController = array("encargadoId"=>$encargadoId, "encargado"=>$encargado);
+		$datosController = array("N_En"=>$N_En, "ID_En"=>$ID_En,"id_tel1"=>$id_tel1,"tel1"=>$tel1,"id_tel2"=>$id_tel2,"tel2"=>$tel2,"id_tel3"=>$id_tel3,"tel3"=>$tel3);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->updateEncargadoModel($datosController);
-		return $respuesta;
-
-	}
-	public function updateEncargadoEstController($encargadoId, $estado){
-
-		$datosController = array("encargadoId"=>$encargadoId, "estado"=>$estado);
-
-		$datos = new DatosEmpresa();
-		$respuesta = $datos->updateEncargadoEstModel($datosController);
-		return $respuesta;
-
-	}
-	public function updateEncargadoTelController($encargadoId, $encargadoTel){
-
-		$datosController = array("encargadoId"=>$encargadoId, "encargadoTel"=>$encargadoTel);
-
-		$datos = new DatosEmpresa();
-		$respuesta = $datos->updateEncargadoTelModel($datosController);
 		return $respuesta;
 
 	}
@@ -232,6 +216,7 @@ class ControllerJson
 		return $respuesta;	
 	}
 
+	//  ------------------- FIN controller modulo empresa --------------------
 //----------NOVEDAD----------//
 
 	//caso CREATE tabla Novedad

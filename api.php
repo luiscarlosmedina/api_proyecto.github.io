@@ -323,7 +323,7 @@ switch ($apicall) {
           );
         }
         break;
-      //http://localhost/../api.php?apicall=readusuario
+      //http://localhost/../api.php?apicall=readempresa
       case 'readempresa':
       if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempresa') {
         $db = new ControllerJson();
@@ -334,13 +334,13 @@ switch ($apicall) {
           $response['message'] = 'Solicitud completada correctamente';
           $response['contenido'] = $db->readEmpresasController($id) ;
           //forma de llamar al api
-          //http://localhost/../api.php?apicall=readusuario&id=2
+          //http://localhost/../api.php?apicall=readempresa&id=2
         } else {
           $response['error'] = false;
           $response['message'] = 'Solicitud completada correctamente';
           $response['contenido'] = $db->readEmpresasController();
           //forma de llamar al api
-          //http://localhost/../api.php?apicall=readusuario
+          //http://localhost/../api.php?apicall=readempresa&id
         }
       } else {
         $response['error'] = true;
@@ -358,13 +358,13 @@ switch ($apicall) {
             $response['message'] = 'Solicitud completada correctamente';
             $response['contenido'] = $db->readSedeController($id) ;
             //forma de llamar al api
-            //http://localhost/../api.php?apicall=readusuario&id=2
+            //http://localhost/../api.php?apicall=readsede&id=2
           } else {
             $response['error'] = false;
             $response['message'] = 'Solicitud completada correctamente';
             $response['contenido'] = $db->readSedeController();
             //forma de llamar al api
-            //http://localhost/../api.php?apicall=readusuario
+            //http://localhost/../api.php?apicall=readsede&id
           }
         } else {
           $response['error'] = true;
@@ -483,23 +483,23 @@ switch ($apicall) {
               'message' => 'Error en el contenido JSON',
             );
           } else {
-            $encargadoId = $data['encargadoId'];
-            $encargado = $data['encargado'];
-            
-    
+            $ID_En = $data['ID_En'];
+            $N_En = $data['N_En'];
+            $id_tel1 = $data['id_tel1'];
+            $tel1 = $data['tel1'];
+            $id_tel2 = $data['id_tel2'];
+            $tel2 = $data['tel2'];
+            $id_tel3 = $data['id_tel3'];
+            $tel3 = $data['tel3'];
+                
             $db = new ControllerJson();
-            $result = $db->updateEncargadoController($encargadoId, $encargado);
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Usuario actualizado correctamente',
-                'contenido' => $db->readEmpresasController(),
-              );
+            $result = $db->updateEncargadoController($ID_En,$N_En, $id_tel1, $tel1,$id_tel2, $tel2,$id_tel3, $tel3);
+            if ($result == true) {
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';         
             } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error al actualizar el usuario',
-              );
+              $response['error'] = true;
+              $response['message'] = 'Solicitud fallida';
             }
           }
         } else {
@@ -509,44 +509,6 @@ switch ($apicall) {
           );
         }
         break;
-      case 'updateencargadoEst':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
-          } else {
-            $encargadoId = $data['encargadoId'];
-            $estado = $data['estado'];
-            
-    
-            $db = new ControllerJson();
-            $result = $db->updateEncargadoEstController($encargadoId, $estado);
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'Usuario actualizado correctamente',
-                'contenido' => $db->readEmpresasController(),
-              );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error al actualizar el usuario',
-              );
-            }
-          }
-        } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
-        }
-        break;
-        
       case 'updateencargadoTel':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $json = file_get_contents('php://input');

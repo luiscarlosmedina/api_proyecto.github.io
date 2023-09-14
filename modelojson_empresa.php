@@ -175,7 +175,7 @@ class DatosEmpresa extends Database
 		$query = "SELECT en.ID_En, en.N_En, es.Est_en, TEL.tel AS telefono
 		FROM encargado AS en
 		JOIN (
-			SELECT ID_En, GROUP_CONCAT(tel) AS tel
+			SELECT ID_En, GROUP_CONCAT(id_tel,'-',tel) AS tel
 			FROM telefono_encargado
 			GROUP BY ID_En
 		) AS TEL ON en.ID_En = TEL.ID_En
@@ -238,46 +238,43 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function updateEncargadoModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE encargado SET N_En = :encargado WHERE ID_En = :encargadoId");
-		
-		$stmt->bindParam(":encargadoId", $datosModel["encargadoId"], PDO::PARAM_INT);
-		$stmt->bindParam(":encargado", $datosModel["encargado"], PDO::PARAM_STR);
-		
-		if($stmt->execute()){
-			echo "Actualizacion Exitosa";
-		}else{
-			echo "No se pudo hacer la Actualizacion";
-		}
-	}
-	public function updateEncargadoEstModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE encargado_estado SET Est_en = :estado WHERE ID_En = :encargadoId");
-		
-		$stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
-		$stmt->bindParam(":encargadoId", $datosModel["encargadoId"], PDO::PARAM_INT);
-
-		if($stmt->execute()){
-			echo "Actualizacion Exitosa";
-		}else{
-			echo "No se pudo hacer la Actualizacion";
-		}
-		
-	}
-
-	public function updateEncargadoTelModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE telefono_encargado SET tel = :encargadoTel WHERE ID_En = :encargadoId");
-		
-		$stmt->bindParam(":encargadoTel", $datosModel["encargadoTel"], PDO::PARAM_STR);
-		$stmt->bindParam(":encargadoId", $datosModel["encargadoId"], PDO::PARAM_INT);
-
-		if($stmt->execute()){
-			
-			return false;
-		}else{
-			
+		$conn = Database::getConnection();
+	
+		try {
+			// Iniciar una transacción
+			$conn->beginTransaction();
+	
+			// Actualizar el nombre del encargado en la tabla "encargado"
+			$stmt1 = $conn->prepare("UPDATE encargado SET N_En = :N_En WHERE ID_En = :ID_En");
+			$stmt1->bindParam(":N_En", $datosModel["N_En"], PDO::PARAM_STR);
+			$stmt1->bindParam(":ID_En", $datosModel["ID_En"], PDO::PARAM_INT);
+			$stmt1->execute();
+	
+			// Actualizar los números de teléfono en la tabla "telefono_encargado"
+			$telefonos = [
+				[":id_tel" => $datosModel["id_tel1"], ":tel" => $datosModel["tel1"]],
+				[":id_tel" => $datosModel["id_tel2"], ":tel" => $datosModel["tel2"]],
+				[":id_tel" => $datosModel["id_tel3"], ":tel" => $datosModel["tel3"]],
+			];
+	
+			foreach ($telefonos as $telefono) {
+				$stmt2 = $conn->prepare("UPDATE telefono_encargado SET tel = :tel WHERE id_tel = :id_tel AND ID_En = :ID_En");
+				$stmt2->bindParam(":id_tel", $telefono[":id_tel"], PDO::PARAM_INT);
+				$stmt2->bindParam(":tel", $telefono[":tel"], PDO::PARAM_STR);
+				$stmt2->bindParam(":ID_En", $datosModel["ID_En"], PDO::PARAM_INT);
+				$stmt2->execute();
+			}
+	
+			// Confirmar la transacción
+			$conn->commit();
 			return true;
+		} catch (PDOException $e) {
+			// Si ocurre un error, hacer rollback de la transacción
+			$conn->rollback();
+			return false;
 		}
-		
-	}
+		$conn = null;
+	}	
 	public function deleteEncargadoModel($datosModel){
 		$stmt = Database::getConnection()->prepare("UPDATE encargado_estado SET Est_en = :Est_en WHERE ID_En = :ID_En");
 
