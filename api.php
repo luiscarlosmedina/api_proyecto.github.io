@@ -323,45 +323,6 @@ switch ($apicall) {
           );
         }
         break;
-
-      case 'createencargadotel':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
-          } else {
-            $encargadoId = $data['encargadoId'];
-            $encargadoTel = $data['encargadoTel'];
-    
-            $db = new ControllerJson();
-            $result = $db->createTelEncargadoIdController($encargadoId, $encargadoTel);
-    
-            if ($result) {
-              $response = array(
-                'error' => false,
-                'message' => 'telefono agregado correctamente',
-                'contenido' => $db->readPhoneSedeIdController($encargadoId),
-              );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error, intenta nuevamente',
-              );
-            }
-          }
-        } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
-        }
-        break;
-    
       //http://localhost/../api.php?apicall=readusuario
       case 'readempresa':
       if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempresa') {
@@ -622,6 +583,41 @@ switch ($apicall) {
           );
         }
         break;
+        case 'deleteencargado':
+          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $json = file_get_contents('php://input');
+            $data = json_decode($json, true);
+      
+            if ($data === null) {
+              $response = array(
+                'error' => true,
+                'message' => 'Error en el contenido JSON',
+              );
+            } else {
+              $ID_En = $data['ID_En'];
+              $Est_en = $data['Est_en'];
+  
+              $db = new ControllerJson();
+              $result = $db->deleteEncargadoController($Est_en, $ID_En);
+              if ($result) {
+                $response = array(
+                  'error' => false,
+                  'message' => 'Encargado eliminado correctamente'
+                );
+              } else {
+                $response = array(
+                  'error' => true,
+                  'message' => 'Ocurrió un error al eliminar el encargado'
+                );
+              }
+            }
+          } else {
+            $response = array(
+              'error' => true,
+              'message' => 'Método de solicitud no válido',
+            );
+          }
+          break;
 
 //----------NOVEDAD----------//
 

@@ -131,31 +131,6 @@ class DatosEmpresa extends Database
 			return false;
 		}
 	}
-	/*public function createEncargadoModel($datosModel){
-		$stmt = Database::getConnection()->prepare("INSERT INTO encargado (N_En) VALUES (:encargado); INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (LAST_INSERT_ID(), :sedeId, :encargadoEst)");
-		
-		$stmt->bindParam(":encargado", $datosModel["encargado"], PDO::PARAM_STR);
-		$stmt->bindParam(":sedeId", $datosModel["sedeId"], PDO::PARAM_INT);
-		$stmt->bindParam(":encargadoEst", $datosModel["encargadoEst"], PDO::PARAM_STR);
-		
-		if($stmt->execute()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	public function createTelEncargadoIdModel($datosModel){
-		$stmt = Database::getConnection()->prepare("INSERT INTO telefono_encargado (ID_En, tel) VALUES (:encargadoId, :encargadoTel)");
-
-		$stmt->bindParam(":encargadoId", $datosModel["encargadoId"], PDO::PARAM_INT);
-		$stmt->bindParam(":encargadoTel", $datosModel["encargadoTel"], PDO::PARAM_STR);
-	
-		if($stmt->execute()){
-			return true;
-		}else{
-			return false;
-		}
-	}*/
 	public function readEmpresaModel($id = null) {
 		$query = "SELECT em.id_e, em.Nit_E, em.Nom_E, em.Eml_E, em.Nom_Rl, em.ID_Doc, em.CC_Rl, em.telefonoGeneral, em.Val_E, em.Est_E, em.Fh_Afi, em.fechaFinalizacion, em.COD_SE, em.COD_AE FROM empresa AS em";
 	

@@ -135,15 +135,6 @@ class ControllerJson
 		return $respuesta;
 
 	}
-	public function createTelEncargadoIdController($encargadoId, $encargadoTel){
-
-		$datosController = array("encargadoId"=>$encargadoId, "encargadoTel"=>$encargadoTel);
-
-		$datos = new DatosEmpresa();
-		$respuesta = $datos->createTelEncargadoIdModel($datosController);
-		return $respuesta;
-
-	}
 	public function readEmpresasController($id = null) {
 		$datos = new DatosEmpresa();
 		if ($id !== null) {
