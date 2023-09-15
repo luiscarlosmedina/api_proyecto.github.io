@@ -172,16 +172,9 @@ class DatosEmpresa extends Database
 		}
 	}
 	public function readPhoneSedeModel($id = null){
-		$query = "SELECT en.ID_En, en.N_En, es.Est_en, TEL.tel AS telefono
-		FROM encargado AS en
-		JOIN (
-			SELECT ID_En, GROUP_CONCAT(id_tel,'-',tel) AS tel
-			FROM telefono_encargado
-			GROUP BY ID_En
-		) AS TEL ON en.ID_En = TEL.ID_En
+		$query = "SELECT en.ID_En, en.N_En, es.Est_en, en.tel1, en.tel2, en.tel3 FROM encargado AS en
 		JOIN encargado_estado AS es ON en.ID_En = es.ID_En
 		JOIN sede AS s ON es.ID_S = s.ID_S";
-		
 		
 		if ($id !== null) {
 			$query .= " WHERE s.ID_S = :id ";
@@ -245,25 +238,13 @@ class DatosEmpresa extends Database
 			$conn->beginTransaction();
 	
 			// Actualizar el nombre del encargado en la tabla "encargado"
-			$stmt1 = $conn->prepare("UPDATE encargado SET N_En = :N_En WHERE ID_En = :ID_En");
+			$stmt1 = $conn->prepare("UPDATE encargado SET N_En = :N_En, tel1 = :tel1, tel2 = :tel2, tel3 =:tel3 WHERE ID_En = :ID_En");
 			$stmt1->bindParam(":N_En", $datosModel["N_En"], PDO::PARAM_STR);
+			$stmt1->bindParam(":tel1", $datosModel["tel1"], PDO::PARAM_STR);
+			$stmt1->bindParam(":tel2", $datosModel["tel2"], PDO::PARAM_STR);
+			$stmt1->bindParam(":tel3", $datosModel["tel3"], PDO::PARAM_STR);
 			$stmt1->bindParam(":ID_En", $datosModel["ID_En"], PDO::PARAM_INT);
 			$stmt1->execute();
-	
-			// Actualizar los números de teléfono en la tabla "telefono_encargado"
-			$telefonos = [
-				[":id_tel" => $datosModel["id_tel1"], ":tel" => $datosModel["tel1"]],
-				[":id_tel" => $datosModel["id_tel2"], ":tel" => $datosModel["tel2"]],
-				[":id_tel" => $datosModel["id_tel3"], ":tel" => $datosModel["tel3"]],
-			];
-	
-			foreach ($telefonos as $telefono) {
-				$stmt2 = $conn->prepare("UPDATE telefono_encargado SET tel = :tel WHERE id_tel = :id_tel AND ID_En = :ID_En");
-				$stmt2->bindParam(":id_tel", $telefono[":id_tel"], PDO::PARAM_INT);
-				$stmt2->bindParam(":tel", $telefono[":tel"], PDO::PARAM_STR);
-				$stmt2->bindParam(":ID_En", $datosModel["ID_En"], PDO::PARAM_INT);
-				$stmt2->execute();
-			}
 	
 			// Confirmar la transacción
 			$conn->commit();

@@ -199,9 +199,9 @@ class ControllerJson
 		return $respuesta;
 
 	}
-	public function updateEncargadoController($ID_En,$N_En, $id_tel1, $tel1,$id_tel2, $tel2,$id_tel3, $tel3){
+	public function updateEncargadoController($ID_En,$N_En, $tel1, $tel2, $tel3){
 
-		$datosController = array("N_En"=>$N_En, "ID_En"=>$ID_En,"id_tel1"=>$id_tel1,"tel1"=>$tel1,"id_tel2"=>$id_tel2,"tel2"=>$tel2,"id_tel3"=>$id_tel3,"tel3"=>$tel3);
+		$datosController = array("N_En"=>$N_En, "ID_En"=>$ID_En,"tel1"=>$tel1,"tel2"=>$tel2,"tel3"=>$tel3);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->updateEncargadoModel($datosController);

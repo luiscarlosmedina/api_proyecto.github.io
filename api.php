@@ -485,15 +485,12 @@ switch ($apicall) {
           } else {
             $ID_En = $data['ID_En'];
             $N_En = $data['N_En'];
-            $id_tel1 = $data['id_tel1'];
             $tel1 = $data['tel1'];
-            $id_tel2 = $data['id_tel2'];
             $tel2 = $data['tel2'];
-            $id_tel3 = $data['id_tel3'];
             $tel3 = $data['tel3'];
                 
             $db = new ControllerJson();
-            $result = $db->updateEncargadoController($ID_En,$N_En, $id_tel1, $tel1,$id_tel2, $tel2,$id_tel3, $tel3);
+            $result = $db->updateEncargadoController($ID_En,$N_En, $tel1, $tel2, $tel3);
             if ($result == true) {
               $response['error'] = false;
               $response['message'] = 'Solicitud completada correctamente';         
