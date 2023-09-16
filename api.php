@@ -471,7 +471,41 @@ switch ($apicall) {
           );
         }
         break;
-
+        case 'updateestsd':
+          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $json = file_get_contents('php://input');
+            $data = json_decode($json, true);
+      
+            if ($data === null) {
+              $response = array(
+                'error' => true,
+                'message' => 'Error en el contenido JSON',
+              );
+            } else {
+              $ID_S = $data['ID_S'];
+              $est_sed = $data['est_sed'];
+  
+              $db = new ControllerJson();
+              $result = $db->updateEstSdController($est_sed, $ID_S);
+              if ($result) {
+                $response = array(
+                  'error' => false,
+                  'message' => 'cambio de estado correctamente'
+                );
+              } else {
+                $response = array(
+                  'error' => true,
+                  'message' => 'Ocurrió un error al cambiar estado'
+                );
+              }
+            }
+          } else {
+            $response = array(
+              'error' => true,
+              'message' => 'Método de solicitud no válido',
+            );
+          }
+          break;
       case 'updateencargado':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $json = file_get_contents('php://input');

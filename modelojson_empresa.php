@@ -205,6 +205,18 @@ class DatosEmpresa extends Database
 			return false;
 		}
 	}
+	public function updateEstSdModel($datosModel){
+		$stmt = Database::getConnection()->prepare("UPDATE sede SET est_sed = :est_sed WHERE ID_S = :ID_S");
+
+		$stmt->bindParam(":est_sed", $datosModel["est_sed"], PDO::PARAM_STR);
+		$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_INT);
+
+		if($stmt->execute()){
+			return false;
+		}else{
+			return true;
+		}
+	}
 	public function updateEncargadoModel($datosModel){
 		$conn = Database::getConnection();
 	

@@ -199,6 +199,13 @@ class ControllerJson
 		return $respuesta;
 
 	}
+	public function updateEstSdController($est_sed, $ID_S){
+		$datosController = array("est_sed"=>$est_sed, "ID_S"=>$ID_S);
+
+		$datos = new DatosEmpresa();
+		$respuesta = $datos->updateEstSdModel($datosController);
+		return $respuesta;
+	}
 	public function updateEncargadoController($ID_En,$N_En, $tel1, $tel2, $tel3){
 
 		$datosController = array("N_En"=>$N_En, "ID_En"=>$ID_En,"tel1"=>$tel1,"tel2"=>$tel2,"tel3"=>$tel3);
