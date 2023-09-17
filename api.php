@@ -194,49 +194,36 @@ switch ($apicall) {
       //empresa
       case 'createempresa':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          $json = file_get_contents('php://input');
-          $data = json_decode($json, true);
-    
-          if ($data === null) {
-            $response = array(
-              'error' => true,
-              'message' => 'Error en el contenido JSON',
-            );
+          // Recibe y decodifica los datos JSON de la solicitud
+          $inputJSON = file_get_contents('php://input');
+          $inputData = json_decode($inputJSON, true);
+          
+          if ($inputData !== null) {
+              $db = new ControllerJson();
+              $result = $db->createEmpresaController($inputData);
+          
+              if ($result) {
+                  $response = array(
+                      'error' => false,
+                      'message' => 'Empresa y datos relacionados agregados correctamente',
+                  );
+              } else {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Ocurrió un error al agregar la empresa y datos relacionados',
+                  );
+              }
           } else {
-            $Nit_E = $data['Nit_E'];
-            $Nom_E = $data['Nom_E'];
-            $Eml_E = $data['Eml_E'];
-            $Nom_Rl = $data['Nom_Rl'];
-            $ID_Doc = $data['ID_Doc'];
-            $CC_Rl = $data['CC_Rl'];
-            $telefonoGeneral = $data['$telefonoGeneral'];
-            $Val_E = $data['Val_E'];
-            $Est_E = $data['Est_E'];
-            $fh_Afi = $data['fh_Afi'];
-            $fechaFinalizacion = $data['fechaFinalizacion'];
-            $COD_SE = $data['COD_SE'];
-            $COD_AE = $data['COD_AE'];
-    
-            $db = new ControllerJson();
-            $result = $db->createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE);
-    
-            if ($result) {
               $response = array(
-                'error' => false,
-                'message' => 'Usuario agregado correctamente',
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
               );
-            } else {
-              $response = array(
-                'error' => true,
-                'message' => 'Ocurrió un error, intenta nuevamente',
-              );
-            }
           }
         } else {
-          $response = array(
-            'error' => true,
-            'message' => 'Método de solicitud no válido',
-          );
+            $response = array(
+                'error' => true,
+                'message' => 'Método de solicitud no válido',
+            );
         }
         break;
       case 'createsede':

@@ -96,27 +96,14 @@ class ControllerJson
 	
 	//  ------------------- min empleados --------------------
 	//  ------------------- controller modulo empresa --------------------
-	public function createEmpresaController($Nit_E, $Nom_E, $Eml_E, $Nom_Rl, $ID_Doc, $CC_Rl, $telefonoGeneral, $Val_E, $Est_E, $Fh_Afi, $fechaFinalizacion, $COD_SE, $COD_AE){
 
-		$datosController = array("Nit_E"=>$Nit_E,
-			"Nom_E"=>$Nom_E, 
-			"Eml_E"=>$Eml_E, 
-			"Nom_Rl"=>$Nom_Rl, 
-			"ID_Doc"=>$ID_Doc,
-			"CC_Rl"=>$CC_Rl,
-			"telefonoGeneral"=>$telefonoGeneral, 
-			"Val_E"=>$Val_E, 
-			"Est_E"=>$Est_E, 
-			"Fh_Afi"=>$fh_Afi, 
-			"fechaFinalizacion"=>$fechaFinalizacion,
-			"COD_SE"=>$COD_SE, 
-			"COD_AE"=>$COD_AE);
+    public function createEmpresaController($data)
+    {
+        $datos = new DatosEmpresa();
+        $respuesta = $datos->createEmpresaModel($data);
+        return $respuesta;
+    }
 
-		$datos = new DatosEmpresa();
-		$respuesta = $datos->createEmpresaModel($datosController);
-		return $respuesta;
-		
-	}
 	//crea una sede con un encargado y tres telefonos
 	public function createSedeController( $Dic_S,$Sec_V, $id_e, $N_En, $Est_en, $tel1, $tel2, $tel3){
 

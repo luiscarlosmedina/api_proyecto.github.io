@@ -6,30 +6,71 @@ class DatosEmpresa extends Database
 	#Metodos
 	//----------------------------------------------------------------------------------
 
-	public function createEmpresaModel($datosModel) {
-		$stmt = Database::getConnection()->prepare("INSERT INTO empresa (Nit_E, Nom_E, Eml_E, Nom_Rl, ID_Doc, CC_Rl, telefonoGeneral, Val_E, Est_E, Fh_Afi, fechaFinalizacion, COD_SE, COD_AE) VALUES (:Nit_E, :Nom_E, :Eml_E, :Nom_Rl, :ID_Doc, :CC_Rl, :telefonoGeneral, :Val_E, :Est_E, :Fh_Afi, :fechaFinalizacion, :COD_SE, :COD_AE)");
+    public function createEmpresaModel($datosModel) {
+		$conn = Database::getConnection();
+        try {
+            $conn->beginTransaction();
 
-		$stmt->bindParam(":Nit_E", $datosModel["Nit_E"], PDO::PARAM_STR);
-		$stmt->bindParam(":Nom_E", $datosModel["Nom_E"], PDO::PARAM_STR);
-		$stmt->bindParam(":Eml_E", $datosModel["Eml_E"], PDO::PARAM_STR);
-		$stmt->bindParam(":Nom_Rl", $datosModel["Nom_Rl"], PDO::PARAM_STR);
-		$stmt->bindParam(":ID_Doc", $datosModel["ID_Doc"], PDO::PARAM_INT);
-		$stmt->bindParam(":CC_Rl", $datosModel["CC_Rl"], PDO::PARAM_STR);
-		$stmt->bindParam(":telefonoGeneral", $datosModel["telefonoGeneral"], PDO::PARAM_STR);
-		$stmt->bindParam(":Val_E", $datosModel["Val_E"], PDO::PARAM_INT);
-		$stmt->bindParam(":Est_E", $datosModel["Est_E"], PDO::PARAM_STR);
-		$stmt->bindParam(":Fh_Afi", $datosModel["Fh_Afi"], PDO::PARAM_STR);
-		$stmt->bindParam(":fechaFinalizacion", $datosModel["fechaFinalizacion"], PDO::PARAM_STR);
-		$stmt->bindParam(":COD_SE", $datosModel["COD_SE"], PDO::PARAM_STR);
-		$stmt->bindParam(":COD_AE", $datosModel["COD_AE"], PDO::PARAM_STR);
+            // Insertar en la tabla "empresa"
+            $stmt = $conn->prepare("INSERT INTO empresa (Nit_E, Nom_E, Eml_E, Nom_Rl, ID_Doc, CC_Rl, telefonoGeneral, Val_E, Est_E, Fh_Afi, fechaFinalizacion, COD_SE, COD_AE) VALUES (:Nit_E, :Nom_E, :Eml_E, :Nom_Rl, :ID_Doc, :CC_Rl, :telefonoGeneral, :Val_E, :Est_E, :Fh_Afi, :fechaFinalizacion, :COD_SE, :COD_AE)");
+            $stmt->bindParam(":Nit_E", $datosModel["Nit_E"], PDO::PARAM_STR);
+            $stmt->bindParam(":Nom_E", $datosModel["Nom_E"], PDO::PARAM_STR);
+            $stmt->bindParam(":Eml_E", $datosModel["Eml_E"], PDO::PARAM_STR);
+            $stmt->bindParam(":Nom_Rl", $datosModel["Nom_Rl"], PDO::PARAM_STR);
+            $stmt->bindParam(":ID_Doc", $datosModel["ID_Doc"], PDO::PARAM_INT);
+            $stmt->bindParam(":CC_Rl", $datosModel["CC_Rl"], PDO::PARAM_STR);
+            $stmt->bindParam(":telefonoGeneral", $datosModel["telefonoGeneral"], PDO::PARAM_STR);
+            $stmt->bindParam(":Val_E", $datosModel["Val_E"], PDO::PARAM_INT);
+            $stmt->bindParam(":Est_E", $datosModel["Est_E"], PDO::PARAM_STR);
+            $stmt->bindParam(":Fh_Afi", $datosModel["Fh_Afi"], PDO::PARAM_STR);
+            $stmt->bindParam(":fechaFinalizacion", $datosModel["fechaFinalizacion"], PDO::PARAM_STR);
+            $stmt->bindParam(":COD_SE", $datosModel["COD_SE"], PDO::PARAM_STR);
+            $stmt->bindParam(":COD_AE", $datosModel["COD_AE"], PDO::PARAM_STR);
+            $stmt->execute();
 
-		if($stmt->execute()){
-			return true;
-		}else{
-			return false;
-		}
-		
-	}
+            // Obtener el último ID insertado en "empresa"
+            $idEmpresa = $conn->lastInsertId();
+
+            // Insertar sedes
+            foreach ($datosModel["sedes"] as $sede) {
+                $stmt = $conn->prepare("INSERT INTO sede (Dic_S, Sec_V, est_sed, id_e) VALUES (:Dic_S, :Sec_V, '0', :id_e)");
+                $stmt->bindParam(":Dic_S", $sede["Dic_S"], PDO::PARAM_STR);
+                $stmt->bindParam(":Sec_V", $sede["Sec_V"], PDO::PARAM_INT);
+                $stmt->bindParam(":id_e", $idEmpresa, PDO::PARAM_INT);
+                $stmt->execute();
+
+                // Obtener el último ID insertado en "sede"
+                $idSede = $conn->lastInsertId();
+
+                // Insertar encargados para esta sede
+                foreach ($sede["encargados"] as $encargado) {
+                    $stmt = $conn->prepare("INSERT INTO encargado (N_En, tel1, tel2, tel3) VALUES (:N_En, :tel1, :tel2, :tel3)");
+                    $stmt->bindParam(":N_En", $encargado["N_En"], PDO::PARAM_STR);
+                    $stmt->bindParam(":tel1", $encargado["tel1"], PDO::PARAM_STR);
+                    $stmt->bindParam(":tel2", $encargado["tel2"], PDO::PARAM_STR);
+                    $stmt->bindParam(":tel3", $encargado["tel3"], PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    // Obtener el último ID insertado en "encargado"
+                    $idEncargado = $conn->lastInsertId();
+
+                    // Insertar en la tabla "encargado_estado"
+                    $stmt = $conn->prepare("INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (:ID_En, :ID_S, :Est_en)");
+                    $stmt->bindParam(":ID_En", $idEncargado, PDO::PARAM_INT);
+                    $stmt->bindParam(":ID_S", $idSede, PDO::PARAM_INT);
+                    $stmt->bindParam(":Est_en", $encargado["Est_en"], PDO::PARAM_STR);
+                    $stmt->execute();
+                }
+            }
+
+            $conn->commit();
+            return true;
+        } catch (PDOException $e) {
+            // En caso de error, deshacer la transacción
+            $conn->rollBack();
+            return false;
+        }
+    }	
 
 	public function createSedeModel($datosModel) {
 		$conn = Database::getConnection();
