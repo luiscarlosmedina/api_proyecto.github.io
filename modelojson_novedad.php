@@ -73,11 +73,10 @@ class DatosNovedad extends Database
 			n.Fe_Nov AS Fecha_Novedad,
 			tn.Nombre_Tn AS Tipo_Novedad,
 			tn.descrip_Tn AS Descripcion_Tipo,
-			n.Dic_Nov AS Diccionario_Novedad,
+			COALESCE(n.Dic_Nov, s.Dic_S) AS Direccion,
 			n.Des_Nov AS Descripcion_Novedad,
 			e.adjunto AS Adjunto_Evidencia,
-			CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado,
-			s.Dic_S AS Direccion_Sede
+			CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado
 		  FROM novedad AS n
 		  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov
 		  JOIN evidencia AS e ON n.id_evi = e.id_evi
@@ -121,6 +120,52 @@ class DatosNovedad extends Database
 			return true;
 		}
 	}
+	//Funcion READ tabla empresa obtener id
+	public function readNovedadEmpresaModel(){
+		$stmt = Database::getConnection()->prepare(
+			"SELECT `id_e`, `Nom_E` FROM `empresa` WHERE 1;"
+		);
+	
+		if($stmt->execute()){
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}else{
+			return true;
+		}
+	}
+
+	//Funcion READ tabla sede por id empresa
+	public function readNovedadSedeModel($id){
+		$stmt = Database::getConnection()->prepare(
+			"SELECT
+			sede.ID_S,
+			sede.Dic_S
+		FROM
+			sede
+		INNER JOIN empresa ON sede.id_e = empresa.id_e
+		WHERE
+			empresa.id_e = '$id';"
+		);
+	
+		if($stmt->execute()){
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}else{
+			return true;
+		}
+	}
+
+	//Funcion READ tabla empleado para novedad
+	public function readNovedadEmpleadoModel(){
+		$stmt = Database::getConnection()->prepare(
+			"SELECT `id_em`, CONCAT(n_em, ' ', a_em) AS Nombre_Completo_Empleado FROM `empleado` WHERE 1;"
+		);
+	
+		if($stmt->execute()){
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}else{
+			return true;
+		}
+	}
+	
 	//Funcion UPDATE tabla Novedad
 	public function updateNovedadModel($datosModel){
 		$stmt = Database::getConnection()->prepare(

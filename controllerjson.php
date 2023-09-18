@@ -267,10 +267,28 @@ class ControllerJson
 		$respuesta = $datos->readTpNovedadModel();
 			return $respuesta;
 	}
+	// casos READ tabla empresa para id
+	public function readNovedadEmpresaController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readNovedadEmpresaModel();
+			return $respuesta;
+	}
 	// casos READ tabla evidencia
 	public function readEvidenciaController() {
 		$datos = new DatosNovedad();
 		$respuesta = $datos->readEvidenciaModel();
+			return $respuesta;
+	}
+	// casos READ tabla sede por id empresa
+	public function readNovedadSedeController($id) {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readNovedadSedeModel($id);
+			return $respuesta;
+	}
+	// casos READ tabla empleado para novedad
+	public function readNovedadEmpleadoController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readNovedadEmpleadoModel();
 			return $respuesta;
 	}
 	//caso UPDATE tabla tp_novedad
