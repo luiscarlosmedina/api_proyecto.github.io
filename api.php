@@ -807,6 +807,55 @@ case 'readnovedad':
       }
     break;
 
+    //caso READ tabla empresa para obtener id
+    //http://localhost/../api.php?apicall=readevidencia
+    case 'readnovedadempresa':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $db = new ControllerJson();
+  
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readNovedadEmpresaController();
+              
+      }else{
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+    break;
+    
+    // caso READ tabla sede con id empresa
+    case 'readnovedadsede':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedadsede') {
+        $db = new ControllerJson();
+        $id = $_GET['id'];
+
+        $response['error'] = false;
+        $response['message'] = 'Solicitud completada correctamente';
+        $response['contenido'] = $db->readNovedadSedeController($id) ;
+        //forma de llamar al api
+        //http://localhost/../api.php?apicall=readnovedad&id=1
+      } else {
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+      break;
+
+  //caso READ tabla empleado para novedad
+    //http://localhost/../api.php?apicall=readnovedadempleado
+    case 'readnovedadempleado':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $db = new ControllerJson();
+  
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readNovedadEmpleadoController();
+              
+      }else{
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+    break;
+
   //caso UPDATE tabla Novedad
     //http://localhost/../api.php?apicall=updatenovedad + body (Json)
 case 'updatenovedad':
