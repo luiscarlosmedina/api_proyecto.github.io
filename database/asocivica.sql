@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: b4zpdfljvwzlvh9yqpvc-mysql.services.clever-cloud.com:3306
--- Generation Time: Sep 19, 2023 at 03:07 PM
+-- Generation Time: Sep 19, 2023 at 03:29 PM
 -- Server version: 8.0.15-5
 -- PHP Version: 8.2.7
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `b4zpdfljvwzlvh9yqpvc`
 --
-CREATE DATABASE IF NOT EXISTS `b4zpdfljvwzlvh9yqpvc` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
-USE `b4zpdfljvwzlvh9yqpvc`;
 
 -- --------------------------------------------------------
 
@@ -401,23 +399,23 @@ INSERT INTO `evidencia` (`id_evi`, `adjunto`) VALUES
 CREATE TABLE `login` (
   `ID_log` int(11) NOT NULL,
   `passw` varchar(10) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL,
-  `ID_Em` varchar(15) CHARACTER SET utf8 COLLATE utf8_spanish_ci NOT NULL
+  `id_em` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `login`
 --
 
-INSERT INTO `login` (`ID_log`, `passw`, `ID_Em`) VALUES
-(1, 'pass', '2345678901'),
-(2, 'password3', '3456789012'),
-(3, 'otra cosa', '1231231231'),
-(4, 'password5', '5678901234'),
-(5, 'password6', '6789012345'),
-(6, 'otra cosa', '1231231231'),
-(7, 'password8', '8901234567'),
-(8, 'password9', '9012345678'),
-(9, 'password10', '12347678');
+INSERT INTO `login` (`ID_log`, `passw`, `id_em`) VALUES
+(1, 'pass', 1),
+(2, 'password3', 2),
+(3, 'otra cosa', 3),
+(4, 'password5', 4),
+(5, 'password6', 5),
+(6, 'otra cosa', 6),
+(7, 'password8', 7),
+(8, 'password9', 8),
+(9, 'password10', 9);
 
 -- --------------------------------------------------------
 
@@ -799,7 +797,8 @@ ALTER TABLE `evidencia`
 -- Indexes for table `login`
 --
 ALTER TABLE `login`
-  ADD PRIMARY KEY (`ID_log`);
+  ADD PRIMARY KEY (`ID_log`),
+  ADD KEY `id_em` (`id_em`);
 
 --
 -- Indexes for table `novedad`
@@ -1039,6 +1038,12 @@ ALTER TABLE `empresa`
 ALTER TABLE `encargado_estado`
   ADD CONSTRAINT `encargado_estado_ibfk_1` FOREIGN KEY (`ID_En`) REFERENCES `encargado` (`ID_En`),
   ADD CONSTRAINT `encargado_estado_ibfk_2` FOREIGN KEY (`ID_S`) REFERENCES `sede` (`ID_S`);
+
+--
+-- Constraints for table `login`
+--
+ALTER TABLE `login`
+  ADD CONSTRAINT `login_ibfk_1` FOREIGN KEY (`id_em`) REFERENCES `empleado` (`id_em`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 --
 -- Constraints for table `novedad`
