@@ -73,7 +73,10 @@ class DatosNovedad extends Database
 			n.Fe_Nov AS Fecha_Novedad,
 			tn.Nombre_Tn AS Tipo_Novedad,
 			tn.descrip_Tn AS Descripcion_Tipo,
-			COALESCE(n.Dic_Nov, s.Dic_S) AS Direccion,
+			CASE
+			  WHEN n.ID_S IS NULL THEN n.Dic_Nov
+			  ELSE s.Dic_S
+			END AS Direccion,
 			n.Des_Nov AS Descripcion_Novedad,
 			e.adjunto AS Adjunto_Evidencia,
 			CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado
@@ -81,8 +84,9 @@ class DatosNovedad extends Database
 		  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov
 		  JOIN evidencia AS e ON n.id_evi = e.id_evi
 		  JOIN empleado AS em ON n.id_em = em.id_em
-		  JOIN sede AS s ON n.ID_S = s.ID_S
-		  WHERE n.ID_Nov =:id;
+		  LEFT JOIN sede AS s ON n.ID_S = s.ID_S
+		  WHERE n.ID_Nov = :id;
+		  
 		  ";
 		}
 		$stmt = Database::getConnection()->prepare($query);
