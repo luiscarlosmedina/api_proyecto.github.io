@@ -10,7 +10,7 @@ class ControllerJson
 {
 	// ------------------- max empleados --------------------
 	
-	public function createempleadoController( $id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw){
+	public function createempleadoController( $id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw, $n_coe, $csag, $t_cem){
 		$datosController = array(
 		    
 			"id_doc"=>$id_doc,
@@ -32,11 +32,14 @@ class ControllerJson
 			"id_rh"=>$id_rh,
 			"id_rol"=>$id_rol,
 			"estado"=>$estado,
-			"passw"=>$passw
+			"passw"=>$passw,
+			"n_coe"=>$n_coe,
+			"csag"=>$csag,
+			"t_cem"=>$t_cem
 			);
 		
 		$datos = new DatosEmpleado();
-		$respuesta = $datos->createEmpleadoModel($datosController, "empleado", "login");
+		$respuesta = $datos->createEmpleadoModel($datosController, "empleado", "login", "contacto_emergencia");
 		return $respuesta;
 	}
 	public function updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado)

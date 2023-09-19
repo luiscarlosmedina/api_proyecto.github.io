@@ -6,12 +6,17 @@ class DatosEmpleado extends Database
 	
 	//---------------------- max empleados    ------------------------
 
-	public function createEmpleadoModel($datosModel, $tabla, $tabla2){
+	public function createEmpleadoModel($datosModel, $tabla, $tabla2, $tabla3){
 		$stmt = Database::getConnection()->prepare("
-		INSERT INTO $tabla ( id_doc, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, id_pens, id_eps, id_arl, id_ces, id_rh, id_rol, estado) VALUES (:id_doc, :documento, :n_em, :a_em, :eml_em, :f_em, :dir_em, :lic_emp, :lib_em, :tel_em, :contrato, :barloc_em, :id_pens, :id_eps, :id_arl, :id_ces, :id_rh, :id_rol, :estado); 
-		INSERT INTO $tabla2 (passw, id_em) VALUES (:passw, LAST_INSERT_ID())");
+		
+		INSERT INTO $tabla ( id_doc, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, id_pens, id_eps, id_arl, id_ces, id_rh, id_rol, estado) VALUES (:id_doc, :documento, :n_em, :a_em, :eml_em, :f_em, :dir_em, :lic_emp, :lib_em, :tel_em, :contrato, :barloc_em, :id_pens, :id_eps, :id_arl, :id_ces, :id_rh, :id_rol, :estado);
 
-		$stmt->bindParam(":id_doc", $datosModel["id_doc"], PDO::PARAM_INT);
+		SET @id_empleado = LAST_INSERT_ID();
+	
+		INSERT INTO $tabla2 (passw, id_em) VALUES (:passw, @id_empleado); 
+		INSERT INTO $tabla3 (n_coe, csag, t_cem, id_em) VALUES (:n_coe, :csag, :t_em, @id_empleado);");
+
+		$stmt->bindParam(":id_doc", $datosModel["id_doc"], PDO::PARAM_INT); 
 		$stmt->bindParam(":documento", $datosModel["documento"], PDO::PARAM_STR);
 		$stmt->bindParam(":n_em", $datosModel["n_em"], PDO::PARAM_STR);
 		$stmt->bindParam(":a_em", $datosModel["a_em"], PDO::PARAM_STR);
@@ -31,10 +36,13 @@ class DatosEmpleado extends Database
 		$stmt->bindParam(":id_rol", $datosModel["id_rol"], PDO::PARAM_INT);
 		$stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
 		$stmt->bindParam(":passw", $datosModel["passw"], PDO::PARAM_STR);
+		$stmt->bindParam(":n_coe", $datosModel["n_coe"], PDO::PARAM_STR);
+		$stmt->bindParam(":csag", $datosModel["csag"], PDO::PARAM_STR);
+		$stmt->bindParam(":t_cem", $datosModel["t_cem"], PDO::PARAM_INT);
 	
 		if($stmt->execute()){
 			return true;
-		}else{
+		}else{ 
 			return false;
 		}
 		
