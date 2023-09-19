@@ -7,8 +7,7 @@ class DatosNovedad extends Database
 	public function createNovedadModel($datosModel){
 		$ahora = "CURRENT_TIMESTAMP()";
 		$stmt = Database::getConnection()->prepare("INSERT INTO novedad (Fe_Nov, T_Nov, Dic_Nov, Des_Nov, id_evi, id_em, ID_S)
-													VALUES (:Fe_Nov, :T_Nov, :Dic_Nov, :Des_Nov, :id_evi, :id_em, :ID_S);");
-        $stmt->bindParam(":Fe_Nov", $datosModel["$ahora"], PDO::PARAM_STR);
+													VALUES ($ahora, :T_Nov, :Dic_Nov, :Des_Nov, :id_evi, :id_em, :ID_S);");
 		$stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":Dic_Nov", $datosModel["Dic_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":Des_Nov", $datosModel["Des_Nov"], PDO::PARAM_STR);

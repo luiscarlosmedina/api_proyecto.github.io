@@ -217,9 +217,8 @@ class ControllerJson
 //----------NOVEDAD----------//
 
 	//caso CREATE tabla Novedad
-	public function createNovedadController($Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){
+	public function createNovedadController($T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){
 		$datosController = array(
-			"Fe_Nov"=>$Fe_Nov,
 			"T_Nov"=>$T_Nov,
 			"Dic_Nov"=>$Dic_Nov,
 			"Des_Nov"=>$Des_Nov,

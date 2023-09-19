@@ -616,7 +616,6 @@ case 'createnovedad':
         'message' => 'Error en el contenido JSON',
       );
     } else {
-      $Fe_Nov = $data['Fe_Nov'];
       $T_Nov = $data['T_Nov'];
       $Dic_Nov = $data['Dic_Nov'];
       $Des_Nov = $data['Des_Nov'];
@@ -626,7 +625,7 @@ case 'createnovedad':
 
   
       $db = new ControllerJson();
-      $result = $db->createNovedadController($Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S);
+      $result = $db->createNovedadController($T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S);
 
       if ($result) {
         $response = array(
