@@ -179,16 +179,16 @@ class DatosEmpleado extends Database
 	//---------------------- min empleados    ------------------------
 
     public function readminEmpleadoModel($tabla){
-		$stmt = Database::getConnection()->prepare("SELECT id_em, documento, id_doc, n_em, a_em, eml_em, tel_em FROM $tabla");
+		$stmt = Database::getConnection()->prepare("SELECT id_em, documento, n_em, a_em, eml_em, tel_em, estado FROM $tabla");
 		$stmt->execute();
 
 		$stmt->bindColumn("id_em", $id_em);
-		$stmt->bindColumn("id_doc", $id_doc);
 		$stmt->bindColumn("documento", $documento);
 		$stmt->bindColumn("n_em", $n_em);
 		$stmt->bindColumn("a_em", $a_em);
 		$stmt->bindColumn("eml_em", $eml_em);
 		$stmt->bindColumn("tel_em", $tel_em);
+		$stmt->bindColumn("estado", $estado);
 
 		$usuarios = array();
 
@@ -198,12 +198,12 @@ class DatosEmpleado extends Database
 
 
 			$user["id_em"] = utf8_encode($id_em);
-			$user["id_doc"] = utf8_encode($id_doc);
 			$user["documento"] = utf8_encode($documento);	
 			$user["n_em"] = utf8_encode($n_em);
 			$user["a_em"] = utf8_encode($a_em);
 			$user["eml_em"] = utf8_encode($eml_em);
 			$user["tel_em"] = utf8_encode($tel_em);
+			$user["estado"] = utf8_encode($estado);
 			array_push($usuarios, $user);
 		}
 		return $usuarios;
