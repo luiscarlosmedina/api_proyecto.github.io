@@ -48,66 +48,26 @@ class DatosEmpleado extends Database
 		
 	}
 	
+	public function readEmpleadoModel($id = null) {
+		$query = "SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, id_doc, id_pens, id_eps, id_arl, id_ces, id_rh, estado FROM empleado";
 	
-	public function readEmpleadoModel($tabla){
-		$stmt = Database::getConnection()->prepare("SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, id_doc, id_pens, id_eps, id_arl, id_ces, id_rh, id_rol, estado FROM $tabla");
-		
-		$stmt->execute();
-
-		$stmt->bindColumn("id_em", $id_em);
-		$stmt->bindColumn("documento", $documento);	
-		$stmt->bindColumn("n_em", $n_em);
-		$stmt->bindColumn("a_em", $a_em);
-		$stmt->bindColumn("eml_em", $eml_em);
-		$stmt->bindColumn("f_em", $f_em);
-		$stmt->bindColumn("dir_em", $dir_em);
-		$stmt->bindColumn("lic_emp", $lic_emp);
-		$stmt->bindColumn("lib_em", $lib_em);
-		$stmt->bindColumn("tel_em", $tel_em);
-		$stmt->bindColumn("contrato", $contrato);
-		$stmt->bindColumn("barloc_em", $barloc_em);
-		$stmt->bindColumn("id_doc", $id_doc);
-		$stmt->bindColumn("id_pens", $id_pens);
-		$stmt->bindColumn("id_eps", $id_eps);
-		$stmt->bindColumn("id_arl", $id_arl);
-		$stmt->bindColumn("id_ces", $id_ces);
-		$stmt->bindColumn("id_rh", $id_rh);
-		$stmt->bindColumn("id_rol", $id_rol);
-		$stmt->bindColumn("estado", $estado);
-
-		
-		$usuarios = array();
-
-		while ($fila = $stmt->fetch(PDO::FETCH_BOUND)){
-
-			$user = array();
-
-			$user["id_em"] = utf8_encode($id_em);
-			$user["documento"] = utf8_encode($documento);
-			$user["n_em"] = utf8_encode($n_em);
-			$user["a_em"] = utf8_encode($a_em);
-			$user["eml_em"] = utf8_encode($eml_em);
-			$user["f_em"] = utf8_encode($f_em);
-			$user["dir_em"] = utf8_encode($dir_em);
-			$user["lic_emp"] = utf8_encode($lic_emp);
-			$user["lib_em"] = utf8_encode($lib_em);
-			$user["tel_em"] = utf8_encode($tel_em);
-			$user["contrato"] = utf8_encode($contrato);
-			$user["barloc_em"] = utf8_encode($barloc_em);
-			$user["id_doc"] = utf8_encode($id_doc);
-			$user["id_pens"] = utf8_encode($id_pens);
-			$user["id_eps"] = utf8_encode($id_eps);
-			$user["id_arl"] = utf8_encode($id_arl);
-			$user["id_ces"] = utf8_encode($id_ces);
-			$user["id_rh"] = utf8_encode($id_rh);
-			$user["id_rol"] = utf8_encode($id_rol);
-			$user["estado"] = utf8_encode($estado);	
-
-			array_push($usuarios, $user);
+		if($id !== null) {
+			$query .= " WHERE id_em = :id";
 		}
-		return $usuarios;
+	
+		$stmt = Database::getConnection()->prepare($query);
+	
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			echo "Hubo un error al obtener las empresas.";
+			return array(); // Devuelve un array vacío en caso de error
+		}
 	}
-
 
 	public function updateEmpleadoModel($datosModel, $tabla){
 		$stmt = Database::getConnection()->prepare(
@@ -161,8 +121,42 @@ class DatosEmpleado extends Database
 		}
 	}
 	
-	
-	
+	public function readContEmgModel($id) {
+		$stmt = Database::getConnection()->prepare("SELECT ID_CEm, N_CoE, Csag, T_CEm FROM contacto_emergencia WHERE id_em = :id");
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		if($stmt->execute()){
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		}else{
+			echo "No se encontraron contactos";
+			return array();
+		}
+	}
+
+	public function createContEmgModel($datosModel) {
+		$stmt = Database::getConnection()->prepare("INSERT INTO contacto_emergencia (N_CoE, Csag, id_em, T_CEm) VALUES (:N_CoE, :Csag, :id_em, :T_CEm)");
+		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
+		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
+		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function updateContEmgModel($datosModel){
+		$stmt = Database::getConnection()->prepare("UPDATE contacto_emergencia SET N_CoE = :N_CoE, Csag = :Csag, T_CEm = :T_CEm WHERE ID_CEm = :ID_CEm");
+		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
+		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
+		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
+		$stmt->bindParam(":ID_CEm", $datosModel["ID_CEm"], PDO::PARAM_INT);
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}
 
 	public function deleteEmpleadoModel($id_em, $tabla){
 		$stmt = Database::getConnection()->prepare("DELETE FROM $tabla WHERE id_em = :id_em");

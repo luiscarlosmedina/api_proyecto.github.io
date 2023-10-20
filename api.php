@@ -69,6 +69,74 @@ switch ($apicall) {
         );
       }
       break;
+      case 'createcontemg':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          // Recibe y decodifica los datos JSON de la solicitud
+          $inputJSON = file_get_contents('php://input');
+          $inputData = json_decode($inputJSON, true);
+          
+          if ($inputData !== null) {
+              $db = new ControllerJson();
+              $result = $db->createContEmgController($inputData);
+          
+              if ($result) {
+                  $response = array(
+                      'error' => false,
+                      'message' => 'contacto de emergencia agregado con exito',
+                  );
+              } else {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Ocurrió un error al agregar el contacto de emergencia',
+                  );
+              }
+          } else {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
+              );
+          }
+        } else {
+            $response = array(
+                'error' => true,
+                'message' => 'Método de solicitud no válido',
+            );
+        }
+        break;
+      case 'updatecontemg':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          // Recibe y decodifica los datos JSON de la solicitud
+          $inputJSON = file_get_contents('php://input');
+          $inputData = json_decode($inputJSON, true);
+          
+          if ($inputData !== null) {
+              $db = new ControllerJson();
+              $result = $db->updateContEmgController($inputData);
+          
+              if ($result) {
+                  $response = array(
+                      'error' => false,
+                      'message' => 'contacto de emergencia actualizado con exito',
+                  );
+              } else {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Ocurrió un error al actualizar el contacto de emergencia',
+                  );
+              }
+          } else {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
+              );
+          }
+        } else {
+            $response = array(
+                'error' => true,
+                'message' => 'Método de solicitud no válido',
+            );
+        }
+        break;
       
     //https://developersaurios.000webhostapp.com/api.php?apicall=updateempleado
     case 'updateempleado':
@@ -128,13 +196,49 @@ switch ($apicall) {
 
     //https://developersaurios.000webhostapp.com/api.php?apicall=readempleado
       case 'readempleado':
-      $db = new ControllerJson();
-      $response = array(
-        'error' => false,
-        'message' => 'Solicitud completada correctamente',
-        'contenido' => $db->readempleadoController(),
-      );
-      break;
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempleado') {
+          $db = new ControllerJson();
+          $id = $_GET['id'];
+        
+          if (!empty($id)) {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readEmpleadoController($id) ;
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readempleado&id=2
+          } else {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readEmpleadoController();
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readempleado&id
+          }
+        } else {
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+        break;
+
+        case 'readcontemg':
+          if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readcontemg') {
+            $db = new ControllerJson();
+            $id = $_GET['id'];
+          
+            if (!empty($id)) {
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';
+              $response['contenido'] = $db->readContEmgController($id) ;
+              //forma de llamar al api
+              //http://localhost/../api.php?apicall=readcontemg&id=2
+            } else {
+              $response['error'] = true;
+              $response['message'] = 'ingrese el id del empleado';
+            }
+          } else {
+            $response['error'] = true;
+            $response['message'] = 'Método de solicitud no válido';
+          }
+          break;
 
 
     //https://developersaurios.000webhostapp.com/api.php?apicall=deleteempleado
