@@ -49,7 +49,7 @@ class DatosEmpleado extends Database
 	}
 	
 	public function readEmpleadoModel($id = null) {
-		$query = "SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, id_doc, id_pens, id_eps, id_arl, id_ces, id_rh, estado FROM empleado";
+		$query = "SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, u.ID_Doc, td.N_TDoc, u.ID_pens, p.N_pens, u.ID_eps, e.N_eps, u.ID_arl, a.N_arl, u.ID_ces, c.N_ces, u.ID_RH, rh.T_RH, estado FROM empleado u JOIN eps e ON u.ID_eps = e.ID_eps JOIN pensiones p ON u.ID_pens = p.ID_pens JOIN arl a ON u.ID_arl = a.ID_arl JOIN cesantias c ON u.ID_ces = c.ID_ces JOIN tipo_doc td ON u.ID_Doc = td.ID_Doc JOIN rh rh ON u.ID_RH = rh.ID_RH";
 	
 		if($id !== null) {
 			$query .= " WHERE id_em = :id";
@@ -65,6 +65,82 @@ class DatosEmpleado extends Database
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
 		} else {
 			echo "Hubo un error al obtener las empresas.";
+			return array(); // Devuelve un array vacío en caso de error
+		}
+	}
+
+	public function readeps($id = null){
+		$query = "SELECT * FROM eps";
+
+		if($id !== null) {
+			$query .= " WHERE ID_eps = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); // Devuelve un array vacío en caso de error
+		}
+	}
+
+	public function readpens($id = null){
+		$query = "SELECT * FROM pensiones";
+
+		if($id !== null) {
+			$query .= " WHERE ID_pens = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); // Devuelve un array vacío en caso de error
+		}
+	}
+
+	public function readarl($id = null){
+		$query = "SELECT * FROM arl";
+
+		if($id !== null) {
+			$query .= " WHERE ID_arl = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); // Devuelve un array vacío en caso de error
+		}
+	}
+
+	public function readcesantias($id = null){
+		$query = "SELECT * FROM cesantias";
+
+		if($id !== null) {
+			$query .= " WHERE ID_ces = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
 			return array(); // Devuelve un array vacío en caso de error
 		}
 	}
@@ -155,16 +231,6 @@ class DatosEmpleado extends Database
 			return true;
 		}else{
 			return false;
-		}
-	}
-
-	public function deleteEmpleadoModel($id_em, $tabla){
-		$stmt = Database::getConnection()->prepare("DELETE FROM $tabla WHERE id_em = :id_em");
-		$stmt->bindParam(":id_em", $id_em, PDO::PARAM_INT);
-		if($stmt->execute()){
-			echo "Usuario eliminado correctamente";
-		}else{
-			echo "El Usuario no se pudo eliminar";
 		}
 	}
 	
