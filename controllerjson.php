@@ -147,6 +147,12 @@ class ControllerJson
 		return $respuesta;
 
 	}
+
+	public function readEmpresaNitController($nit) {
+		$datos = new DatosEmpresa();
+		$respuesta = $datos->readEmpresaNitModel($nit);
+		return $respuesta;
+	}
 	public function readEmpresasController($id = null) {
 		$datos = new DatosEmpresa();
 		if ($id !== null) {

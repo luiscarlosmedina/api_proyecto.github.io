@@ -238,48 +238,7 @@ switch ($apicall) {
             $response['error'] = true;
             $response['message'] = 'Método de solicitud no válido';
           }
-          break;
-
-
-    //https://developersaurios.000webhostapp.com/api.php?apicall=deleteempleado
-    case 'deleteempleado':
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $json = file_get_contents('php://input');
-        $data = json_decode($json, true);
-
-        if ($data === null) {
-          $response = array(
-            'error' => true,
-            'message' => 'Error en el contenido JSON',
-          );
-        } else {
-          $id_em = $data['id_em'];
-
-          $db = new ControllerJson();
-          $result = $db->deleteempleadoController($id_em);
-
-          if ($result) {
-            $response = array(
-              'error' => false,
-              'message' => 'Usuario eliminado correctamente',
-              'contenido' => $db->readempleadoController(),
-            );
-          } else {
-            $response = array(
-              'error' => true,
-              'message' => 'Ocurrió un error al eliminar el usuario',
-            );
-          }
-        }
-      } else {
-        $response = array(
-          'error' => true,
-          'message' => 'Método de solicitud no válido',
-        );
-      }
-      break;
-      
-      
+          break;      
     // ---------------------- max empleados --------------------------
       
     // ---------------------- min empleados --------------------------
@@ -434,6 +393,23 @@ switch ($apicall) {
           $response['contenido'] = $db->readEmpresasController();
           //forma de llamar al api
           //http://localhost/../api.php?apicall=readempresa&id
+        }
+      } else {
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+      }
+      break;
+      case 'readempresanit':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempresanit') {
+        $db = new ControllerJson();
+        $nit = $_GET['nit'];
+      
+        if (!empty($nit)) {
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['contenido'] = $db->readEmpresaNitController($nit) ;
+          //forma de llamar al api
+          //http://localhost/api_proyecto.github.io/api.php?apicall=readempresanit&nit=123456782
         }
       } else {
         $response['error'] = true;

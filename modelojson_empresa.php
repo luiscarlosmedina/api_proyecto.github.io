@@ -147,6 +147,17 @@ class DatosEmpresa extends Database
 			return false;
 		}
 	}
+	public function readEmpresaNitModel($nit) {
+		$query = "SELECT id_e FROM empresa WHERE Nit_E = :nit";
+		$stmt = Database::getConnection()->prepare($query);
+		$stmt->bindParam(":nit", $nit, PDO::PARAM_STR);
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(null); // Devuelve un array vacío en caso de error
+		}
+	}
+
 	public function readEmpresaModel($id = null) {
 		$query = "SELECT em.id_e, em.Nit_E, em.Nom_E, em.Eml_E, em.Nom_Rl, em.ID_Doc, em.CC_Rl, em.telefonoGeneral, em.Val_E, em.Est_E, em.Fh_Afi, em.fechaFinalizacion, em.COD_SE, em.COD_AE FROM empresa AS em";
 	
