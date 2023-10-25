@@ -257,6 +257,41 @@ switch ($apicall) {
      // ----------------------min empleados --------------------------      
       
       //empresa
+      case 'createfastempresa':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          // Recibe y decodifica los datos JSON de la solicitud
+          $inputJSON = file_get_contents('php://input');
+          $inputData = json_decode($inputJSON, true);
+          
+          if ($inputData !== null) {
+              $db = new ControllerJson();
+              $result = $db->createFastEmpresaController($inputData);
+          
+              if ($result) {
+                  $response = array(
+                      'error' => false,
+                      'message' => 'Empresa agregada correctamente',
+                  );
+              } else {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Ocurrió un error al agregar la empresa',
+                  );
+              }
+          } else {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
+              );
+          }
+        } else {
+            $response = array(
+                'error' => true,
+                'message' => 'Método de solicitud no válido',
+            );
+        }
+        break;
+
       case 'createempresa':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           // Recibe y decodifica los datos JSON de la solicitud
@@ -416,7 +451,29 @@ switch ($apicall) {
         $response['message'] = 'Método de solicitud no válido';
       }
       break;
-
+      case 'readtdoc':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readtdoc') {
+          $db = new ControllerJson();
+          $id = $_GET['id'];
+        
+          if (!empty($id)) {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readTdocController($id) ;
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readTdoc&id=2
+          } else {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readTdocController();
+            //forma de llamar al api
+            //http://localhost/../api.php?apicall=readTdoc&id
+          }
+        } else {
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+        break;
       case 'readsede':
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readsede') {
           $db = new ControllerJson();

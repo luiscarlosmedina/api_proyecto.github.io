@@ -121,7 +121,14 @@ class ControllerJson
 	//  ------------------- min empleados --------------------
 	//  ------------------- controller modulo empresa --------------------
 
-    public function createEmpresaController($data)
+    public function createFastEmpresaController($data)
+    {
+        $datos = new DatosEmpresa();
+        $respuesta = $datos->createFastEmpresaModel($data);
+        return $respuesta;
+    }
+
+	public function createEmpresaController($data)
     {
         $datos = new DatosEmpresa();
         $respuesta = $datos->createEmpresaModel($data);
@@ -152,6 +159,16 @@ class ControllerJson
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->readEmpresaNitModel($nit);
 		return $respuesta;
+	}
+	public function readTdocController($id = null) {
+		$datos = new DatosEmpresa();
+		if ($id !== null) {
+			$respuesta = $datos->readTdocModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readTdocModel();
+			return $respuesta;
+		}
 	}
 	public function readEmpresasController($id = null) {
 		$datos = new DatosEmpresa();
