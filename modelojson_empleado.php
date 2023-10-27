@@ -165,8 +165,7 @@ class DatosEmpleado extends Database
 			id_eps=:id_eps, 
 			id_arl=:id_arl, 
 			id_ces=:id_ces, 
-			id_rh=:id_rh, 
-			id_rol=:id_rol,
+			id_rh=:id_rh,
 			estado=:estado WHERE id_em = :id_em");
 			 
 		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
@@ -187,7 +186,6 @@ class DatosEmpleado extends Database
 		$stmt->bindParam(":id_arl", $datosModel["id_arl"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_ces", $datosModel["id_ces"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_rh", $datosModel["id_rh"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_rol", $datosModel["id_rol"], PDO::PARAM_INT);
 		$stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
 
 		if($stmt->execute()){

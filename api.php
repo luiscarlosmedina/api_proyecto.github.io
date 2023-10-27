@@ -1135,7 +1135,34 @@ case 'updateevidencia':
           );
         }
         break;
-//----------FIN LOGIN----------//  
+//----------FIN LOGIN----------// 
+//----------REPORTES----------// 
+      case 'repnov':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+          $db = new ControllerJson();
+          $data = $db->repNovController();
+
+          // Crear una respuesta con solo los datos
+          $response = $data;
+                
+        }else{
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+      break;
+      case 'repnovsector':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+          $db = new ControllerJson();
+          $data = $db->repSectorNovController();
+
+          // Crear una respuesta con solo los datos
+          $response = $data;
+                
+        }else{
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+      break;
       default:
       $response = array(
         'error' => true,

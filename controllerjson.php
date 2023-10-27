@@ -3,6 +3,7 @@ require_once 'modelojson_empleado.php';
 require_once 'modelojson_empresa.php';
 require_once 'modelojson_novedad.php';
 require_once 'modelojson_login.php';
+require_once 'modelojson_reporte.php';
 /**
  *
  */
@@ -394,8 +395,16 @@ class ControllerJson
 		$respuesta = $datos->loginModel($datosController);
 		return $respuesta;
 	}
-
-	
+	//----------reporte----------//
+	public function repNovController(){
+		$datos = new DatosReporte();
+		$respuesta = $datos->repNovModel();
+		return $respuesta;
+	}
+	public function repSectorNovController(){
+		$datos = new DatosReporte();
+		$respuesta = $datos->repNovSectorModel();
+		return $respuesta;
+	}
 }
-
 ?>
