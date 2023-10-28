@@ -411,5 +411,10 @@ class ControllerJson
 		$respuesta = $datos->repNovDiaModel();
 		return $respuesta;
 	}
+	public function repNovHoraController(){
+		$datos = new DatosReporte();
+		$respuesta = $datos->repNovHoraModel();
+		return $respuesta;
+	}
 }
 ?>

@@ -1176,6 +1176,19 @@ case 'updateevidencia':
           $response['message'] = 'Método de solicitud no válido';
         }
       break;
+      case 'repnovhora':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+          $db = new ControllerJson();
+          $data = $db->repNovHoraController();
+
+          // Crear una respuesta con solo los datos
+          $response = $data;
+                
+        }else{
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+      break;
       default:
       $response = array(
         'error' => true,
