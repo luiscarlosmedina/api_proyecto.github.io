@@ -406,5 +406,10 @@ class ControllerJson
 		$respuesta = $datos->repNovSectorModel();
 		return $respuesta;
 	}
+	public function repNovDiaController(){
+		$datos = new DatosReporte();
+		$respuesta = $datos->repNovDiaModel();
+		return $respuesta;
+	}
 }
 ?>
