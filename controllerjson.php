@@ -396,11 +396,12 @@ class ControllerJson
 		return $respuesta;
 	}
 	//----------reporte----------//
-	public function repNovController(){
+	public function repNovController($startdate = null, $enddate = null, $tipoNovedad = null) {
 		$datos = new DatosReporte();
-		$respuesta = $datos->repNovModel();
+		$respuesta = $datos->repNovModel($startdate, $enddate, $tipoNovedad);
 		return $respuesta;
 	}
+	
 	public function repSectorNovController(){
 		$datos = new DatosReporte();
 		$respuesta = $datos->repNovSectorModel();
