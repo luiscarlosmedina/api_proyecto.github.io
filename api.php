@@ -39,21 +39,21 @@ switch ($apicall) {
           $id_arl = $data['id_arl'];
           $id_ces = $data['id_ces'];
           $id_rh = $data['id_rh'];
-          $id_rol = $data['id_rol'];
           $estado = $data['estado'];
-          $passw = $data['passw'];
           $n_coe = $data['n_coe'];          
           $csag = $data['csag'];
           $t_cem = $data['t_cem'];
+          
+          $passw = $data['passw'];
+          $id_rol =$data['id_rol'];
 		  
           $db = new ControllerJson();
-          $result = $db->createempleadoController($id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado, $passw, $n_coe, $csag, $t_cem);
+        $result = $db->createempleadoController($id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $estado , $n_coe, $csag, $t_cem , $passw, $id_rol);
 
           if ($result) {
             $response = array(
               'error' => false,
               'message' => 'Usuario agregado correctamente',
-              'contenido' => $db->readempleadoController(),
             );
           } else {
             $response = array(
