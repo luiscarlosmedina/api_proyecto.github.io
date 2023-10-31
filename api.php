@@ -1139,17 +1139,20 @@ case 'updateevidencia':
 //----------REPORTES----------// 
       case 'repnov':
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-          $db = new ControllerJson();
-          $data = $db->repNovController();
+            $db = new ControllerJson();
+            $tipoNovedad = isset($_GET['tipoNovedad']) ? $_GET['tipoNovedad'] : null;
+            $startdate = isset($_GET['startdate']) ? $_GET['startdate'] : null;
+            $enddate = isset($_GET['enddate']) ? $_GET['enddate'] : null;
 
-          // Crear una respuesta con solo los datos
-          $response = $data;
-                
-        }else{
-          $response['error'] = true;
-          $response['message'] = 'Método de solicitud no válido';
+            $data = $db->repNovController($startdate, $enddate, $tipoNovedad);
+
+            // Create a response with the data
+            $response = $data;
+        } else {
+            $response = ['error' => true, 'message' => 'Método de solicitud no válido'];
         }
-      break;
+        break;
+
       case 'repnovsector':
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
           $db = new ControllerJson();
