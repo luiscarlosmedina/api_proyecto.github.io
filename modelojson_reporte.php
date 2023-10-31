@@ -64,25 +64,55 @@ class DatosReporte extends Database
         }
     }    
     
-    public function repNovSectorModel() {
+    public function repNovSectorModel($startdate = null, $enddate = null, $tipoNovedad = null) {
         $query = "SELECT s.Sec_V, COUNT(*) AS cantidad
         FROM novedad n
         JOIN tp_novedad tn ON n.T_Nov = tn.T_Nov
         JOIN sede s ON n.ID_S = s.ID_S
-        GROUP BY s.Sec_V;
         ";
+        
+        $whereClause = ''; // Inicializa una cláusula WHERE vacía
     
+        if ($startdate !== null && $enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov BETWEEN :startdate AND :enddate";
+        } elseif ($startdate !== null) {
+            $whereClause = " WHERE n.Fe_Nov >= :startdate";
+        } elseif ($enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov <= :enddate";
+        }
+    
+        if ($tipoNovedad !== null) {
+            if ($whereClause === '') {
+                $whereClause = " WHERE n.T_Nov = :tipoNovedad";
+            } else {
+                $whereClause .= " AND n.T_Nov = :tipoNovedad";
+            }
+        }
+    
+        $query .= $whereClause; // Agrega la cláusula WHERE a la consulta principal
+    
+        $query .= " GROUP BY s.Sec_V"; // Agrupa por el nombre del tipo de novedad
         $stmt = Database::getConnection()->prepare($query);
     
         try {
+            if ($startdate !== null) {
+                $stmt->bindParam(':startdate', $startdate, PDO::PARAM_STR);
+            }
+            if ($enddate !== null) {
+                $stmt->bindParam(':enddate', $enddate, PDO::PARAM_STR);
+            }
+            if ($tipoNovedad !== null) {
+                $stmt->bindParam(':tipoNovedad', $tipoNovedad, PDO::PARAM_INT);
+            }
+    
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_OBJ);
     
-            // Extraer solo los datos y crear un nuevo array
+            // Extrae solo los datos y crea un nuevo array
             $data = array();
             foreach ($results as $result) {
                 $data[] = array(
-                    'name' => 'Sector' .$result->Sec_V,
+                    'name' => 'Sector' . $result->Sec_V,
                     'value' => $result->cantidad
                 );
             }
@@ -93,6 +123,7 @@ class DatosReporte extends Database
             return array(); // Devuelve un array vacío en caso de error
         }
     }
+    
     public function repNovDiaModel() {
         $query = "SELECT
         CASE DAYOFWEEK(Fe_Nov)

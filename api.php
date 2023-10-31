@@ -1156,7 +1156,11 @@ case 'updateevidencia':
       case 'repnovsector':
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
           $db = new ControllerJson();
-          $data = $db->repSectorNovController();
+          $tipoNovedad = isset($_GET['tipoNovedad']) ? $_GET['tipoNovedad'] : null;
+          $startdate = isset($_GET['startdate']) ? $_GET['startdate'] : null;
+          $enddate = isset($_GET['enddate']) ? $_GET['enddate'] : null;
+
+          $data = $db->repSectorNovController($startdate, $enddate, $tipoNovedad);
 
           // Crear una respuesta con solo los datos
           $response = $data;
