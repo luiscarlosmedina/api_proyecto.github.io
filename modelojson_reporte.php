@@ -192,17 +192,47 @@ class DatosReporte extends Database
             return array(); // Devuelve un array vacío en caso de error
         }
     }
-    public function repNovHoraModel() {
+    public function repNovHoraModel($startdate = null, $enddate = null, $tipoNovedad = null) {
         $query = "SELECT
-        CONCAT(LPAD(HOUR(Fe_Nov), 2, '0'), ':00 - ', LPAD(HOUR(Fe_Nov) + 1, 2, '0'), ':00') AS Rango_Hora,
+        CONCAT(LPAD(HOUR(n.Fe_Nov), 2, '0'), ':00 - ', LPAD(HOUR(n.Fe_Nov) + 1, 2, '0'), ':00') AS Rango_Hora,
         COUNT(*) AS cantidad
-        FROM novedad
-        GROUP BY Rango_Hora
-        ORDER BY Rango_Hora;";
+        FROM novedad n 
+        JOIN tp_novedad tn ON n.T_Nov = tn.T_Nov ";
+
+        $whereClause = ''; // Inicializa una cláusula WHERE vacía
+                    
+        if ($startdate !== null && $enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov BETWEEN :startdate AND :enddate";
+        } elseif ($startdate !== null) {
+            $whereClause = " WHERE n.Fe_Nov >= :startdate";
+        } elseif ($enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov <= :enddate";
+        }
+
+        if ($tipoNovedad !== null) {
+            if ($whereClause === '') {
+                $whereClause = " WHERE n.T_Nov = :tipoNovedad";
+            } else {
+                $whereClause .= " AND n.T_Nov = :tipoNovedad";
+            }
+        }
+
+        $query .= $whereClause; // Agrega la cláusula WHERE a la consulta principal
+        $query .= " GROUP BY Rango_Hora ORDER BY Rango_Hora";
     
         $stmt = Database::getConnection()->prepare($query);
     
         try {
+            if ($startdate !== null) {
+                $stmt->bindParam(':startdate', $startdate, PDO::PARAM_STR);
+            }
+            if ($enddate !== null) {
+                $stmt->bindParam(':enddate', $enddate, PDO::PARAM_STR);
+            }
+            if ($tipoNovedad !== null) {
+                $stmt->bindParam(':tipoNovedad', $tipoNovedad, PDO::PARAM_INT);
+            }
+            
             $stmt->execute();
             $results = $stmt->fetchAll(PDO::FETCH_OBJ);
     
