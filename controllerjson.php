@@ -138,9 +138,9 @@ class ControllerJson
     }
 
 	//crea una sede con un encargado y tres telefonos
-	public function createSedeController( $Dic_S,$Sec_V, $id_e, $N_En, $Est_en, $tel1, $tel2, $tel3){
+	public function createSedeController( $Dic_S,$Sec_V, $id_e){
 
-		$datosController = array("Dic_S"=>$Dic_S, "Sec_V"=>$Sec_V, "id_e"=>$id_e, "N_En"=>$N_En, "Est_en"=>$Est_en, "tel1"=>$tel1, "tel2"=>$tel2, "tel3"=>$tel3);
+		$datosController = array("Dic_S"=>$Dic_S, "Sec_V"=>$Sec_V, "id_e"=>$id_e);
 
 		$datos = new DatosEmpresa();
 		$respuesta = $datos->createSedeModel($datosController);

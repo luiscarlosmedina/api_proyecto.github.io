@@ -340,14 +340,9 @@ switch ($apicall) {
             $Dic_S = $data['Dic_S'];
             $Sec_V = $data['Sec_V'];
             $id_e = $data['id_e'];
-            $N_En = $data['N_En'];
-            $Est_en = $data['Est_en'];
-            $tel1 = $data['tel1'];
-            $tel2 = $data['tel2'];
-            $tel3 = $data['tel3'];
     
             $db = new ControllerJson();
-            $result = $db->createSedeController( $Dic_S,$Sec_V, $id_e, $N_En, $Est_en, $tel1, $tel2, $tel3);
+            $result = $db->createSedeController( $Dic_S,$Sec_V, $id_e);
     
             if ($result) {
               $response = array(

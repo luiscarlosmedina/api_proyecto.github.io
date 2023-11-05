@@ -138,28 +138,7 @@ class DatosEmpresa extends Database
 			$stmt->bindParam(":Sec_V", $datosModel["Sec_V"], PDO::PARAM_INT);
 			$stmt->bindParam(":id_e", $datosModel["id_e"], PDO::PARAM_INT);
 			$stmt->execute();
-	
-			// Obtener el último ID insertado en "sede"
-			$idse = $conn->lastInsertId();
-	
-			// Insertar en la tabla "encargado"
-			$stmt = $conn->prepare("INSERT INTO encargado (N_En, tel1, tel2, tel3) VALUES (:N_En, :tel1, :tel2, :tel3)");
-			$stmt->bindParam(":N_En", $datosModel["N_En"], PDO::PARAM_STR);
-			$stmt->bindParam(":tel1", $datosModel["tel1"], PDO::PARAM_STR);
-			$stmt->bindParam(":tel2", $datosModel["tel2"], PDO::PARAM_STR);
-			$stmt->bindParam(":tel3", $datosModel["tel3"], PDO::PARAM_STR);
-			$stmt->execute();
-	
-			// Obtener el último ID insertado en "encargado"
-			$iden = $conn->lastInsertId();
-	
-			// Insertar en la tabla "encargado_estado"
-			$stmt = $conn->prepare("INSERT INTO encargado_estado (ID_En, ID_S, Est_en) VALUES (:ID_En, :ID_S, :Est_en)");
-			$stmt->bindParam(":ID_En", $iden, PDO::PARAM_INT);
-			$stmt->bindParam(":ID_S", $idse, PDO::PARAM_INT);
-			$stmt->bindParam(":Est_en", $datosModel["Est_en"], PDO::PARAM_STR);
-			$stmt->execute();
-
+			
 			$conn->commit();
 			return true;
 		} catch (PDOException $e) {
