@@ -251,6 +251,17 @@ switch ($apicall) {
 // ------------------------ Read employes ------------------------- 
 
 // ------------------------ Read selectors ------------------------
+case 'readtpdocumento':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTpdocumentoController();
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
 
 // ------------------------ Read selectors ------------------------
 

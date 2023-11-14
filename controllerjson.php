@@ -125,6 +125,11 @@ class ControllerJson
 
   // ------------------------ Read selectors ------------------------
 
+  public function readTpdocumentoController() {
+    $datos = new DatosEmpleado();
+    return $datos->readTpDocumentoModel();
+}
+
   // ------------------------ Read selectors ------------------------
 
 

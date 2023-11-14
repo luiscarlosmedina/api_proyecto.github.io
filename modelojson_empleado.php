@@ -221,83 +221,16 @@ class DatosEmpleado extends Database
   // ------------------------ Read employes -------------------------
 
   // ------------------------ Read selectors ------------------------
+
+
+  public function readTpDocumentoModel() {
+    $stmt = Database::getConnection()->prepare(
+        "SELECT ID_Doc , N_TDoc  FROM tipo_doc;"
+    );
+    return $stmt->execute() ? $stmt->fetchAll(PDO::FETCH_OBJ) : true;
+}
 	
-	public function readeps($id = null){
-		$query = "SELECT * FROM eps";
-
-		if($id !== null) {
-			$query .= " WHERE ID_eps = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
 	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); 
-		}
-	}
-
-	public function readpens($id = null){
-		$query = "SELECT * FROM pensiones";
-
-		if($id !== null) {
-			$query .= " WHERE ID_pens = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); 
-		}
-	}
-
-	public function readarl($id = null){
-		$query = "SELECT * FROM arl";
-
-		if($id !== null) {
-			$query .= " WHERE ID_arl = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); 
-		}
-	}
-
-	public function readcesantias($id = null){
-		$query = "SELECT * FROM cesantias";
-
-		if($id !== null) {
-			$query .= " WHERE ID_ces = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); 
-		}
-	}
-
 	// ------------------------ Read selectors ------------------------
 	
 
