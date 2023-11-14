@@ -9,11 +9,11 @@ require_once 'modelojson_reporte.php';
  */
 class ControllerJson
 {
-	// ------------------- max empleados --------------------
-	
+//  ------------------------ Start controller module employee --------------------------
+
+  // ---------------------- Create employe -------------------------
 	public function createempleadoController( $id_doc, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $estado, $n_coe, $csag, $t_cem , $passw, $id_rol ){
 		$datosController = array(
-		    
 			"id_doc"=>$id_doc,
 			"documento"=>$documento,		    
 			"n_em"=>$n_em,
@@ -35,7 +35,6 @@ class ControllerJson
 			"n_coe"=>$n_coe,
 			"csag"=>$csag,
 			"t_cem"=>$t_cem,
-			
 			"passw"=>$passw,
 			"id_rol"=>$id_rol,
 			);
@@ -44,11 +43,32 @@ class ControllerJson
 		$respuesta = $datos->createEmpleadoModel($datosController);
 		return $respuesta;
 	}
+
+  // ---------------------- Create employe -------------------------
+
+  // ---------------------- Contact emergency ----------------------
+
 	public function createContEmgController($datosController){
 		$datos = new DatosEmpleado();
 		$respuesta = $datos->createContEmgModel($datosController);
 		return $respuesta;
 	}
+
+	public function readContEmgController($id){
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->readContEmgModel($id);
+		return $respuesta;
+	}
+
+	public function updateContEmgController($datosController) {
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->updateContEmgModel($datosController);
+		return $respuesta;
+	}
+  // ---------------------- Contact emergency -----------------------
+
+  // ------------------------ Update employe -------------------------
+
 	public function updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado)
 	{
 		$datosController = array(
@@ -78,6 +98,9 @@ class ControllerJson
 		$respuesta = $datos->updateEmpleadoModel($datosController, "empleado");
 		return $respuesta;
 	}
+  // ------------------------ Update employe -------------------------
+
+  // ------------------------ Read employes -------------------------
 
 	public function readEmpleadoController($id = null) {
 		$datos = new DatosEmpleado();
@@ -90,37 +113,26 @@ class ControllerJson
 		}
 	}
 
-	public function readContEmgController($id){
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->readContEmgModel($id);
-		return $respuesta;
-	}
-
-	public function updateContEmgController($datosController) {
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->updateContEmgModel($datosController);
-		return $respuesta;
-	}
-
-	public function deleteempleadoController($id_em){
-
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->deleteEmpleadoModel($id_em, "empleado");
-		return $respuesta;
-
-	}
-	
-	//  ------------------- max empleados --------------------
-	
-	//  ------------------- min empleados --------------------
-	
-		public function readminempleadoController(){
+	public function readminempleadoController(){
 		$datos = new DatosEmpleado();
 		$respuesta = $datos->readminEmpleadoModel("empleado");
 		return $respuesta;
 	}
 	
-	//  ------------------- min empleados --------------------
+  // ------------------------ Read employes -------------------------
+
+
+
+  // ------------------------ Read selectors ------------------------
+
+  // ------------------------ Read selectors ------------------------
+
+
+
+//  ------------------------ End controller module employe --------------------------
+
+
+
 	//  ------------------- controller modulo empresa --------------------
 
     public function createFastEmpresaController($data)

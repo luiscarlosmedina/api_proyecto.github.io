@@ -7,10 +7,10 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 $apicall = isset($_GET['apicall']) ? $_GET['apicall'] : '';
 
 switch ($apicall) {
-    
-     // ---------------------- max empleados --------------------------
-    
-    //https://developersaurios.000webhostapp.com/api.php?apicall=createempleado
+
+//  ------------------------ Start Api employee module --------------------------
+
+  // ---------------------- Create employe -------------------------
     case 'createempleado':
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents('php://input');
@@ -43,7 +43,6 @@ switch ($apicall) {
           $n_coe = $data['n_coe'];          
           $csag = $data['csag'];
           $t_cem = $data['t_cem'];
-          
           $passw = $data['passw'];
           $id_rol =$data['id_rol'];
 		  
@@ -69,9 +68,12 @@ switch ($apicall) {
         );
       }
       break;
+  // ---------------------- Create employe -------------------------
+
+  // ---------------------- Contact emergency ----------------------
       case 'createcontemg':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          // Recibe y decodifica los datos JSON de la solicitud
+
           $inputJSON = file_get_contents('php://input');
           $inputData = json_decode($inputJSON, true);
           
@@ -103,9 +105,27 @@ switch ($apicall) {
             );
         }
         break;
+
+      case 'readcontemg':
+          if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readcontemg') {
+            $db = new ControllerJson();
+            $id = $_GET['id'];
+            if (!empty($id)) {
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';
+              $response['contenido'] = $db->readContEmgController($id) ;
+            } else {
+              $response['error'] = true;
+              $response['message'] = 'ingrese el id del empleado';
+            }
+          } else {
+            $response['error'] = true;
+            $response['message'] = 'Método de solicitud no válido';
+          }
+          break;      
+
       case 'updatecontemg':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-          // Recibe y decodifica los datos JSON de la solicitud
           $inputJSON = file_get_contents('php://input');
           $inputData = json_decode($inputJSON, true);
           
@@ -137,8 +157,9 @@ switch ($apicall) {
             );
         }
         break;
-      
-    //https://developersaurios.000webhostapp.com/api.php?apicall=updateempleado
+  // ---------------------- Contact emergency ------------------------
+
+  // ------------------------ Update employe -------------------------
     case 'updateempleado':
       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents('php://input');
@@ -194,7 +215,9 @@ switch ($apicall) {
       }
       break;
 
-    //https://developersaurios.000webhostapp.com/api.php?apicall=readempleado
+ // ------------------------ Update employe -----------------------
+
+// ------------------------ Read employes -------------------------
       case 'readempleado':
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempleado') {
           $db = new ControllerJson();
@@ -204,14 +227,10 @@ switch ($apicall) {
             $response['error'] = false;
             $response['message'] = 'Solicitud completada correctamente';
             $response['contenido'] = $db->readEmpleadoController($id) ;
-            //forma de llamar al api
-            //http://localhost/../api.php?apicall=readempleado&id=2
           } else {
             $response['error'] = false;
             $response['message'] = 'Solicitud completada correctamente';
             $response['contenido'] = $db->readEmpleadoController();
-            //forma de llamar al api
-            //http://localhost/../api.php?apicall=readempleado&id
           }
         } else {
           $response['error'] = true;
@@ -219,32 +238,7 @@ switch ($apicall) {
         }
         break;
 
-        case 'readcontemg':
-          if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readcontemg') {
-            $db = new ControllerJson();
-            $id = $_GET['id'];
-          
-            if (!empty($id)) {
-              $response['error'] = false;
-              $response['message'] = 'Solicitud completada correctamente';
-              $response['contenido'] = $db->readContEmgController($id) ;
-              //forma de llamar al api
-              //http://localhost/../api.php?apicall=readcontemg&id=2
-            } else {
-              $response['error'] = true;
-              $response['message'] = 'ingrese el id del empleado';
-            }
-          } else {
-            $response['error'] = true;
-            $response['message'] = 'Método de solicitud no válido';
-          }
-          break;      
-    // ---------------------- max empleados --------------------------
-      
-    // ---------------------- min empleados --------------------------
-    
-    
-    //https://developersaurios.000webhostapp.com/api.php?apicall=readminempleado
+
       case 'readminempleado':
       $db = new ControllerJson();
       $response = array(
@@ -254,8 +248,14 @@ switch ($apicall) {
       );
       break;
       
-     // ----------------------min empleados --------------------------      
-      
+// ------------------------ Read employes ------------------------- 
+
+// ------------------------ Read selectors ------------------------
+
+// ------------------------ Read selectors ------------------------
+
+//  ------------------------ End Api module employee  --------------------------
+
       //empresa
       case 'createfastempresa':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {

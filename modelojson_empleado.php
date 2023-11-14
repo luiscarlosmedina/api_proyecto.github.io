@@ -3,9 +3,10 @@ require_once 'database.php';
 
 class DatosEmpleado extends Database
 {
-	
-	//---------------------- maximo empleados    ------------------------
 
+//  ------------------------ Start modeljson employee module --------------------------
+
+  // ---------------------- Create employe -------------------------
 	public function createEmpleadoModel($datosModel) {
 		$conn = Database::getConnection();
 	
@@ -64,103 +65,50 @@ class DatosEmpleado extends Database
 			return false;
 		}
 	}
-	
-	public function readEmpleadoModel($id = null) {
-		$query = "SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, u.ID_Doc, td.N_TDoc, u.ID_pens, p.N_pens, u.ID_eps, e.N_eps, u.ID_arl, a.N_arl, u.ID_ces, c.N_ces, u.ID_RH, rh.T_RH, estado FROM empleado u JOIN eps e ON u.ID_eps = e.ID_eps JOIN pensiones p ON u.ID_pens = p.ID_pens JOIN arl a ON u.ID_arl = a.ID_arl JOIN cesantias c ON u.ID_ces = c.ID_ces JOIN tipo_doc td ON u.ID_Doc = td.ID_Doc JOIN rh rh ON u.ID_RH = rh.ID_RH";
-	
-		if($id !== null) {
-			$query .= " WHERE id_em = :id";
-		}
-	
-		$stmt = Database::getConnection()->prepare($query);
-	
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			echo "Hubo un error al obtener las empresas.";
-			return array(); // Devuelve un array vacío en caso de error
+  // ---------------------- Create employe -------------------------
+
+  // ---------------------- Contact emergency ----------------------
+	public function createContEmgModel($datosModel) {
+		$stmt = Database::getConnection()->prepare("INSERT INTO contacto_emergencia (N_CoE, Csag, id_em, T_CEm) VALUES (:N_CoE, :Csag, :id_em, :T_CEm)");
+		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
+		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
+		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
 		}
 	}
 
-	public function readeps($id = null){
-		$query = "SELECT * FROM eps";
-
-		if($id !== null) {
-			$query .= " WHERE ID_eps = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
+	public function readContEmgModel($id) {
+		$stmt = Database::getConnection()->prepare("SELECT ID_CEm, N_CoE, Csag, T_CEm FROM contacto_emergencia WHERE id_em = :id");
+		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		if($stmt->execute()){
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); // Devuelve un array vacío en caso de error
+		}else{
+			echo "No se encontraron contactos";
+			return array();
 		}
 	}
 
-	public function readpens($id = null){
-		$query = "SELECT * FROM pensiones";
-
-		if($id !== null) {
-			$query .= " WHERE ID_pens = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); // Devuelve un array vacío en caso de error
+	public function updateContEmgModel($datosModel){
+		$stmt = Database::getConnection()->prepare("UPDATE contacto_emergencia SET N_CoE = :N_CoE, Csag = :Csag, T_CEm = :T_CEm WHERE ID_CEm = :ID_CEm");
+		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
+		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
+		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
+		$stmt->bindParam(":ID_CEm", $datosModel["ID_CEm"], PDO::PARAM_INT);
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
 		}
 	}
 
-	public function readarl($id = null){
-		$query = "SELECT * FROM arl";
+  // ---------------------- Contact emergency ----------------------
 
-		if($id !== null) {
-			$query .= " WHERE ID_arl = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
 
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); // Devuelve un array vacío en caso de error
-		}
-	}
-
-	public function readcesantias($id = null){
-		$query = "SELECT * FROM cesantias";
-
-		if($id !== null) {
-			$query .= " WHERE ID_ces = :id";
-		}
-		$stmt = Database::getConnection()->prepare($query);
-
-		if ($id !== null) {
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		}
-	
-		if ($stmt->execute()) {
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		} else {
-			return array(); // Devuelve un array vacío en caso de error
-		}
-	}
+  // ------------------------ Update employe -----------------------
 
 	public function updateEmpleadoModel($datosModel, $tabla){
 		$stmt = Database::getConnection()->prepare(
@@ -184,7 +132,7 @@ class DatosEmpleado extends Database
 			id_ces=:id_ces, 
 			id_rh=:id_rh,
 			estado=:estado WHERE id_em = :id_em");
-			 
+			
 		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_doc", $datosModel["id_doc"], PDO::PARAM_INT);
 		$stmt->bindParam(":documento", $datosModel["documento"], PDO::PARAM_STR);
@@ -211,49 +159,33 @@ class DatosEmpleado extends Database
 			echo "No se pudo hacer la Actualizacion";
 		}
 	}
-	
-	public function readContEmgModel($id) {
-		$stmt = Database::getConnection()->prepare("SELECT ID_CEm, N_CoE, Csag, T_CEm FROM contacto_emergencia WHERE id_em = :id");
-		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-		if($stmt->execute()){
+  // ------------------------ Update employe ------------------------
+
+  // ------------------------ Read employes -------------------------
+
+	public function readEmpleadoModel($id = null) {
+		$query = "SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, u.ID_Doc, td.N_TDoc, u.ID_pens, p.N_pens, u.ID_eps, e.N_eps, u.ID_arl, a.N_arl, u.ID_ces, c.N_ces, u.ID_RH, rh.T_RH, estado FROM empleado u JOIN eps e ON u.ID_eps = e.ID_eps JOIN pensiones p ON u.ID_pens = p.ID_pens JOIN arl a ON u.ID_arl = a.ID_arl JOIN cesantias c ON u.ID_ces = c.ID_ces JOIN tipo_doc td ON u.ID_Doc = td.ID_Doc JOIN rh rh ON u.ID_RH = rh.ID_RH";
+
+		if($id !== null) {
+			$query .= " WHERE id_em = :id";
+		}
+
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+
+		if ($stmt->execute()) {
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		}else{
-			echo "No se encontraron contactos";
-			return array();
+		} else {
+			echo "Hubo un error al obtener las empresas.";
+			return array(); // Devuelve un array vacío en caso de error
 		}
 	}
 
-	public function createContEmgModel($datosModel) {
-		$stmt = Database::getConnection()->prepare("INSERT INTO contacto_emergencia (N_CoE, Csag, id_em, T_CEm) VALUES (:N_CoE, :Csag, :id_em, :T_CEm)");
-		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
-		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
-		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
-		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
-		if($stmt->execute()){
-			return true;
-		}else{
-			return false;
-		}
-	}
 
-	public function updateContEmgModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE contacto_emergencia SET N_CoE = :N_CoE, Csag = :Csag, T_CEm = :T_CEm WHERE ID_CEm = :ID_CEm");
-		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
-		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
-		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
-		$stmt->bindParam(":ID_CEm", $datosModel["ID_CEm"], PDO::PARAM_INT);
-		if($stmt->execute()){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	//---------------------- max empleados    ------------------------
-	
-	//---------------------- min empleados    ------------------------
-
-    public function readminEmpleadoModel($tabla){
+	public function readminEmpleadoModel($tabla){
 		$stmt = Database::getConnection()->prepare("SELECT id_em, documento, n_em, a_em, eml_em, tel_em, estado FROM $tabla");
 		$stmt->execute();
 
@@ -284,9 +216,96 @@ class DatosEmpleado extends Database
 		return $usuarios;
 	}
 
-	
-	//---------------------- min empleados    ------------------------
 
+
+  // ------------------------ Read employes -------------------------
+
+  // ------------------------ Read selectors ------------------------
+	
+	public function readeps($id = null){
+		$query = "SELECT * FROM eps";
+
+		if($id !== null) {
+			$query .= " WHERE ID_eps = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); 
+		}
+	}
+
+	public function readpens($id = null){
+		$query = "SELECT * FROM pensiones";
+
+		if($id !== null) {
+			$query .= " WHERE ID_pens = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); 
+		}
+	}
+
+	public function readarl($id = null){
+		$query = "SELECT * FROM arl";
+
+		if($id !== null) {
+			$query .= " WHERE ID_arl = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); 
+		}
+	}
+
+	public function readcesantias($id = null){
+		$query = "SELECT * FROM cesantias";
+
+		if($id !== null) {
+			$query .= " WHERE ID_ces = :id";
+		}
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); 
+		}
+	}
+
+	// ------------------------ Read selectors ------------------------
+	
+
+
+	
+
+	
+	
 	
 }
 ?>
