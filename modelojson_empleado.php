@@ -222,18 +222,40 @@ class DatosEmpleado extends Database
 
   // ------------------------ Read selectors ------------------------
 
-
   public function readTpDocumentoModel() {
     $stmt = Database::getConnection()->prepare(
         "SELECT ID_Doc , N_TDoc  FROM tipo_doc;"
     );
     return $stmt->execute() ? $stmt->fetchAll(PDO::FETCH_OBJ) : true;
-}
-	
-	
-	// ------------------------ Read selectors ------------------------
-	
 
+
+	
+}
+	// ------------------------ Read selectors ------------------------
+
+
+
+	
+// ------------------------ Checker unique------------------------
+
+public function readverificarEmpleadoModel($tipoDocumento, $numeroDocumento) {
+    $query = "SELECT * FROM empleado WHERE id_doc = :id_doc AND documento = :documento";
+    $stmt = Database::getConnection()->prepare($query);
+    $stmt->bindParam(":id_doc", $tipoDocumento, PDO::PARAM_INT);
+    $stmt->bindParam(":documento", $numeroDocumento, PDO::PARAM_STR);
+
+    try {
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            return empty($result); 
+        } else {
+            return true; 
+        }
+    } catch (PDOException $e) {
+        return true; 
+    }
+}
+// ------------------------ Checker unique------------------------
 
 	
 

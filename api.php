@@ -265,6 +265,38 @@ case 'readtpdocumento':
 
 // ------------------------ Read selectors ------------------------
 
+// ------------------------ Checker unique------------------------
+
+case 'readverificarempleado':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readverificarempleado') {
+      $db = new ControllerJson();
+      $tipoDocumento = $_GET['id_doc'];
+      $numeroDocumento = $_GET['documento'];
+
+      if (!empty($tipoDocumento) && !empty($numeroDocumento)) {
+          $empleadoEncontrado = $db->readverificarEmpleadoController($tipoDocumento, $numeroDocumento);
+
+          if ($empleadoEncontrado) {
+              error_log('Empleado encontrado en la base de datos');
+          } else {
+              error_log('Empleado NO encontrado en la base de datos');
+          }
+
+          $response['error'] = false;
+          $response['message'] = 'Solicitud completada correctamente';
+          $response['encontrado'] = $empleadoEncontrado; 
+      }
+  } else {
+      error_log('Método de solicitud no válido');
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+    
+// ------------------------ Checker unique------------------------
+
+
 //  ------------------------ End Api module employee  --------------------------
 
       //empresa

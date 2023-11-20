@@ -122,21 +122,27 @@ class ControllerJson
   // ------------------------ Read employes -------------------------
 
 
-
   // ------------------------ Read selectors ------------------------
-
   public function readTpdocumentoController() {
     $datos = new DatosEmpleado();
     return $datos->readTpDocumentoModel();
 }
-
   // ------------------------ Read selectors ------------------------
+
+
+// ------------------------ Checker unique------------------------
+
+public function readverificarEmpleadoController($tipoDocumento, $numeroDocumento) {
+    $datos = new DatosEmpleado();
+    $empleadoEncontrado = $datos->readverificarEmpleadoModel($tipoDocumento, $numeroDocumento);
+    
+    return !$empleadoEncontrado; 
+}
+// ------------------------ Checker unique------------------------
 
 
 
 //  ------------------------ End controller module employe --------------------------
-
-
 
 	//  ------------------- controller modulo empresa --------------------
 
