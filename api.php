@@ -293,6 +293,26 @@ case 'readverificarempleado':
   }
   break;
 
+  case 'readveriemlempleado':
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readveriemlempleado') {
+        $db = new ControllerJson();
+        $Email = $_GET['eml_em'];
+  
+        if (!empty($Email) ) {
+            $EmailEncontrado = $db->readveriemlEmpleadoController($Email);
+
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['encontrado'] = $EmailEncontrado; 
+        }
+    } else {
+        error_log('Método de solicitud no válido');
+        $response['error'] = true;
+        $response['message'] = 'Método de solicitud no válido';
+    }
+    break;
+  
+
     
 // ------------------------ Checker unique------------------------
 

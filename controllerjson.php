@@ -137,7 +137,22 @@ public function readverificarEmpleadoController($tipoDocumento, $numeroDocumento
     $empleadoEncontrado = $datos->readverificarEmpleadoModel($tipoDocumento, $numeroDocumento);
     
     return !$empleadoEncontrado; 
+
 }
+
+
+public function readveriemlEmpleadoController($Email) {
+    $datos = new DatosEmpleado();
+    $EmailEncontrado = $datos->readveriemlEmpleadoModel($Email) ;
+    
+    return !$EmailEncontrado; 
+
+}
+
+
+
+
+
 // ------------------------ Checker unique------------------------
 
 

@@ -255,6 +255,25 @@ public function readverificarEmpleadoModel($tipoDocumento, $numeroDocumento) {
         return true; 
     }
 }
+
+
+public function readveriemlEmpleadoModel($Email){
+    $query = "SELECT * FROM empleado WHERE eml_em = :eml_em ";
+    $stmt = Database::getConnection()->prepare($query);
+
+    $stmt->bindParam(":eml_em", $Email, PDO::PARAM_STR);
+
+    try {
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            return empty($result); 
+        } else {
+            return true; 
+        }
+    } catch (PDOException $e) {
+        return true; 
+    }
+}
 // ------------------------ Checker unique------------------------
 
 	
