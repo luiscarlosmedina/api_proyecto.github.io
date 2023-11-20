@@ -813,8 +813,7 @@ case 'createtpnovedad':
       if ($result) {
         $response = array(
           'error' => false,
-          'message' => 'tipo de novedad agregada correctamente',
-          'contenido' => $db->readTpNovdadController(),
+          'message' => 'tipo de novedad agregada correctamente'
         );
       } else {
         $response = array(
@@ -1044,7 +1043,6 @@ case 'updatenovedad':
           $response = array(
             'error' => false,
             'message' => 'Tipo de novedad actualizada correctamente',
-            'contenido' => $db->readTpNovedadController(),
           );
         } else {
           $response = array(
