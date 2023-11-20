@@ -122,7 +122,7 @@ class DatosNovedad extends Database
 	//Funcion READ tabla empresa obtener id
 	public function readNovedadEmpresaModel(){
 		$stmt = Database::getConnection()->prepare(
-			"SELECT `id_e`, `Nom_E` FROM `empresa` WHERE 1;"
+			"SELECT `id_e`, `Nom_E` FROM `empresa` WHERE Est_E != 2;"
 		);
 	
 		if($stmt->execute()){
@@ -142,7 +142,7 @@ class DatosNovedad extends Database
 			sede
 		INNER JOIN empresa ON sede.id_e = empresa.id_e
 		WHERE
-			empresa.id_e = '$id';"
+			empresa.id_e = '$id' AND sede.est_sed = 0;"
 		);
 	
 		if($stmt->execute()){
@@ -155,7 +155,7 @@ class DatosNovedad extends Database
 	//Funcion READ tabla empleado para novedad
 	public function readNovedadEmpleadoModel(){
 		$stmt = Database::getConnection()->prepare(
-			"SELECT `id_em`, CONCAT(n_em, ' ', a_em) AS Nombre_Completo_Empleado FROM `empleado` WHERE 1;"
+			"SELECT `id_em`, CONCAT(n_em, ' ', a_em) AS Nombre_Completo_Empleado FROM `empleado` WHERE estado = 0;"
 		);
 	
 		if($stmt->execute()){
