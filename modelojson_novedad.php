@@ -62,8 +62,9 @@ class DatosNovedad extends Database
 		CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado
 	  FROM novedad AS n
 	  JOIN empleado AS em ON n.id_em = em.id_em
-	  LEFT JOIN sede AS s ON n.ID_S = s.ID_S
-	  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov;";
+	  JOIN sede AS s ON n.ID_S = s.ID_S
+	  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov 
+	  ORDER BY Fecha_Novedad DESC;";
 	
 		if($id !== null) {
 			//Ampliada por id
@@ -71,22 +72,17 @@ class DatosNovedad extends Database
 			n.ID_Nov AS ID_Novedad,
 			n.Fe_Nov AS Fecha_Novedad,
 			tn.Nombre_Tn AS Tipo_Novedad,
-			tn.descrip_Tn AS Descripcion_Tipo,
 			CASE
 			  WHEN n.ID_S IS NULL THEN n.Dic_Nov
 			  ELSE s.Dic_S
 			END AS Direccion,
 			n.Des_Nov AS Descripcion_Novedad,
-			e.adjunto AS Adjunto_Evidencia,
 			CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado
 		  FROM novedad AS n
 		  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov
-		  JOIN evidencia AS e ON n.id_evi = e.id_evi
 		  JOIN empleado AS em ON n.id_em = em.id_em
-		  LEFT JOIN sede AS s ON n.ID_S = s.ID_S
-		  WHERE n.ID_Nov = :id;
-		  
-		  ";
+		  JOIN sede AS s ON n.ID_S = s.ID_S
+		  WHERE n.ID_Nov = :id";
 		}
 		$stmt = Database::getConnection()->prepare($query);
 	
