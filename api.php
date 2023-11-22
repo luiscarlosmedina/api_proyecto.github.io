@@ -800,49 +800,47 @@ case 'readverificarempleado':
 
   // caso CREATE tabla Novedad
     //http:/localhost/.../api.php?apicall=createnovedad + body (Json)
-case 'createnovedad':
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $json = file_get_contents('php://input');
-    $data = json_decode($json, true);
-
-    if ($data === null) {
-      $response = array(
-        'error' => true,
-        'message' => 'Error en el contenido JSON',
-      );
-    } else {
-      $T_Nov = $data['T_Nov'];
-      $Dic_Nov = $data['Dic_Nov'];
-      $Des_Nov = $data['Des_Nov'];
-      $id_evi = $data['id_evi'];
-      $id_em = $data['id_em'];
-      $ID_S = $data['ID_S'];
-
+    case 'createnovedad':
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          $json = file_get_contents('php://input');
+          $data = json_decode($json, true);
   
-      $db = new ControllerJson();
-      $result = $db->createNovedadController($T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S);
-
-      if ($result) {
-        $response = array(
-          'error' => false,
-          'message' => 'Novedad agregada correctamente',
-          'contenido' => $db->readNovedadController(),
-        );
+          if ($data === null) {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
+              );
+          } else {
+              $T_Nov = $data['T_Nov'];
+              $Dic_Nov = $data['Dic_Nov'];
+              $Des_Nov = $data['Des_Nov'];
+              $id_em = $data['id_em'];
+              $ID_S = $data['ID_S'];
+              $adjuntos = $data['adjuntos'];
+  
+              // Continuar con el resto de tu código para guardar la información en la base de datos
+              $db = new ControllerJson();
+              $result = $db->createNovedadController($T_Nov, $Dic_Nov, $Des_Nov, $adjuntos, $id_em, $ID_S);
+  
+              if ($result) {
+                  $response = array(
+                      'error' => false,
+                      'message' => 'Novedad y evidencias agregadas correctamente',
+                  );
+              } else {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Ocurrió un error al guardar la novedad',
+                  );
+              }
+          }
       } else {
-        $response = array(
-          'error' => true,
-          'message' => 'Ocurrió un error, intenta nuevamente',
-        );
+          $response = array(
+              'error' => true,
+              'message' => 'Método de solicitud no válido',
+          );
       }
-    }
-  } else {
-    $response = array(
-      'error' => true,
-      'message' => 'Método de solicitud no válido',
-    );
-  }
-  break;
-
+      break;  
   // caso CREATE tabla tp_novedad
     //http:/localhost/.../api.php?apicall=createtpnovedad + body (Json)
 case 'createtpnovedad':
@@ -965,18 +963,21 @@ case 'readnovedad':
   //caso READ tabla evidencia
     //http://localhost/../api.php?apicall=readevidencia
     case 'readevidencia':
-      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readevidencia') {
         $db = new ControllerJson();
-  
-          $response['error'] = false;
-          $response['message'] = 'Solicitud completada correctamente';
-          $response['contenido'] = $db->readEvidenciaController();
-              
-      }else{
+        $id = $_GET['id'];
+
+        $response['error'] = false;
+        $response['message'] = 'Solicitud completada correctamente';
+        $response['contenido'] = $db->readevidenciaController($id) ;
+        //forma de llamar al api
+        //http://localhost/../api.php?apicall=readnovedad&id=1
+      } else {
         $response['error'] = true;
         $response['message'] = 'Método de solicitud no válido';
       }
-    break;
+      break;
+  
 
     //caso READ tabla empresa para obtener id
     //http://localhost/../api.php?apicall=readevidencia
@@ -1191,6 +1192,67 @@ case 'updateevidencia':
           );
         }
         break;
+        case 'createevidencia':
+          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              try {
+                  $json = file_get_contents('php://input');
+                  $data = json_decode($json, true);
+      
+                  if ($data === null) {
+                      throw new Exception('Error en el contenido JSON');
+                  }
+      
+                  // Verificar si se ha enviado un archivo
+                  if (isset($_FILES['adjunto']) && $_FILES['adjunto']['error'] === UPLOAD_ERR_OK) {
+                      $adjunto = $_FILES['adjunto'];
+      
+                      // Ruta donde se guardará el archivo
+                      $serverBaseURL = 'http://localhost/api_proyecto.github.io';
+                      $uploadDirectory = $serverBaseURL . '/uploads/evidencias/';
+                      $uploadPath = $uploadDirectory . basename($adjunto['name']);
+      
+                      // Mover el archivo al directorio de destino
+                      if (move_uploaded_file($adjunto['tmp_name'], $uploadPath)) {
+                          $db = new ControllerJson();
+                          $result = $db->createEvidenciaController($uploadPath);
+      
+                          if ($result) {
+                              $response = array(
+                                  'error' => false,
+                                  'message' => 'Evidencia agregada correctamente',
+                              );
+                          } else {
+                              $response = array(
+                                  'error' => true,
+                                  'message' => 'Ocurrió un error al procesar la evidencia en la base de datos',
+                              );
+                          }
+                      } else {
+                          $response = array(
+                              'error' => true,
+                              'message' => 'Error al mover el archivo al directorio de destino',
+                          );
+                      }
+                  } else {
+                      $response = array(
+                          'error' => true,
+                          'message' => 'No se ha enviado un archivo válido',
+                      );
+                  }
+              } catch (Exception $e) {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Error: ' . $e->getMessage(),
+                  );
+              }
+          } else {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Método de solicitud no válido',
+              );
+          }
+          break;
+      
 //----------FIN LOGIN----------// 
 //----------REPORTES----------// 
       case 'repnov':

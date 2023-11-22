@@ -301,20 +301,21 @@ public function readveriemlEmpleadoController($Email) {
 //----------NOVEDAD----------//
 
 	//caso CREATE tabla Novedad
-	public function createNovedadController($T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S){
+	public function createNovedadController($T_Nov, $Dic_Nov, $Des_Nov, $adjuntos, $id_em, $ID_S){
 		$datosController = array(
-			"T_Nov"=>$T_Nov,
-			"Dic_Nov"=>$Dic_Nov,
-			"Des_Nov"=>$Des_Nov,
-			"id_evi"=>$id_evi,
-			"id_em"=>$id_em,
-			"ID_S"=>$ID_S
-			);
-		
+			"T_Nov" => $T_Nov,
+			"Dic_Nov" => $Dic_Nov,
+			"Des_Nov" => $Des_Nov,
+			"adjuntos" => $adjuntos,
+			"id_em" => $id_em,
+			"ID_S" => $ID_S
+		);
+	
 		$datos = new DatosNovedad();
 		$respuesta = $datos->createNovedadModel($datosController);
 		return $respuesta;
 	}
+	
 	//caso CREATE tabla tpNovedad
 	public function createTpNovedadController($Nombre_Tn, $descrip_Tn){
 		$datosController = array(
@@ -360,11 +361,20 @@ public function readveriemlEmpleadoController($Email) {
 			return $respuesta;
 	}
 	// casos READ tabla evidencia
-	public function readEvidenciaController() {
+	public function readEvidenciaController($id) {
 		$datos = new DatosNovedad();
-		$respuesta = $datos->readEvidenciaModel();
-			return $respuesta;
+		try {
+			$respuesta = $datos->readEvidenciaModel($id);
+			if ($respuesta) {
+				return $respuesta;
+			} else {
+				return array(); // o cualquier valor que desees devolver cuando no hay evidencia
+			}
+		} catch (Exception $e) {
+			return null; // o maneja el error de alguna manera
+		}
 	}
+	
 	// casos READ tabla sede por id empresa
 	public function readNovedadSedeController($id) {
 		$datos = new DatosNovedad();

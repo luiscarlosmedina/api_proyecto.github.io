@@ -5,20 +5,41 @@ class DatosNovedad extends Database
 {
 	//Funcion CREATE tabla Novedad
 	public function createNovedadModel($datosModel){
-		$ahora = "CURRENT_TIMESTAMP()";
-		$stmt = Database::getConnection()->prepare("INSERT INTO novedad (Fe_Nov, T_Nov, Dic_Nov, Des_Nov, id_evi, id_em, ID_S)
-													VALUES ($ahora, :T_Nov, :Dic_Nov, :Des_Nov, :id_evi, :id_em, :ID_S);");
-		$stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_STR);
-		$stmt->bindParam(":Dic_Nov", $datosModel["Dic_Nov"], PDO::PARAM_STR);
-		$stmt->bindParam(":Des_Nov", $datosModel["Des_Nov"], PDO::PARAM_STR);
-		$stmt->bindParam(":id_evi", $datosModel["id_evi"], PDO::PARAM_STR);
-		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_STR);
-		$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_STR);
+		$conn = Database::getConnection();
+		
+		try {
+			$conn->beginTransaction();
+			$ahora = "CURRENT_TIMESTAMP()";
+			$stmt = $conn->prepare("INSERT INTO novedad (Fe_Nov, T_Nov, Dic_Nov, Des_Nov, id_em, ID_S)
+														VALUES ($ahora, :T_Nov, :Dic_Nov, :Des_Nov, :id_em, :ID_S);");
+			$stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_STR);
+			$stmt->bindParam(":Dic_Nov", $datosModel["Dic_Nov"], PDO::PARAM_STR);
+			$stmt->bindParam(":Des_Nov", $datosModel["Des_Nov"], PDO::PARAM_STR);
+			$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_STR);
+			$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_STR);
+			$stmt->execute();
 	
-		if($stmt->execute()){
+			// Obtener el último ID insertado en "novedad"
+			$idnov = $conn->lastInsertId();
+
+			//insertar a tabla evidencia
+			$stmt = $conn->prepare("INSERT INTO evidencia ( adjunto, ID_Nov) VALUES (:adjuntos, :ID_Nov)");
+			$stmt->bindParam(":adjuntos", $datosModel["adjuntos"], PDO::PARAM_STR);
+			$stmt->bindParam(":ID_Nov", $idnov, PDO::PARAM_INT);
+			$stmt->execute();
+
+			// Confirmar la transacción
+			$conn->commit();
+			
 			return true;
-		}else{
+		} catch (PDOException $e) {
+			// Revertir la transacción en caso de error
+			$conn->rollBack();
+			echo "Error: " . $e->getMessage();
 			return false;
+		}finally {
+			// Cerrar la conexión
+			$conn = null;
 		}
 	}
 	//Funcion CREATE tabla tpNovedad
@@ -109,16 +130,23 @@ class DatosNovedad extends Database
 		}
 	}
 	//Funcion READ tabla evidencia
-	public function readEvidenciaModel(){
-		$stmt = Database::getConnection()->prepare(
-			"SELECT id_evi, adjunto FROM evidencia;"
-		);
-		if($stmt->execute()){
-			return $stmt->fetchAll(PDO::FETCH_OBJ);
-		}else{
-			return true;
+	public function readEvidenciaModel($id){
+		try {
+			$stmt = Database::getConnection()->prepare(
+				"SELECT id_evi, adjunto FROM evidencia WHERE ID_Nov = :id;"
+			);
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+	
+			if($stmt->execute()){
+				return $stmt->fetchAll(PDO::FETCH_OBJ);
+			} else {
+				throw new Exception("Error en la ejecucion");
+			}
+		} catch (Exception $e) {
+			// Log the exception or handle it as appropriate
+			throw new Exception("Database error: " . $e->getMessage());
 		}
-	}
+	}	
 	//Funcion READ tabla empresa obtener id
 	public function readNovedadEmpresaModel(){
 		$stmt = Database::getConnection()->prepare(
