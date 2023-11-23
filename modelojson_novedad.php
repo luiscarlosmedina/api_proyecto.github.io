@@ -83,7 +83,7 @@ class DatosNovedad extends Database
 		CONCAT(em.n_em, ' ', em.a_em) AS Nombre_Completo_Empleado
 	  FROM novedad AS n
 	  JOIN empleado AS em ON n.id_em = em.id_em
-	  JOIN sede AS s ON n.ID_S = s.ID_S
+	  LEFT JOIN sede AS s ON n.ID_S = s.ID_S
 	  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov 
 	  ORDER BY Fecha_Novedad DESC;";
 	
@@ -102,7 +102,7 @@ class DatosNovedad extends Database
 		  FROM novedad AS n
 		  JOIN tp_novedad AS tn ON n.T_Nov = tn.T_Nov
 		  JOIN empleado AS em ON n.id_em = em.id_em
-		  JOIN sede AS s ON n.ID_S = s.ID_S
+		  LEFT JOIN sede AS s ON n.ID_S = s.ID_S
 		  WHERE n.ID_Nov = :id";
 		}
 		$stmt = Database::getConnection()->prepare($query);
