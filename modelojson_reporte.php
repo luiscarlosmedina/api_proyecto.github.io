@@ -375,5 +375,76 @@ class DatosReporte extends Database
             return array(); // Return an empty array in case of an error
         }
     }    
+    public function repSedetpNovModel($startdate = null, $enddate = null, $ltempresa = null) {
+        $query = "SELECT s.Dic_S, tn.Nombre_Tn, COUNT(tn.Nombre_Tn) AS cantidad 
+        FROM novedad n 
+        JOIN tp_novedad tn ON n.T_Nov = tn.T_Nov 
+        JOIN sede s ON n.ID_S = s.ID_S
+        JOIN empresa e ON s.id_e = e.id_e
+        ";
+    
+        $whereClause = ''; // Initialize an empty WHERE clause
+    
+        if ($startdate !== null && $enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov BETWEEN :startdate AND :enddate";
+        } elseif ($startdate !== null) {
+            $whereClause = " WHERE n.Fe_Nov >= :startdate";
+        } elseif ($enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov <= :enddate";
+        }
+    
+        if ($ltempresa !== null) {
+            if ($whereClause === '') {
+                $whereClause = " WHERE e.id_e = :ltempresa";
+            } else {
+                $whereClause .= " AND e.id_e = :ltempresa";
+            }
+        }
+    
+        $query .= $whereClause; // Append the WHERE clause to the main query
+    
+        $query .= " GROUP BY s.Dic_S, tn.Nombre_Tn"; // Agrupo por sedes de empresa la cantidad de novedades
+    
+        $stmt = Database::getConnection()->prepare($query);
+    
+        try {
+            if ($startdate !== null) {
+                $stmt->bindParam(':startdate', $startdate, PDO::PARAM_STR);
+            }
+    
+            if ($enddate !== null) {
+                $stmt->bindParam(':enddate', $enddate, PDO::PARAM_STR);
+            }
+    
+            if ($ltempresa !== null) {
+                $stmt->bindParam(':ltempresa', $ltempresa, PDO::PARAM_INT);
+            }
+    
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+            // Extract only the data and create a new array
+            $data = array();
+            foreach ($results as $result) {
+                $sede = $result->Dic_S;
+                $novedad = $result->Nombre_Tn;
+                $cantidad = $result->cantidad;
+
+                if (!isset($data[$sede])) {
+                    $data[$sede] = array();
+                }
+
+                $data[$sede][] = array(
+                    'name' => $novedad,
+                    'cantidad' => $cantidad
+                );
+            }
+    
+            return $data;
+        } catch (PDOException $e) {
+            echo "Hubo un error al obtener los datos: " . $e->getMessage();
+            return array(); // Return an empty array in case of an error
+        }
+    }    
 }
 ?>
