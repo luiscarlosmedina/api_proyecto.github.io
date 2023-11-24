@@ -466,5 +466,15 @@ public function readveriemlEmpleadoController($Email) {
 		$respuesta = $datos->repNovHoraModel($startdate, $enddate, $tipoNovedad);
 		return $respuesta;
 	}
+	public function repEmpresaNovController($startdate = null, $enddate = null, $ltempresa = null) {
+		$datos = new DatosReporte();
+		$respuesta = $datos->repEmpresaNovModel($startdate, $enddate, $ltempresa);
+		return $respuesta;
+	}
+	public function repSedeNovController($startdate = null, $enddate = null, $ltempresa = null) {
+		$datos = new DatosReporte();
+		$respuesta = $datos->repSedeNovModel($startdate, $enddate, $ltempresa);
+		return $respuesta;
+	}
 }
 ?>

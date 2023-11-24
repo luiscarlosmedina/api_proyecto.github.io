@@ -251,5 +251,129 @@ class DatosReporte extends Database
             return array(); // Devuelve un array vacío en caso de error
         }
     }
+    public function repEmpresaNovModel($startdate = null, $enddate = null, $ltempresa = null) {
+        $query = "SELECT e.Nom_E, COUNT(*) AS cantidad 
+        FROM novedad n 
+        JOIN sede s ON n.ID_S = s.ID_S
+        JOIN empresa e ON s.id_e = e.id_e
+        ";
+    
+        $whereClause = ''; // Initialize an empty WHERE clause
+    
+        if ($startdate !== null && $enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov BETWEEN :startdate AND :enddate";
+        } elseif ($startdate !== null) {
+            $whereClause = " WHERE n.Fe_Nov >= :startdate";
+        } elseif ($enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov <= :enddate";
+        }
+    
+        if ($ltempresa !== null) {
+            if ($whereClause === '') {
+                $whereClause = " WHERE e.id_e = :ltempresa";
+            } else {
+                $whereClause .= " AND e.id_e = :ltempresa";
+            }
+        }
+    
+        $query .= $whereClause; // Append the WHERE clause to the main query
+    
+        $query .= " GROUP BY e.Nom_E"; //  Agrupo por empresa la cantidad de novedades
+    
+        $stmt = Database::getConnection()->prepare($query);
+    
+        try {
+            if ($startdate !== null) {
+                $stmt->bindParam(':startdate', $startdate, PDO::PARAM_STR);
+            }
+    
+            if ($enddate !== null) {
+                $stmt->bindParam(':enddate', $enddate, PDO::PARAM_STR);
+            }
+    
+            if ($ltempresa !== null) {
+                $stmt->bindParam(':ltempresa', $ltempresa, PDO::PARAM_INT);
+            }
+    
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+            // Extract only the data and create a new array
+            $data = array();
+            foreach ($results as $result) {
+                $data[] = array(
+                    'name' => $result->Nom_E,
+                    'value' => $result->cantidad
+                );
+            }
+    
+            return $data;
+        } catch (PDOException $e) {
+            echo "Hubo un error al obtener los datos: " . $e->getMessage();
+            return array(); // Return an empty array in case of an error
+        }
+    }    
+    public function repSedeNovModel($startdate = null, $enddate = null, $ltempresa = null) {
+        $query = "SELECT e.Nom_E, s.Dic_S, COUNT(*) AS cantidad 
+        FROM novedad n 
+        JOIN sede s ON n.ID_S = s.ID_S
+        JOIN empresa e ON s.id_e = e.id_e
+        ";
+    
+        $whereClause = ''; // Initialize an empty WHERE clause
+    
+        if ($startdate !== null && $enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov BETWEEN :startdate AND :enddate";
+        } elseif ($startdate !== null) {
+            $whereClause = " WHERE n.Fe_Nov >= :startdate";
+        } elseif ($enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov <= :enddate";
+        }
+    
+        if ($ltempresa !== null) {
+            if ($whereClause === '') {
+                $whereClause = " WHERE e.id_e = :ltempresa";
+            } else {
+                $whereClause .= " AND e.id_e = :ltempresa";
+            }
+        }
+    
+        $query .= $whereClause; // Append the WHERE clause to the main query
+    
+        $query .= " GROUP BY e.Nom_E, s.Dic_S"; // Agrupo por sedes de empresa la cantidad de novedades
+    
+        $stmt = Database::getConnection()->prepare($query);
+    
+        try {
+            if ($startdate !== null) {
+                $stmt->bindParam(':startdate', $startdate, PDO::PARAM_STR);
+            }
+    
+            if ($enddate !== null) {
+                $stmt->bindParam(':enddate', $enddate, PDO::PARAM_STR);
+            }
+    
+            if ($ltempresa !== null) {
+                $stmt->bindParam(':ltempresa', $ltempresa, PDO::PARAM_INT);
+            }
+    
+            $stmt->execute();
+            $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+            // Extract only the data and create a new array
+            $data = array();
+            foreach ($results as $result) {
+                $data[] = array(
+                    'name' => $result->Dic_S,
+                    'value' => $result->cantidad
+                );
+            }
+    
+            return $data;
+        } catch (PDOException $e) {
+            echo "Hubo un error al obtener los datos: " . $e->getMessage();
+            return array(); // Return an empty array in case of an error
+        }
+    }    
 }
 ?>
