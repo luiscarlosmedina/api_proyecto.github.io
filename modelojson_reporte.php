@@ -476,7 +476,86 @@ class DatosReporte extends Database
     
         $query .= $whereClause; // Append the WHERE clause to the main query
     
-        $query .= " GROUP BY MesAnio ORDER BY MesAnio;";
+        $query .= " AND tn.T_Nov = :tipoNovedad GROUP BY MesAnio ORDER BY MesAnio;";
+    
+        $stmt = Database::getConnection()->prepare($query);
+    
+        try {
+            if ($startdate !== null) {
+                $stmt->bindParam(':startdate', $startdate, PDO::PARAM_STR);
+            }
+    
+            if ($enddate !== null) {
+                $stmt->bindParam(':enddate', $enddate, PDO::PARAM_STR);
+            }
+    
+            if ($ltempresa !== null) {
+                $stmt->bindParam(':ltempresa', $ltempresa, PDO::PARAM_INT);
+            }
+    
+            // Obtener el tipo de novedad más ocurrido
+            $tipoNovedadData = $this->getTipoNovedadMasOcurrido($startdate, $enddate, $ltempresa);
+    
+            if (!empty($tipoNovedadData)) {
+                $tipoNovedad = $tipoNovedadData['TipoNovedad'];
+    
+                $stmt->bindParam(':tipoNovedad', $tipoNovedad, PDO::PARAM_STR);
+    
+                $stmt->execute();
+                $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+    
+                // Extract only the data and create a new array
+                $data = array();
+                foreach ($results as $result) {
+                    $data[] = array(
+                        'Nombre_nov' => $tipoNovedadData['NombreNovedad'],
+                        'MesAnio' => $result->MesAnio,
+                        'Novedad' => $result->Cantidad
+                    );
+                }
+    
+                return $data;
+            } else {
+                return array(); // Return an empty array if no tipo de novedad is found
+            }
+        } catch (PDOException $e) {
+            echo "Hubo un error al obtener los datos: " . $e->getMessage();
+            return array(); // Return an empty array in case of an error
+        }
+    }
+    
+    private function getTipoNovedadMasOcurrido($startdate, $enddate, $ltempresa) {
+        $query = "SELECT
+                    tn.T_Nov AS TipoNovedad,
+                    tn.Nombre_Tn,
+                    COUNT(*) AS Cantidad
+                  FROM
+                    novedad n
+                    JOIN tp_novedad tn ON n.T_Nov = tn.T_Nov
+                    JOIN sede s ON n.ID_S = s.ID_S
+                    JOIN empresa e ON s.id_e = e.id_e";
+    
+        $whereClause = ''; // Initialize an empty WHERE clause
+    
+        if ($startdate !== null && $enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov BETWEEN :startdate AND :enddate";
+        } elseif ($startdate !== null) {
+            $whereClause = " WHERE n.Fe_Nov >= :startdate";
+        } elseif ($enddate !== null) {
+            $whereClause = " WHERE n.Fe_Nov <= :enddate";
+        }
+    
+        if ($ltempresa !== null) {
+            if ($whereClause === '') {
+                $whereClause = " WHERE e.id_e = :ltempresa";
+            } else {
+                $whereClause .= " AND e.id_e = :ltempresa";
+            }
+        }
+    
+        $query .= $whereClause; // Append the WHERE clause to the main query
+    
+        $query .= " GROUP BY TipoNovedad, Nombre_Tn ORDER BY Cantidad DESC LIMIT 1;";
     
         $stmt = Database::getConnection()->prepare($query);
     
@@ -494,16 +573,14 @@ class DatosReporte extends Database
             }
     
             $stmt->execute();
-            $results = $stmt->fetchAll(PDO::FETCH_OBJ);
+            $result = $stmt->fetch(PDO::FETCH_OBJ);
     
             // Extract only the data and create a new array
-            $data = array();
-            foreach ($results as $result) {
-                $data[] = array(
-                    'name' => $result->MesAnio,
-                    'Novedad' => $result->Cantidad
-                );
-            }
+            $data = array(
+                'TipoNovedad' => $result->TipoNovedad,
+                'NombreNovedad' => $result->Nombre_Tn,
+                'Cantidad' => $result->Cantidad
+            );
     
             return $data;
         } catch (PDOException $e) {
@@ -511,6 +588,5 @@ class DatosReporte extends Database
             return array(); // Return an empty array in case of an error
         }
     }    
-    
 }
 ?>
