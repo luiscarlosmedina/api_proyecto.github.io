@@ -481,5 +481,10 @@ public function readveriemlEmpleadoController($Email) {
 		$respuesta = $datos->repSedetpNovModel($startdate, $enddate, $ltempresa);
 		return $respuesta;
 	}
+	public function repHistNovController($startdate = null, $enddate = null, $ltempresa = null) {
+		$datos = new DatosReporte();
+		$respuesta = $datos->repHistNovModel($startdate, $enddate, $ltempresa);
+		return $respuesta;
+	}
 }
 ?>

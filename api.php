@@ -1367,6 +1367,21 @@ case 'updateevidencia':
             $response = ['error' => true, 'message' => 'Método de solicitud no válido'];
         }
         break;
+      case 'rephistnov':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $db = new ControllerJson();
+            $ltempresa = isset($_GET['ltempresa']) ? $_GET['ltempresa'] : null;
+            $startdate = isset($_GET['startdate']) ? $_GET['startdate'] : null;
+            $enddate = isset($_GET['enddate']) ? $_GET['enddate'] : null;
+
+            $data = $db->repHistNovController($startdate, $enddate, $ltempresa);
+
+            // Create a response with the data
+            $response = $data;
+        } else {
+            $response = ['error' => true, 'message' => 'Método de solicitud no válido'];
+        }
+        break;
       default:
       $response = array(
         'error' => true,
