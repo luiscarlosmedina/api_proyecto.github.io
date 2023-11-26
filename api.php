@@ -1176,7 +1176,8 @@ case 'updateevidencia':
             if ($result) {
               $response = array(
                 'error' => false,
-                'message' => 'Ingreso exitoso al sistema'
+                'message' => 'Ingreso exitoso al sistema',
+                'user' => $result,
               );
             } else {
               $response = array(
