@@ -160,101 +160,136 @@ switch ($apicall) {
   // ---------------------- Contact emergency ------------------------
 
   // ------------------------ Update employe -------------------------
-    case 'updateempleado':
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+  case 'updateempleadoinfoprin':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
         if ($data === null) {
-          $response = array(
-            'error' => true,
-            'message' => 'Error en el contenido JSON',
-          );
+            $response = array(
+                'error' => true,
+                'message' => 'Error en el contenido JSON',
+            );
         } else {
-          $id_em = $data['id_em'];
-          $documento = $data['documento'];
-		      $n_em = $data['n_em'];
-          $a_em = $data['a_em'];
-          $eml_em = $data['eml_em'];
-          $f_em = $data['f_em'];
-          $dir_em = $data['dir_em'];
-          $lic_emp = $data['lic_emp'];
-          $lib_em = $data['lib_em'];
-          $tel_em = $data['tel_em'];
-          $contrato = $data['contrato'];
-          $barloc_em = $data['barloc_em'];
-          $id_doc = $data['id_doc'];
-		      $id_pens = $data['id_pens'];
-		      $id_eps = $data['id_eps'];
-		      $id_arl = $data['id_arl'];
-		      $id_ces = $data['id_ces'];
-		      $id_rh = $data['id_rh'];
-		      $id_rol = $data['id_rol'];
-          $estado = $data['estado'];
+            $id_em = $data['id_em'];
+            $id_doc = $data['id_doc'];
+            $documento = $data['documento'];
+            $n_em = $data['n_em'];
+            $a_em = $data['a_em'];
+            $eml_em = $data['eml_em'];
+            $dir_em = $data['dir_em'];
+            $lic_emp = $data['lic_emp'];
+            $lib_em = $data['lib_em'];
+            $tel_em = $data['tel_em'];
+            $contrato = $data['contrato'];
+            $barloc_em = $data['barloc_em'];
+            $id_rol = $data['id_rol'];
+            $id_rh = $data['id_rh'];
 
-          $db = new ControllerJson();
-          $result = $db->updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado);
-          if ($result) {
-            $response = array(
-              'error' => false,
-              'message' => 'Usuario actualizado correctamente',
-              'contenido' => $db->readempleadoController(),
-            );
-          } else {
-            $response = array(
-              'error' => true,
-              'message' => 'Ocurrio un error al actualizar el usuario',
-            );
-          }
+            $db = new ControllerJson();
+            try {
+                $result = $db->updateInfoPrinController($id_em, $id_doc, $documento, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_rh);
+                $response = array(
+                    'error' => false,
+                    'message' => 'Usuario actualizado correctamente'
+                    //'contenido' => $db->readempleadoController(),
+                );
+            } catch (Exception $e) {
+                $response = array(
+                    'error' => true,
+                    'message' => $e->getMessage(),
+                );
+            }
         }
-      } else {
+    } else {
         $response = array(
-          'error' => true,
-          'message' => 'Método de solicitud no válido',
+            'error' => true,
+            'message' => 'Método de solicitud no válido',
         );
-      }
-      break;
-    case 'updateperfil':
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    }
+    break;
+
+
+
+  case 'updateempleadoparafiscales':
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
         if ($data === null) {
-          $response = array(
-            'error' => true,
-            'message' => 'Error en el contenido JSON',
-          );
+            $response = array(
+                'error' => true,
+                'message' => 'Error en el contenido JSON',
+            );
         } else {
-          $id_em = $data['id_em'];
-		      $n_em = $data['n_em'];
-          $a_em = $data['a_em'];
-          $eml_em = $data['eml_em'];
-          $dir_em = $data['dir_em'];
-          $lic_emp = $data['lic_emp'];
-          $tel_em = $data['tel_em'];
-          $barloc_em = $data['barloc_em'];
-
-          $db = new ControllerJson();
-          $result = $db->updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em);
-          if ($result) {
-            $response = array(
-              'error' => false,
-              'message' => 'Usuario actualizado correctamente'
-            );
-          } else {
-            $response = array(
-              'error' => true,
-              'message' => 'Ocurrio un error al actualizar el usuario',
-            );
-          }
+            $id_em = $data['id_em'];
+            $id_pens = $data['id_pens'];
+            $id_eps = $data['id_eps'];
+            $id_arl = $data['id_arl'];
+            $id_ces = $data['id_ces'];
+            
+            $db = new ControllerJson();
+            try {
+                $result = $db->updateParafiscalesController( $id_em, $id_pens, $id_eps, $id_arl, $id_ces);
+                $response = array(
+                    'error' => false,
+                    'message' => 'Usuario actualizado correctamente'
+                    //'contenido' => $db->readempleadoController(),
+                );
+            } catch (Exception $e) {
+                $response = array(
+                    'error' => true,
+                    'message' => $e->getMessage(),
+                );
+            }
         }
-      } else {
+    } else {
         $response = array(
-          'error' => true,
-          'message' => 'Método de solicitud no válido',
+            'error' => true,
+            'message' => 'Método de solicitud no válido',
         );
+    }
+    break;
+
+
+    case 'updateestadoemp':
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          $json = file_get_contents('php://input');
+          $data = json_decode($json, true);
+  
+          if ($data === null) {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
+              );
+          } else {
+              $id_em = $data['id_em'];
+              $estado = $data['estado'];
+              
+              $db = new ControllerJson();
+              try {
+                  $result = $db->updateEstadoEmpController( $id_em, $estado);
+                  $response = array(
+                      'error' => false,
+                      'message' => 'Usuario actualizado correctamente'
+                      //'contenido' => $db->readempleadoController(),
+                  );
+              } catch (Exception $e) {
+                  $response = array(
+                      'error' => true,
+                      'message' => $e->getMessage(),
+                  );
+              }
+          }
+      } else {
+          $response = array(
+              'error' => true,
+              'message' => 'Método de solicitud no válido',
+          );
       }
       break;
+  
 
  // ------------------------ Update employe -----------------------
 
