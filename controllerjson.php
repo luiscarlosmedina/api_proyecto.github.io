@@ -69,52 +69,59 @@ class ControllerJson
 
   // ------------------------ Update employe -------------------------
 
-	public function updateEmpleadoController($id_em, $documento, $n_em, $a_em, $eml_em, $f_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_doc, $id_pens, $id_eps, $id_arl, $id_ces, $id_rh, $id_rol, $estado)
+	public function  updateInfoPrinController($id_em, $id_doc, $documento, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_rh )
 	{
 		$datosController = array(
-			"id_em"=>$id_em,
-			"documento"=>$documento,		    
+			"id_em" => $id_em,
+			"id_doc"=>$id_doc,
+			"documento"=>$documento,	    
 			"n_em"=>$n_em,
 			"a_em"=>$a_em,
 			"eml_em"=>$eml_em,
-			"f_em"=>$f_em,
 			"dir_em"=>$dir_em,
 			"lic_emp"=>$lic_emp,
 			"lib_em"=>$lib_em,
 			"tel_em"=>$tel_em,
 			"contrato"=>$contrato,
 			"barloc_em"=>$barloc_em,
-			"id_doc"=>$id_doc,
-			"id_pens"=>$id_pens,
-			"id_eps"=>$id_eps,
-			"id_arl"=>$id_arl,
-			"id_ces"=>$id_ces,
-			"id_rh"=>$id_rh,
-			"id_rol"=>$id_rol,
-			"estado"=>$estado
+			"id_rh"=> $id_rh
 		);
 			
 		$datos = new DatosEmpleado();
-		$respuesta = $datos->updateEmpleadoModel($datosController, "empleado");
+		$respuesta = $datos->updateInfoPrinModel($datosController, "empleado");
 		return $respuesta;
 	}
-	public function updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em)
+
+
+	public function updateParafiscalesController( $id_em, $id_pens, $id_eps, $id_arl, $id_ces)
 	{
 		$datosController = array(
-			"id_em"=>$id_em,	    
-			"n_em"=>$n_em,
-			"a_em"=>$a_em,
-			"eml_em"=>$eml_em,
-			"dir_em"=>$dir_em,
-			"lic_emp"=>$lic_emp,
-			"tel_em"=>$tel_em,
-			"barloc_em"=>$barloc_em
+			"id_em" => $id_em,
+			"id_pens"=>$id_pens,	    
+			"id_eps"=>$id_eps,
+			"id_arl"=>$id_arl,
+			"id_ces"=>$id_ces
 		);
-			
+
 		$datos = new DatosEmpleado();
-		$respuesta = $datos->updatePerfilModel($datosController, "empleado");
+		$respuesta = $datos->updateParafiscalesModel($datosController, "empleado");
 		return $respuesta;
 	}
+
+
+	public function updateEstadoEmpController( $id_em, $estado)
+	{
+		$datosController = array(
+			"id_em" => $id_em,
+			"estado"=>$estado
+		);
+
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->updateEstadoEmpModel($datosController, "empleado");
+		return $respuesta;
+	}
+
+
   // ------------------------ Update employe -------------------------
 
   // ------------------------ Read employes -------------------------
@@ -175,9 +182,6 @@ public function readveriemlEmpleadoController($Email) {
     return !$EmailEncontrado; 
 
 }
-
-
-
 
 
 // ------------------------ Checker unique------------------------
