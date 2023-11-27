@@ -159,12 +159,59 @@ class DatosEmpleado extends Database
 			echo "No se pudo hacer la Actualizacion";
 		}
 	}
+	public function updatePerfilModel($datosModel, $tabla){
+		$stmt = Database::getConnection()->prepare(
+			"UPDATE $tabla SET		
+			n_em=:n_em, 
+			a_em=:a_em, 
+			eml_em=:eml_em, 
+			dir_em=:dir_em, 
+			lic_emp=:lic_emp, 
+			tel_em=:tel_em, 
+			barloc_em=:barloc_em
+			WHERE id_em = :id_em");
+			
+		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
+		$stmt->bindParam(":n_em", $datosModel["n_em"], PDO::PARAM_STR);
+		$stmt->bindParam(":a_em", $datosModel["a_em"], PDO::PARAM_STR);
+		$stmt->bindParam(":eml_em", $datosModel["eml_em"], PDO::PARAM_STR);
+		$stmt->bindParam(":dir_em", $datosModel["dir_em"], PDO::PARAM_STR);
+		$stmt->bindParam(":lic_emp", $datosModel["lic_emp"], PDO::PARAM_STR);
+		$stmt->bindParam(":tel_em", $datosModel["tel_em"], PDO::PARAM_STR);
+		$stmt->bindParam(":barloc_em", $datosModel["barloc_em"], PDO::PARAM_STR);
+
+		if($stmt->execute()){
+			return true;
+		}else{
+			return false;
+		}
+	}
   // ------------------------ Update employe ------------------------
 
   // ------------------------ Read employes -------------------------
 
 	public function readEmpleadoModel($id = null) {
 		$query = "SELECT id_em, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, u.ID_Doc, td.N_TDoc, u.ID_pens, p.N_pens, u.ID_eps, e.N_eps, u.ID_arl, a.N_arl, u.ID_ces, c.N_ces, u.ID_RH, rh.T_RH, estado FROM empleado u JOIN eps e ON u.ID_eps = e.ID_eps JOIN pensiones p ON u.ID_pens = p.ID_pens JOIN arl a ON u.ID_arl = a.ID_arl JOIN cesantias c ON u.ID_ces = c.ID_ces JOIN tipo_doc td ON u.ID_Doc = td.ID_Doc JOIN rh rh ON u.ID_RH = rh.ID_RH";
+
+		if($id !== null) {
+			$query .= " WHERE id_em = :id";
+		}
+
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			echo "Hubo un error al obtener las empresas.";
+			return array(); // Devuelve un array vacío en caso de error
+		}
+	}
+	public function readPerfilModel($id = null) {
+		$query = "SELECT id_em, n_em, a_em, eml_em, dir_em, lic_emp, tel_em, barloc_em FROM empleado";
 
 		if($id !== null) {
 			$query .= " WHERE id_em = :id";

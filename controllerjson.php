@@ -98,6 +98,23 @@ class ControllerJson
 		$respuesta = $datos->updateEmpleadoModel($datosController, "empleado");
 		return $respuesta;
 	}
+	public function updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em)
+	{
+		$datosController = array(
+			"id_em"=>$id_em,	    
+			"n_em"=>$n_em,
+			"a_em"=>$a_em,
+			"eml_em"=>$eml_em,
+			"dir_em"=>$dir_em,
+			"lic_emp"=>$lic_emp,
+			"tel_em"=>$tel_em,
+			"barloc_em"=>$barloc_em
+		);
+			
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->updatePerfilModel($datosController, "empleado");
+		return $respuesta;
+	}
   // ------------------------ Update employe -------------------------
 
   // ------------------------ Read employes -------------------------
@@ -109,6 +126,16 @@ class ControllerJson
 			return $respuesta;
 		} else {
 			$respuesta = $datos->readEmpleadoModel();
+			return $respuesta;
+		}
+	}
+	public function readPerfilController($id = null) {
+		$datos = new DatosEmpleado();
+		if ($id !== null) {
+			$respuesta = $datos->readPerfilModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readPerfilModel();
 			return $respuesta;
 		}
 	}

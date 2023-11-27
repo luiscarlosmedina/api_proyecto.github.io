@@ -214,6 +214,47 @@ switch ($apicall) {
         );
       }
       break;
+    case 'updateperfil':
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+
+        if ($data === null) {
+          $response = array(
+            'error' => true,
+            'message' => 'Error en el contenido JSON',
+          );
+        } else {
+          $id_em = $data['id_em'];
+		      $n_em = $data['n_em'];
+          $a_em = $data['a_em'];
+          $eml_em = $data['eml_em'];
+          $dir_em = $data['dir_em'];
+          $lic_emp = $data['lic_emp'];
+          $tel_em = $data['tel_em'];
+          $barloc_em = $data['barloc_em'];
+
+          $db = new ControllerJson();
+          $result = $db->updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em);
+          if ($result) {
+            $response = array(
+              'error' => false,
+              'message' => 'Usuario actualizado correctamente'
+            );
+          } else {
+            $response = array(
+              'error' => true,
+              'message' => 'Ocurrio un error al actualizar el usuario',
+            );
+          }
+        }
+      } else {
+        $response = array(
+          'error' => true,
+          'message' => 'Método de solicitud no válido',
+        );
+      }
+      break;
 
  // ------------------------ Update employe -----------------------
 
@@ -231,6 +272,25 @@ switch ($apicall) {
             $response['error'] = false;
             $response['message'] = 'Solicitud completada correctamente';
             $response['contenido'] = $db->readEmpleadoController();
+          }
+        } else {
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+        break;
+      case 'readperfil':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readperfil') {
+          $db = new ControllerJson();
+          $id = $_GET['id'];
+        
+          if (!empty($id)) {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readPerfilController($id) ;
+          } else {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['contenido'] = $db->readPerfilController();
           }
         } else {
           $response['error'] = true;
