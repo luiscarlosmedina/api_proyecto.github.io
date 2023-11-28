@@ -69,7 +69,7 @@ class ControllerJson
 
   // ------------------------ Update employe -------------------------
 
-	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh)
+	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato)
 	{
 		$datosController = array(
 			"id_em" => $id_em,
@@ -83,7 +83,8 @@ class ControllerJson
 			"lib_em"=>$lib_em,
 			"tel_em"=>$tel_em,
 			"barloc_em"=>$barloc_em,
-			"id_rh"=> $id_rh
+			"id_rh"=> $id_rh,
+			"contrato"=> $contrato
 		);
 			
 		$datos = new DatosEmpleado();
@@ -120,6 +121,23 @@ class ControllerJson
 		return $respuesta;
 	}
 
+	public function updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em)
+	{
+		$datosController = array(
+			"id_em"=>$id_em,	    
+			"n_em"=>$n_em,
+			"a_em"=>$a_em,
+			"eml_em"=>$eml_em,
+			"dir_em"=>$dir_em,
+			"lic_emp"=>$lic_emp,
+			"tel_em"=>$tel_em,
+			"barloc_em"=>$barloc_em
+		);
+
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->updatePerfilModel($datosController, "empleado");
+		return $respuesta;
+	}
 
   // ------------------------ Update employe -------------------------
 
