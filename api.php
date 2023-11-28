@@ -1037,6 +1037,21 @@ case 'createevidencia':
   }
   break;
 
+  case 'readtrazabilidad':
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readtrazabilidad') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTrazabilidadController() ;
+      //forma de llamar al api
+      //http://localhost/../api.php?apicall=readnovedad&id=1
+    } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+    }
+    break;
+
   //caso READ tabla Novedad
 case 'readnovedad':
   if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readnovedad') {

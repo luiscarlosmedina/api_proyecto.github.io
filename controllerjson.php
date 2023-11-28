@@ -382,6 +382,12 @@ public function readveriemlEmpleadoController($Email) {
 		$respuesta = $datos->createEvidenciaModel($datosController);
 		return $respuesta;
 	}
+	//read trasabilidad
+	public function readTrazabilidadController() {
+		$datos = new DatosNovedad();
+		$respuesta = $datos->readTrazabilidadModel();
+			return $respuesta;
+	}
 	// casos READ tabla Novedad
 	public function readNovedadController($id = null) {
 		$datos = new DatosNovedad();

@@ -5,7 +5,7 @@ class Database{
 		$localhost = 'localhost';
 		$database = 'asocivica';
 		$user = 'root';
-		$password = '';
+		$password = 'admin';
 		// $localhost = 'b4zpdfljvwzlvh9yqpvc-mysql.services.clever-cloud.com:3306';
 		// $database = 'b4zpdfljvwzlvh9yqpvc';
 		// $user = 'ulcb8ojs5uz00guz';
