@@ -1311,6 +1311,81 @@ case 'updateevidencia':
           );
         }
         break;
+  case 'verifpass':
+
+     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+          if ($data === null) {
+            $response = array(
+              'error' => true,
+              'message' => 'Error en el contenido JSON',
+            );
+          } else {
+            $passw = $data['passw'];
+            $id_em = $data['id_em'];
+                  
+            $db = new ControllerJson();
+            $result = $db->VerifPassController($passw, $id_em);
+        
+            if ($result) {
+              $response = array(
+                'error' => false,
+                'message' => 'contraseña valida',
+                'user' => $result,
+              );
+            } else {
+              $response = array(
+                'error' => true,
+                'message' => 'Error: Credenciales incorrectas.',
+              );
+            }
+          }
+        } else {
+          $response = array(
+            'error' => true,
+            'message' => 'Método de solicitud no válido',
+          );
+        }
+        break;
+  case 'changepass':
+
+     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+          if ($data === null) {
+            $response = array(
+              'error' => true,
+              'message' => 'Error en el contenido JSON',
+            );
+          } else {
+            $passw = $data['passw'];
+            $id_em = $data['id_em'];
+                  
+            $db = new ControllerJson();
+            $result = $db->ChangePassController($passw, $id_em);
+        
+            if ($result) {
+              $response = array(
+                'error' => false,
+                'message' => 'Cambio exitoso de contraseña',
+                'respond' => $result,
+              );
+            } else {
+              $response = array(
+                'error' => true,
+                'message' => 'Error: No se logro cambiar la contraseña.',
+                'respond' => $result,
+              );
+            }
+          }
+        } else {
+          $response = array(
+            'error' => true,
+            'message' => 'Método de solicitud no válido',
+          );
+        }
+        break;
         case 'createevidencia':
           if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               try {

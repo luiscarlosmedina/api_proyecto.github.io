@@ -489,6 +489,26 @@ public function readveriemlEmpleadoController($Email) {
 		$respuesta = $datos->loginModel($datosController);
 		return $respuesta;
 	}
+	public function VerifPassController($passw, $id_em)
+	{
+		$datosController = array(
+			"passw"=>$passw, 
+			"id_em"=>$id_em);
+			
+		$datos = new DatosLogin();
+		$respuesta = $datos->VerifPassModel($datosController);
+		return $respuesta;
+	}
+	public function ChangePassController($passw, $id_em)
+	{
+		$datosController = array(
+			"passw"=>$passw, 
+			"id_em"=>$id_em);
+			
+		$datos = new DatosLogin();
+		$respuesta = $datos->ChangePassModel($datosController);
+		return $respuesta;
+	}
 	//----------reporte----------//
 	public function repNovController($startdate = null, $enddate = null, $tipoNovedad = null) {
 		$datos = new DatosReporte();
