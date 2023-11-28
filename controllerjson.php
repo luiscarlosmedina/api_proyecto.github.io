@@ -69,7 +69,7 @@ class ControllerJson
 
   // ------------------------ Update employe -------------------------
 
-	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato)
+	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato, $estado, $id_pens, $id_eps, $id_arl, $id_ces)
 	{
 		$datosController = array(
 			"id_em" => $id_em,
@@ -84,7 +84,12 @@ class ControllerJson
 			"tel_em"=>$tel_em,
 			"barloc_em"=>$barloc_em,
 			"id_rh"=> $id_rh,
-			"contrato"=> $contrato
+			"contrato"=> $contrato,
+			"estado" => $estado,
+			"id_pens"=>$id_pens,	    
+			"id_eps"=>$id_eps,
+			"id_arl"=>$id_arl,
+			"id_ces"=>$id_ces
 		);
 			
 		$datos = new DatosEmpleado();
@@ -92,34 +97,6 @@ class ControllerJson
 		return $respuesta;
 	}
 
-
-	public function updateParafiscalesController( $id_em, $id_pens, $id_eps, $id_arl, $id_ces)
-	{
-		$datosController = array(
-			"id_em" => $id_em,
-			"id_pens"=>$id_pens,	    
-			"id_eps"=>$id_eps,
-			"id_arl"=>$id_arl,
-			"id_ces"=>$id_ces
-		);
-
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->updateParafiscalesModel($datosController, "empleado");
-		return $respuesta;
-	}
-
-
-	public function updateEstadoEmpController( $id_em, $estado)
-	{
-		$datosController = array(
-			"id_em" => $id_em,
-			"estado"=>$estado
-		);
-
-		$datos = new DatosEmpleado();
-		$respuesta = $datos->updateEstadoEmpModel($datosController, "empleado");
-		return $respuesta;
-	}
 
 	public function updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em)
 	{
@@ -164,8 +141,6 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-
-
 
 	
 	public function readPerfilController($id = null) {
