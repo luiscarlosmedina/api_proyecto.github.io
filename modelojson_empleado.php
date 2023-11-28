@@ -123,7 +123,6 @@ class DatosEmpleado extends Database
 		  lic_emp=:lic_emp, 
 		  lib_em=:lib_em, 
 		  tel_em=:tel_em, 
-		  contrato=:contrato,
 		  barloc_em=:barloc_em,
 		  id_rh=:id_rh
 		  WHERE id_em = :id_em"
@@ -139,7 +138,6 @@ class DatosEmpleado extends Database
 	  $stmt->bindParam(":lic_emp", $datosModel["lic_emp"], PDO::PARAM_STR);
 	  $stmt->bindParam(":lib_em", $datosModel["lib_em"], PDO::PARAM_STR);
 	  $stmt->bindParam(":tel_em", $datosModel["tel_em"], PDO::PARAM_STR);
-	  $stmt->bindParam(":contrato", $datosModel["contrato"], PDO::PARAM_STR);
 	  $stmt->bindParam(":barloc_em", $datosModel["barloc_em"], PDO::PARAM_STR);
 	  $stmt->bindParam(":id_rh", $datosModel["id_rh"], PDO::PARAM_INT);
   
@@ -213,10 +211,36 @@ class DatosEmpleado extends Database
 		if ($stmt->execute()) {
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
 		} else {
-			echo "Hubo un error al obtener las empresas.";
-			return array(); // Devuelve un array vacío en caso de error
+			echo "Hubo un error al obtener las empleados.";
+			return array(); 
 		}
 	}
+
+	public function readEmpleadoOneModel($id = null) {
+		$query = "SELECT id_em, n_em, a_em, eml_em, id_rh, id_doc, documento, tel_em,
+		barloc_em, dir_em,lib_em, lic_emp  FROM empleado";
+
+		if($id !== null) {
+			$query .= " WHERE id_em = :id";
+		}
+
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			echo "Hubo un error al obtener los empleados.";
+			return array(); 
+		}
+	}
+
+
+
+
 	public function readPerfilModel($id = null) {
 		$query = "SELECT id_em, n_em, a_em, eml_em, dir_em, lic_emp, tel_em, barloc_em FROM empleado";
 

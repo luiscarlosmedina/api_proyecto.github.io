@@ -69,7 +69,7 @@ class ControllerJson
 
   // ------------------------ Update employe -------------------------
 
-	public function  updateInfoPrinController($id_em, $id_doc, $documento, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_rh )
+	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh)
 	{
 		$datosController = array(
 			"id_em" => $id_em,
@@ -82,7 +82,6 @@ class ControllerJson
 			"lic_emp"=>$lic_emp,
 			"lib_em"=>$lib_em,
 			"tel_em"=>$tel_em,
-			"contrato"=>$contrato,
 			"barloc_em"=>$barloc_em,
 			"id_rh"=> $id_rh
 		);
@@ -136,6 +135,21 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
+
+	public function readEmpleadoOneController($id = null) {
+		$datos = new DatosEmpleado();
+		if ($id !== null) {
+			$respuesta = $datos->readEmpleadoOneModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readEmpleadoOneModel();
+			return $respuesta;
+		}
+	}
+
+
+
+	
 	public function readPerfilController($id = null) {
 		$datos = new DatosEmpleado();
 		if ($id !== null) {

@@ -161,7 +161,7 @@ switch ($apicall) {
 
   // ------------------------ Update employe -------------------------
 
-  case 'updateempleadoinfoprin':
+  case 'updateempleadoinfoone':
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
@@ -173,23 +173,22 @@ switch ($apicall) {
             );
         } else {
             $id_em = $data['id_em'];
-            $id_doc = $data['id_doc'];
-            $documento = $data['documento'];
             $n_em = $data['n_em'];
             $a_em = $data['a_em'];
             $eml_em = $data['eml_em'];
+            $id_rh = $data['id_rh'];
+            $id_doc = $data['id_doc'];
+            $documento = $data['documento'];
+            $tel_em = $data['tel_em'];
+            $barloc_em = $data['barloc_em'];
             $dir_em = $data['dir_em'];
             $lic_emp = $data['lic_emp'];
             $lib_em = $data['lib_em'];
-            $tel_em = $data['tel_em'];
-            $contrato = $data['contrato'];
-            $barloc_em = $data['barloc_em'];
-            $id_rol = $data['id_rol'];
-            $id_rh = $data['id_rh'];
+
 
             $db = new ControllerJson();
             try {
-                $result = $db->updateInfoPrinController($id_em, $id_doc, $documento, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $contrato, $barloc_em, $id_rh);
+                $result = $db->updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh);
                 $response = array(
                     'error' => false,
                     'message' => 'Usuario actualizado correctamente'
@@ -313,6 +312,30 @@ switch ($apicall) {
           $response['message'] = 'Método de solicitud no válido';
         }
         break;
+
+        case 'readempleadoone':
+          if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempleadoone') {
+            $db = new ControllerJson();
+            $id = $_GET['id'];
+          
+            if (!empty($id)) {
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';
+              $response['contenido'] = $db->readEmpleadoOneController($id) ;
+            } else {
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';
+              $response['contenido'] = $db->readEmpleadoOneController();
+            }
+          } else {
+            $response['error'] = true;
+            $response['message'] = 'Método de solicitud no válido';
+          }
+          break;
+  
+
+
+
       case 'readperfil':
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readperfil') {
           $db = new ControllerJson();
