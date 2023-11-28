@@ -184,11 +184,12 @@ switch ($apicall) {
             $dir_em = $data['dir_em'];
             $lic_emp = $data['lic_emp'];
             $lib_em = $data['lib_em'];
+            $contrato = $data['contrato'];
 
 
             $db = new ControllerJson();
             try {
-                $result = $db->updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh);
+                $result = $db->updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato);
                 $response = array(
                     'error' => false,
                     'message' => 'Usuario actualizado correctamente'
@@ -288,7 +289,49 @@ switch ($apicall) {
           );
       }
       break;
+
+
+      case 'updateperfil':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          $json = file_get_contents('php://input');
+          $data = json_decode($json, true);
   
+          if ($data === null) {
+            $response = array(
+              'error' => true,
+              'message' => 'Error en el contenido JSON',
+            );
+          } else {
+            $id_em = $data['id_em'];
+            $n_em = $data['n_em'];
+            $a_em = $data['a_em'];
+            $eml_em = $data['eml_em'];
+            $dir_em = $data['dir_em'];
+            $lic_emp = $data['lic_emp'];
+            $tel_em = $data['tel_em'];
+            $barloc_em = $data['barloc_em'];
+  
+            $db = new ControllerJson();
+            $result = $db->updatePerfilController($id_em, $n_em, $a_em, $eml_em, $dir_em, $lic_emp, $tel_em, $barloc_em);
+            if ($result) {
+              $response = array(
+                'error' => false,
+                'message' => 'Usuario actualizado correctamente'
+              );
+            } else {
+              $response = array(
+                'error' => true,
+                'message' => 'Ocurrio un error al actualizar el usuario',
+              );
+            }
+          }
+        } else {
+          $response = array(
+            'error' => true,
+            'message' => 'Método de solicitud no válido',
+          );
+        }
+        break;
 
  // ------------------------ Update employe -----------------------
 
