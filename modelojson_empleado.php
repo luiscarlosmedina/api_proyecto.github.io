@@ -124,7 +124,13 @@ class DatosEmpleado extends Database
 		  lib_em=:lib_em, 
 		  tel_em=:tel_em, 
 		  barloc_em=:barloc_em,
-		  id_rh=:id_rh
+		  id_rh=:id_rh,
+		  contrato=:contrato, 
+		  estado=:estado,
+		  id_pens=:id_pens, 
+		  id_eps=:id_eps, 
+		  id_arl=:id_arl, 
+		  id_ces=:id_ces
 		  WHERE id_em = :id_em"
 	  );
   
@@ -140,7 +146,13 @@ class DatosEmpleado extends Database
 	  $stmt->bindParam(":tel_em", $datosModel["tel_em"], PDO::PARAM_STR);
 	  $stmt->bindParam(":barloc_em", $datosModel["barloc_em"], PDO::PARAM_STR);
 	  $stmt->bindParam(":id_rh", $datosModel["id_rh"], PDO::PARAM_INT);
-  
+	  $stmt->bindParam(":contrato", $datosModel["contrato"], PDO::PARAM_STR);
+	  $stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
+	  $stmt->bindParam(":id_pens", $datosModel["id_pens"], PDO::PARAM_INT);
+	  $stmt->bindParam(":id_eps", $datosModel["id_eps"], PDO::PARAM_INT);
+	  $stmt->bindParam(":id_arl", $datosModel["id_arl"], PDO::PARAM_INT);
+	  $stmt->bindParam(":id_ces", $datosModel["id_ces"], PDO::PARAM_INT);
+
 	  if ($stmt->execute()) {
 		  return true;
 	  } else {
@@ -150,45 +162,33 @@ class DatosEmpleado extends Database
   
 
 
-   public function updateParafiscalesModel($datosModel, $tabla){
-		$stmt = Database::getConnection()->prepare(
-			"UPDATE $tabla SET		
-			id_pens=:id_pens, 
-			id_eps=:id_eps, 
-			id_arl=:id_arl, 
-			id_ces=:id_ces 
-			WHERE id_em = :id_em");
-
-		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_pens", $datosModel["id_pens"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_eps", $datosModel["id_eps"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_arl", $datosModel["id_arl"], PDO::PARAM_INT);
-		$stmt->bindParam(":id_ces", $datosModel["id_ces"], PDO::PARAM_INT);
-
-
-		if ($stmt->execute()) {
-			return true;
-		} else {
-			throw new Exception("No se pudo hacer la Actualización");
+		public function updatePerfilModel($datosModel, $tabla){
+			$stmt = Database::getConnection()->prepare(
+				"UPDATE $tabla SET		
+				n_em=:n_em, 
+				a_em=:a_em, 
+				eml_em=:eml_em, 
+				dir_em=:dir_em, 
+				lic_emp=:lic_emp, 
+				tel_em=:tel_em, 
+				barloc_em=:barloc_em
+				WHERE id_em = :id_em");
+	
+			$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
+			$stmt->bindParam(":n_em", $datosModel["n_em"], PDO::PARAM_STR);
+			$stmt->bindParam(":a_em", $datosModel["a_em"], PDO::PARAM_STR);
+			$stmt->bindParam(":eml_em", $datosModel["eml_em"], PDO::PARAM_STR);
+			$stmt->bindParam(":dir_em", $datosModel["dir_em"], PDO::PARAM_STR);
+			$stmt->bindParam(":lic_emp", $datosModel["lic_emp"], PDO::PARAM_STR);
+			$stmt->bindParam(":tel_em", $datosModel["tel_em"], PDO::PARAM_STR);
+			$stmt->bindParam(":barloc_em", $datosModel["barloc_em"], PDO::PARAM_STR);
+	
+			if($stmt->execute()){
+				return true;
+			}else{
+				return false;
+			}
 		}
-	}
-
-
-	public function updateEstadoEmpModel($datosModel, $tabla){
-		$stmt = Database::getConnection()->prepare(
-			"UPDATE $tabla SET		
-			estado=:estado
-			WHERE id_em = :id_em");
-			
-		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
-		$stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
-
-		if ($stmt->execute()) {
-			return true;
-		} else {
-			throw new Exception("No se pudo hacer la Actualización");
-		}
-	}
 
 
   // ------------------------ Update employe ------------------------
@@ -218,7 +218,7 @@ class DatosEmpleado extends Database
 
 	public function readEmpleadoOneModel($id = null) {
 		$query = "SELECT id_em, n_em, a_em, eml_em, id_rh, id_doc, documento, tel_em,
-		barloc_em, dir_em,lib_em, lic_emp  FROM empleado";
+		barloc_em, dir_em, lib_em, lic_emp, contrato, estado, id_eps, id_ces, id_pens, id_arl FROM empleado";
 
 		if($id !== null) {
 			$query .= " WHERE id_em = :id";
@@ -237,8 +237,6 @@ class DatosEmpleado extends Database
 			return array(); 
 		}
 	}
-
-
 
 
 	public function readPerfilModel($id = null) {

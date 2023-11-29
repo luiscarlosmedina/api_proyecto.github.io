@@ -71,6 +71,17 @@ class DatosNovedad extends Database
 			return false;
 		}
 	}	
+	// ver tabla trazabilidad
+	public function readTrazabilidadModel(){
+		$query = "SELECT ID_Tra, descripcion FROM trazabilidad ORDER BY ID_Tra DESC";
+		$stmt = Database::getConnection()->prepare($query);
+	
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			return array(); // Devuelve un array vacío en caso de error
+		}
+	}
 	//Funcion READ tabla Novedad
 	public function readNovedadModel($id = null) {
 		//Consulta General
