@@ -185,7 +185,6 @@ switch ($apicall) {
             $lic_emp = $data['lic_emp'];
             $lib_em = $data['lib_em'];
             $contrato = $data['contrato'];
-            $estado = $data['estado'];
             $id_pens = $data['id_pens'];
             $id_eps = $data['id_eps'];
             $id_arl = $data['id_arl'];
@@ -193,7 +192,7 @@ switch ($apicall) {
 
             $db = new ControllerJson();
             try {
-                $result = $db->updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato, $estado, $id_pens, $id_eps, $id_arl, $id_ces);
+                $result = $db->updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato, $id_pens, $id_eps, $id_arl, $id_ces);
                 $response = array(
                     'error' => false,
                     'message' => 'Usuario actualizado correctamente'
@@ -214,7 +213,42 @@ switch ($apicall) {
     }
     break;
 
-
+    case 'updateestadoempleado':
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+          $json = file_get_contents('php://input');
+          $data = json_decode($json, true);
+  
+          if ($data === null) {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Error en el contenido JSON',
+              );
+          } else {
+              $id_em = $data['id_em'];
+              $estado = $data['estado'];
+             
+              $db = new ControllerJson();
+              try {
+                  $result = $db->updateEstadoEmpController($id_em, $estado );
+                  $response = array(
+                      'error' => false,
+                      'message' => 'Usuario actualizado correctamente'
+                      //'contenido' => $db->readempleadoController(),
+                  );
+              } catch (Exception $e) {
+                  $response = array(
+                      'error' => true,
+                      'message' => $e->getMessage(),
+                  );
+              }
+          }
+      } else {
+          $response = array(
+              'error' => true,
+              'message' => 'Método de solicitud no válido',
+          );
+      }
+      break;
 
 
       case 'updateperfil':
@@ -301,9 +335,28 @@ switch ($apicall) {
             $response['message'] = 'Método de solicitud no válido';
           }
           break;
+
+          case 'readempleadoestado':
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempleadoestado') {
+              $db = new ControllerJson();
+              $id = $_GET['id'];
+            
+              if (!empty($id)) {
+                $response['error'] = false;
+                $response['message'] = 'Solicitud completada correctamente';
+                $response['contenido'] = $db->readEmpleadoestadoController($id) ;
+              } else {
+                $response['error'] = false;
+                $response['message'] = 'Solicitud completada correctamente';
+                $response['contenido'] = $db->readEmpleadoestadoController();
+              }
+            } else {
+              $response['error'] = true;
+              $response['message'] = 'Método de solicitud no válido';
+            }
+            break;
+    
   
-
-
 
       case 'readperfil':
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readperfil') {
@@ -337,20 +390,6 @@ switch ($apicall) {
       
 // ------------------------ Read employes ------------------------- 
 
-// ------------------------ Read selectors ------------------------
-case 'readtpdocumento':
-  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      $db = new ControllerJson();
-      $response['error'] = false;
-      $response['message'] = 'Solicitud completada correctamente';
-      $response['contenido'] = $db->readTpdocumentoController();
-  } else {
-      $response['error'] = true;
-      $response['message'] = 'Método de solicitud no válido';
-  }
-  break;
-
-// ------------------------ Read selectors ------------------------
 
 // ------------------------ Checker unique------------------------
 
@@ -1432,6 +1471,7 @@ case 'updateevidencia':
           break;
       
 //----------FIN LOGIN----------// 
+
 //----------REPORTES----------// 
       case 'repnov':
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {

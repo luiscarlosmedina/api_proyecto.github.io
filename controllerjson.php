@@ -69,7 +69,7 @@ class ControllerJson
 
   // ------------------------ Update employe -------------------------
 
-	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato, $estado, $id_pens, $id_eps, $id_arl, $id_ces)
+	public function  updateInfoPrinController($id_em, $n_em, $a_em, $id_doc, $documento, $eml_em, $dir_em, $lic_emp, $lib_em, $tel_em, $barloc_em, $id_rh, $contrato, $id_pens, $id_eps, $id_arl, $id_ces)
 	{
 		$datosController = array(
 			"id_em" => $id_em,
@@ -85,7 +85,6 @@ class ControllerJson
 			"barloc_em"=>$barloc_em,
 			"id_rh"=> $id_rh,
 			"contrato"=> $contrato,
-			"estado" => $estado,
 			"id_pens"=>$id_pens,	    
 			"id_eps"=>$id_eps,
 			"id_arl"=>$id_arl,
@@ -94,6 +93,17 @@ class ControllerJson
 			
 		$datos = new DatosEmpleado();
 		$respuesta = $datos->updateInfoPrinModel($datosController, "empleado");
+		return $respuesta;
+	}
+
+	public function  updateEstadoEmpController($id_em, $estado)
+	{
+		$datosController = array(
+			"id_em" => $id_em,
+			"estado" => $estado
+		);
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->updateEstadoEmpModel($datosController, "empleado");
 		return $respuesta;
 	}
 
@@ -142,6 +152,17 @@ class ControllerJson
 		}
 	}
 
+	public function readEmpleadoestadoController($id = null) {
+		$datos = new DatosEmpleado();
+		if ($id !== null) {
+			$respuesta = $datos->readEmpleadoestadoModel($id);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readEmpleadoestadoModel();
+			return $respuesta;
+		}
+	}
+
 	
 	public function readPerfilController($id = null) {
 		$datos = new DatosEmpleado();
@@ -163,13 +184,7 @@ class ControllerJson
   // ------------------------ Read employes -------------------------
 
 
-  // ------------------------ Read selectors ------------------------
-  public function readTpdocumentoController() {
-    $datos = new DatosEmpleado();
-    return $datos->readTpDocumentoModel();
-}
-  // ------------------------ Read selectors ------------------------
-
+ 
 
 // ------------------------ Checker unique------------------------
 

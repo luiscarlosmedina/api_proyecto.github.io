@@ -126,7 +126,6 @@ class DatosEmpleado extends Database
 		  barloc_em=:barloc_em,
 		  id_rh=:id_rh,
 		  contrato=:contrato, 
-		  estado=:estado,
 		  id_pens=:id_pens, 
 		  id_eps=:id_eps, 
 		  id_arl=:id_arl, 
@@ -147,7 +146,6 @@ class DatosEmpleado extends Database
 	  $stmt->bindParam(":barloc_em", $datosModel["barloc_em"], PDO::PARAM_STR);
 	  $stmt->bindParam(":id_rh", $datosModel["id_rh"], PDO::PARAM_INT);
 	  $stmt->bindParam(":contrato", $datosModel["contrato"], PDO::PARAM_STR);
-	  $stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
 	  $stmt->bindParam(":id_pens", $datosModel["id_pens"], PDO::PARAM_INT);
 	  $stmt->bindParam(":id_eps", $datosModel["id_eps"], PDO::PARAM_INT);
 	  $stmt->bindParam(":id_arl", $datosModel["id_arl"], PDO::PARAM_INT);
@@ -158,10 +156,28 @@ class DatosEmpleado extends Database
 	  } else {
 		  throw new Exception("No se pudo hacer la Actualización");
 	  }
+	  
+  }
+
+  public function updateEstadoEmpModel($datosModel, $tabla)
+  {
+	  $stmt = Database::getConnection()->prepare(
+		  "UPDATE $tabla SET 
+		  estado=:estado
+		  WHERE id_em = :id_em"
+	  );
+  
+	  $stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
+	  $stmt->bindParam(":estado", $datosModel["estado"], PDO::PARAM_STR);
+
+	  if ($stmt->execute()) {
+		  return true;
+	  } else {
+		  throw new Exception("No se pudo hacer la Actualización");
+	  }
+	  
   }
   
-
-
 		public function updatePerfilModel($datosModel, $tabla){
 			$stmt = Database::getConnection()->prepare(
 				"UPDATE $tabla SET		
@@ -218,7 +234,28 @@ class DatosEmpleado extends Database
 
 	public function readEmpleadoOneModel($id = null) {
 		$query = "SELECT id_em, n_em, a_em, eml_em, id_rh, id_doc, documento, tel_em,
-		barloc_em, dir_em, lib_em, lic_emp, contrato, estado, id_eps, id_ces, id_pens, id_arl FROM empleado";
+		barloc_em, dir_em, lib_em, lic_emp, contrato, id_eps, estado, id_ces, id_pens, id_arl FROM empleado";
+
+		if($id !== null) {
+			$query .= " WHERE id_em = :id";
+		}
+
+		$stmt = Database::getConnection()->prepare($query);
+
+		if ($id !== null) {
+			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
+		}
+
+		if ($stmt->execute()) {
+			return $stmt->fetchAll(PDO::FETCH_OBJ);
+		} else {
+			echo "Hubo un error al obtener los empleados.";
+			return array(); 
+		}
+	}
+
+	public function readEmpleadoestadoModel($id = null) {
+		$query = "SELECT id_em, estado FROM empleado";
 
 		if($id !== null) {
 			$query .= " WHERE id_em = :id";
@@ -292,26 +329,9 @@ class DatosEmpleado extends Database
 		return $usuarios;
 	}
 
-
-
   // ------------------------ Read employes -------------------------
 
-  // ------------------------ Read selectors ------------------------
 
-  public function readTpDocumentoModel() {
-    $stmt = Database::getConnection()->prepare(
-        "SELECT ID_Doc , N_TDoc  FROM tipo_doc;"
-    );
-    return $stmt->execute() ? $stmt->fetchAll(PDO::FETCH_OBJ) : true;
-
-
-	
-}
-	// ------------------------ Read selectors ------------------------
-
-
-
-	
 // ------------------------ Checker unique------------------------
 
 public function readverificarEmpleadoModel($tipoDocumento, $numeroDocumento) {
@@ -352,10 +372,6 @@ public function readveriemlEmpleadoModel($Email){
 }
 // ------------------------ Checker unique------------------------
 
-	
 
-	
-	
-	
 }
-?>
+?>	
