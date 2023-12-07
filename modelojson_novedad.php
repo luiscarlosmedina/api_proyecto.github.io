@@ -208,24 +208,14 @@ class DatosNovedad extends Database
 	public function updateNovedadModel($datosModel){
 		$stmt = Database::getConnection()->prepare(
 			"UPDATE novedad set 
-			ID_Nov=:ID_Nov, 
-			Fe_Nov=:Fe_Nov, 
 			T_Nov=:T_Nov, 
-			Dic_Nov=:Dic_Nov, 
 			Des_Nov=:Des_Nov, 
-			id_evi=:id_evi, 
-			id_em=:id_em, 
-			ID_S=:ID_S
-
-			 WHERE ID_Nov = :ID_Nov");
+			id_em=:id_em
+			WHERE ID_Nov = :ID_Nov");
 		$stmt->bindParam(":ID_Nov", $datosModel["ID_Nov"], PDO::PARAM_INT);
-		$stmt->bindParam(":Fe_Nov", $datosModel["Fe_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":T_Nov", $datosModel["T_Nov"], PDO::PARAM_INT);
-		$stmt->bindParam(":Dic_Nov", $datosModel["Dic_Nov"], PDO::PARAM_STR);
 		$stmt->bindParam(":Des_Nov", $datosModel["Des_Nov"], PDO::PARAM_STR);
-		$stmt->bindParam(":id_evi", $datosModel["id_evi"], PDO::PARAM_INT);
 		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
-		$stmt->bindParam(":ID_S", $datosModel["ID_S"], PDO::PARAM_INT);
 
 		if($stmt->execute()){
 			return false;
