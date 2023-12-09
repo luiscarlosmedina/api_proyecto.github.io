@@ -9,7 +9,6 @@ class DatosEmpleado extends Database
   // ---------------------- Create employe -------------------------
 	public function createEmpleadoModel($datosModel) {
 		$conn = Database::getConnection();
-	
 		try {
 			$conn->beginTransaction();
 			$stmt = $conn->prepare("INSERT INTO Empleado (id_doc, documento, n_em, a_em, eml_em, f_em, dir_em, lic_emp, lib_em, tel_em, contrato, barloc_em, id_pens, id_eps, id_arl, id_ces, id_rh, estado) VALUES (:id_doc, :documento, :n_em, :a_em, :eml_em, :f_em, :dir_em, :lic_emp, :lib_em, :tel_em, :contrato, :barloc_em, :id_pens, :id_eps, :id_arl, :id_ces, :id_rh, :estado)");
@@ -69,11 +68,11 @@ class DatosEmpleado extends Database
 
   // ---------------------- Contact emergency ----------------------
 	public function createContEmgModel($datosModel) {
-		$stmt = Database::getConnection()->prepare("INSERT INTO contacto_emergencia (N_CoE, Csag, id_em, T_CEm) VALUES (:N_CoE, :Csag, :id_em, :T_CEm)");
-		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
-		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
+		$stmt = Database::getConnection()->prepare("INSERT INTO contacto_emergencia (n_coe, csag, id_em, t_cem) VALUES (:n_coe, :csag, :id_em, :t_cem)");
+		$stmt->bindParam(":n_coe", $datosModel["n_coe"], PDO::PARAM_STR);
+		$stmt->bindParam(":csag", $datosModel["csag"], PDO::PARAM_STR);
 		$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
-		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
+		$stmt->bindParam(":t_cem", $datosModel["t_cem"], PDO::PARAM_STR);
 		if($stmt->execute()){
 			return true;
 		}else{
@@ -82,7 +81,7 @@ class DatosEmpleado extends Database
 	}
 
 	public function readContEmgModel($id) {
-		$stmt = Database::getConnection()->prepare("SELECT ID_CEm, N_CoE, Csag, T_CEm FROM contacto_emergencia WHERE id_em = :id");
+		$stmt = Database::getConnection()->prepare("SELECT id_cem, n_coe, csag, t_cem FROM contacto_emergencia WHERE id_em = :id");
 		$stmt->bindParam(":id", $id, PDO::PARAM_INT);
 		if($stmt->execute()){
 			return $stmt->fetchAll(PDO::FETCH_OBJ);
@@ -101,6 +100,16 @@ class DatosEmpleado extends Database
 		if($stmt->execute()){
 			return true;
 		}else{
+			return false;
+		}
+	}
+
+	public function deleteContEmgModel($id) {
+		$stmt = Database::getConnection()->prepare("DELETE FROM contacto_emergencia WHERE id_cem = :id_cem");
+		$stmt->bindParam(":id_cem", $id, PDO::PARAM_INT);
+		if($stmt->execute()){
+			return true;
+		} else {
 			return false;
 		}
 	}
@@ -370,6 +379,28 @@ public function readveriemlEmpleadoModel($Email){
         return true; 
     }
 }
+
+
+
+public function readveritemlEmpleadoModel($telefono){
+    $query = "SELECT * FROM contacto_emergencia WHERE t_cem = :t_cem ";
+    $stmt = Database::getConnection()->prepare($query);
+
+    $stmt->bindParam(":t_cem", $telefono, PDO::PARAM_STR);
+
+    try {
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            return empty($result); 
+        } else {
+            return true; 
+        }
+    } catch (PDOException $e) {
+        return true; 
+    }
+}
+
+
 // ------------------------ Checker unique------------------------
 
 

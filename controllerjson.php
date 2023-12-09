@@ -65,6 +65,13 @@ class ControllerJson
 		$respuesta = $datos->updateContEmgModel($datosController);
 		return $respuesta;
 	}
+
+
+	public function deleteContEmgController($id){
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->deleteContEmgModel($id);
+		return $respuesta;
+	}
   // ---------------------- Contact emergency -----------------------
 
   // ------------------------ Update employe -------------------------
@@ -204,6 +211,16 @@ public function readveriemlEmpleadoController($Email) {
     return !$EmailEncontrado; 
 
 }
+
+
+public function readveritemlEmpleadoController($telefono) {
+    $datos = new DatosEmpleado();
+    $TelefonoEncontrado = $datos->readveritemlEmpleadoModel($telefono) ;
+    
+    return !$TelefonoEncontrado; 
+
+}
+
 
 
 // ------------------------ Checker unique------------------------

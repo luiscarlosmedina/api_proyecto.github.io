@@ -70,7 +70,11 @@ switch ($apicall) {
       break;
   // ---------------------- Create employe -------------------------
 
+
   // ---------------------- Contact emergency ----------------------
+
+  // ---------------------------------------------------------------------
+
       case 'createcontemg':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -124,8 +128,11 @@ switch ($apicall) {
           }
           break;      
 
+          
+
       case 'updatecontemg':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
           $inputJSON = file_get_contents('php://input');
           $inputData = json_decode($inputJSON, true);
           
@@ -157,6 +164,43 @@ switch ($apicall) {
             );
         }
         break;
+
+
+
+        case 'deletecontemg':
+          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              $inputJSON = file_get_contents('php://input');
+              $inputData = json_decode($inputJSON, true);
+      
+              if ($inputData !== null && isset($inputData['id_cem'])) {
+                  $db = new ControllerJson();
+                  $result = $db->deleteContEmgController($inputData['id_cem']);
+      
+                  if ($result) {
+                      $response = array(
+                          'error' => false,
+                          'message' => 'Contacto de emergencia eliminado con éxito',
+                      );
+                  } else {
+                      $response = array(
+                          'error' => true,
+                          'message' => 'Ocurrió un error al eliminar el contacto de emergencia',
+                      );
+                  }
+              } else {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Error en el contenido JSON o falta el parámetro "id"',
+                  );
+              }
+          } else {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Método de solicitud no válido',
+              );
+          }
+          break;
+         
   // ---------------------- Contact emergency ------------------------
 
   // ------------------------ Update employe -------------------------
@@ -417,7 +461,7 @@ case 'readverificarempleado':
       $response['error'] = true;
       $response['message'] = 'Método de solicitud no válido';
   }
-  break;
+  break; 
 
   case 'readveriemlempleado':
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readveriemlempleado') {
@@ -437,6 +481,26 @@ case 'readverificarempleado':
         $response['message'] = 'Método de solicitud no válido';
     }
     break;
+
+
+    case 'readtelcontact':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readtelcontact') {
+          $db = new ControllerJson();
+          $telefono = $_GET['t_cem'];
+    
+          if (!empty($telefono) ) {
+              $TelefonoEncontrado = $db->readveritemlEmpleadoController($telefono);
+  
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';
+              $response['encontrado'] = $TelefonoEncontrado; 
+          }
+      } else {
+          error_log('Método de solicitud no válido');
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+      }
+      break;
   
 
     
