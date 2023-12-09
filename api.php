@@ -1247,22 +1247,17 @@ case 'updatenovedad':
       );
     } else {
       $ID_Nov = $data['ID_Nov'];
-      $Fe_Nov = $data['Fe_Nov'];
       $T_Nov = $data['T_Nov'];
-      $Dic_Nov = $data['Dic_Nov'];
       $Des_Nov = $data['Des_Nov'];
-      $id_evi = $data['id_evi'];
       $id_em = $data['id_em'];
-      $ID_S = $data['ID_S'];
 
       $db = new ControllerJson();
-      $result = $db->updateNovedadController($ID_Nov, $Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S);
+      $result = $db->updateNovedadController($ID_Nov, $T_Nov, $Des_Nov, $id_em);
 
       if ($result == false) {
         $response = array(
           'error' => false,
-          'message' => 'Novedad actualizada correctamente',
-          'contenido' => $db->readNovedadController(),
+          'message' => 'Novedad actualizada correctamente'
         );
       } else {
         $response = array(

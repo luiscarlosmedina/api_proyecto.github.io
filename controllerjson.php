@@ -464,17 +464,13 @@ public function readveritemlEmpleadoController($telefono) {
 			return $respuesta;
 	}
 	//caso UPDATE tabla tp_novedad
-	public function updateNovedadController($ID_Nov, $Fe_Nov, $T_Nov, $Dic_Nov, $Des_Nov, $id_evi, $id_em, $ID_S)
+	public function updateNovedadController($ID_Nov, $T_Nov, $Des_Nov, $id_em)
 	{
 		$datosController = array(
 			"ID_Nov"=>$ID_Nov,
-			"Fe_Nov"=>$Fe_Nov,
 			"T_Nov"=>$T_Nov,
-			"Dic_Nov"=>$Dic_Nov,
 			"Des_Nov"=>$Des_Nov,
-			"id_evi"=>$id_evi,
 			"id_em"=>$id_em,
-			"ID_S"=>$ID_S,
 		);
 			
 		$datos = new DatosNovedad();
