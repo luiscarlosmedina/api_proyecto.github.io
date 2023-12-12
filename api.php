@@ -337,6 +337,47 @@ switch ($apicall) {
         }
         break;
 
+        
+        case 'update_rol':
+          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+              $json = file_get_contents('php://input');
+              $data = json_decode($json, true);
+      
+              if ($data === null) {
+                  $response = array(
+                      'error' => true,
+                      'message' => 'Error en el contenido JSON',
+                  );
+              } else {
+                  $id_em = $data['id_em']; // Cambiado de $_POST a $data
+                  $id_rol = $data['id_rol']; // Cambiado de $_POST a $data
+      
+                  $db = new ControllerJson();
+                  $result = $db->updateRolController($id_em, $id_rol);
+      
+                  if ($result) {
+                      $response = array(
+                          'error' => false,
+                          'message' => 'Rol actualizado correctamente'
+                      );
+                  } else {
+                      $response = array(
+                          'error' => true,
+                          'message' => 'Ocurrió un error al actualizar el Rol',
+                      );
+                  }
+              }
+          } else {
+              $response = array(
+                  'error' => true,
+                  'message' => 'Método de solicitud no válido',
+              );
+          }
+          break;
+      
+        
+
+
  // ------------------------ Update employe -----------------------
 
 // ------------------------ Read employes -------------------------
@@ -384,7 +425,6 @@ switch ($apicall) {
             if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempleadoestado') {
               $db = new ControllerJson();
               $id = $_GET['id'];
-            
               if (!empty($id)) {
                 $response['error'] = false;
                 $response['message'] = 'Solicitud completada correctamente';
@@ -406,7 +446,6 @@ switch ($apicall) {
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readperfil') {
           $db = new ControllerJson();
           $id = $_GET['id'];
-        
           if (!empty($id)) {
             $response['error'] = false;
             $response['message'] = 'Solicitud completada correctamente';
@@ -421,8 +460,6 @@ switch ($apicall) {
           $response['message'] = 'Método de solicitud no válido';
         }
         break;
-
-
       case 'readminempleado':
       $db = new ControllerJson();
       $response = array(
@@ -431,7 +468,29 @@ switch ($apicall) {
         'contenido' => $db->readminempleadoController(),
       );
       break;
-      
+
+
+
+      case 'readempleadorol':
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readempleadorol') {
+          $db = new ControllerJson();
+          $id_em = $_GET['id_em'];
+          if (!empty($id_em)) {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correct  amente';
+            $response['id_rol'] = $db->readEmpleadorolController($id_em) ;
+          } else {
+            $response['error'] = false;
+            $response['message'] = 'Solicitud completada correctamente';
+            $response['id_rol'] = $db->readEmpleadorolController();
+          }
+        } else {
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+        }
+        break;
+
+
 // ------------------------ Read employes ------------------------- 
 
 
@@ -505,6 +564,117 @@ case 'readverificarempleado':
 
     
 // ------------------------ Checker unique------------------------
+
+
+// ------------------------ Selectors ------------------------
+
+// Roles ---------------------
+case 'readtprol':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTprolController();
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// Tipos de RH ---------------------
+case 'readtprh':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTpthController();
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// Tipos de Documento ---------------------
+case 'readtpdocu':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTpdocuController();
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// Tipos de EPS ---------------------
+case 'readtpeps':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTpepsController();
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// Tipos de CES ---------------------
+case 'readtces':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTpcesController();
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// Tipos de ARL ---------------------
+case 'readtparl':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTparlController();  
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// Tipos de Pensiones ---------------------
+case 'readtppens':
+  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $db = new ControllerJson();
+
+      $response['error'] = false;
+      $response['message'] = 'Solicitud completada correctamente';
+      $response['contenido'] = $db->readTppensController();
+
+  } else {
+      $response['error'] = true;
+      $response['message'] = 'Método de solicitud no válido';
+  }
+  break;
+
+// ------------------------ Selectors ------------------------
+
 
 
 //  ------------------------ End Api module employee  --------------------------

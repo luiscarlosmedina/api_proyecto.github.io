@@ -92,11 +92,11 @@ class DatosEmpleado extends Database
 	}
 
 	public function updateContEmgModel($datosModel){
-		$stmt = Database::getConnection()->prepare("UPDATE contacto_emergencia SET N_CoE = :N_CoE, Csag = :Csag, T_CEm = :T_CEm WHERE ID_CEm = :ID_CEm");
-		$stmt->bindParam(":N_CoE", $datosModel["N_CoE"], PDO::PARAM_STR);
-		$stmt->bindParam(":Csag", $datosModel["Csag"], PDO::PARAM_STR);
-		$stmt->bindParam(":T_CEm", $datosModel["T_CEm"], PDO::PARAM_STR);
-		$stmt->bindParam(":ID_CEm", $datosModel["ID_CEm"], PDO::PARAM_INT);
+		$stmt = Database::getConnection()->prepare("UPDATE contacto_emergencia SET n_coe = :n_coe, csag = :csag, t_cem = :t_cem WHERE id_cem = :id_cem");
+		$stmt->bindParam(":n_coe", $datosModel["n_coe"], PDO::PARAM_STR);
+		$stmt->bindParam(":csag", $datosModel["csag"], PDO::PARAM_STR);
+		$stmt->bindParam(":t_cem", $datosModel["t_cem"], PDO::PARAM_STR);
+		$stmt->bindParam(":id_cem", $datosModel["id_cem"], PDO::PARAM_INT);
 		if($stmt->execute()){
 			return true;
 		}else{
@@ -214,6 +214,44 @@ class DatosEmpleado extends Database
 				return false;
 			}
 		}
+
+
+		public function updateRolModel($datosModel) {
+			$conn = Database::getConnection();
+			try {
+				$conn->beginTransaction(); // Inicia la transacción
+		
+				// Obtener el id_log asociado al id_empleado
+				$stmt = $conn->prepare("SELECT id_log FROM login WHERE id_em = :id_em");
+				$stmt->bindParam(":id_em", $datosModel["id_em"], PDO::PARAM_INT);
+				$stmt->execute();
+		
+				$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+				if (is_array($row) && isset($row['id_log'])) {
+					$id_log = $row['id_log'];
+		
+					// Actualizar el id_rol en la tabla user_rol
+					$stmt = $conn->prepare("UPDATE user_rol SET id_rol = :nuevo_id_rol WHERE id_log = :id_log");
+					$stmt->bindParam(":nuevo_id_rol", $datosModel["id_rol"], PDO::PARAM_INT);
+					$stmt->bindParam(":id_log", $id_log, PDO::PARAM_INT);
+					$stmt->execute();
+		
+					$conn->commit(); // Confirma la transacción
+		
+					return true;
+				} else {
+					$conn->rollBack(); // Deshace la transacción en caso de error
+					return false; // No se encontró un id_log válido
+				}
+			} catch (PDOException $e) {
+				$conn->rollBack(); // Deshace la transacción en caso de error
+				echo $e->getMessage(); // Muestra el mensaje de error específico
+				return false;
+			}
+		}
+		
+		
 
 
   // ------------------------ Update employe ------------------------
@@ -338,6 +376,28 @@ class DatosEmpleado extends Database
 		return $usuarios;
 	}
 
+
+	public function readEmpleadorolModel($id_em) {
+		$conn = Database::getConnection();
+		try {
+			// Obtener el id_rol asociado al id_empleado
+			$stmt = $conn->prepare("SELECT id_rol FROM user_rol WHERE id_log IN (SELECT id_log FROM login WHERE id_em = :id_em)");
+			$stmt->bindParam(":id_em", $id_em, PDO::PARAM_INT);
+			$stmt->execute();
+	
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	
+			if (is_array($row) && isset($row['id_rol'])) {
+				$id_rol = $row['id_rol'];
+				return $id_rol;
+			} else {
+				return false; // No se encontró un id_rol válido
+			}
+		} catch (PDOException $e) {
+			echo $e->getMessage(); // Mostrar el mensaje de error específico
+			return false;
+		}
+	}
   // ------------------------ Read employes -------------------------
 
 
@@ -402,6 +462,96 @@ public function readveritemlEmpleadoModel($telefono){
 
 
 // ------------------------ Checker unique------------------------
+
+
+// ------------------------ Selectors ------------------------
+
+// Lee y retorna los roles disponibles.
+public function readTprolModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_rol, N_rol AS Tipo_rol FROM rol;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// Lee y retorna los tipos de RH disponibles.
+public function readTprhModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_rh, T_RH AS Tipo_rh FROM rh;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// Lee y retorna los tipos de documento disponibles.
+public function readTpdocuModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_Doc, N_TDoc AS Nombre_documento FROM tipo_doc;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// Lee y retorna los tipos de EPS disponibles.
+public function readTpepsModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_eps, N_eps AS Nombre_eps FROM eps;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// Lee y retorna los tipos de CES disponibles.
+public function readTpcesModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_ces, N_ces AS Nombre_ces FROM cesantias;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// Lee y retorna los tipos de ARL disponibles.
+public function readTparlModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_arl, N_arl AS Nombre_arl FROM arl;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// Lee y retorna los tipos de pensiones disponibles.
+public function readTppensModel(){
+	$stmt = Database::getConnection()->prepare(
+		"SELECT ID_pens, N_pens AS Nombre_pens FROM pensiones;"
+	);
+	if($stmt->execute()){
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}else{
+		return true;
+	}
+}
+
+// ------------------------ Selectors ------------------------
+
 
 
 }

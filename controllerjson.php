@@ -133,6 +133,20 @@ class ControllerJson
 		return $respuesta;
 	}
 
+
+
+	public function updateRolController($id_em, $id_rol)
+	{
+		$datosController = array(
+			"id_em"=>$id_em,	    
+			"id_rol"=>$id_rol
+		);
+
+		$datos = new DatosEmpleado();
+		$respuesta = $datos->updateRolModel($datosController);
+		return $respuesta;
+	}
+
   // ------------------------ Update employe -------------------------
 
   // ------------------------ Read employes -------------------------
@@ -169,7 +183,6 @@ class ControllerJson
 			return $respuesta;
 		}
 	}
-
 	
 	public function readPerfilController($id = null) {
 		$datos = new DatosEmpleado();
@@ -187,7 +200,18 @@ class ControllerJson
 		$respuesta = $datos->readminEmpleadoModel("empleado");
 		return $respuesta;
 	}
-	
+
+	public function readEmpleadorolController($id_em = null) {
+		$datos = new DatosEmpleado();
+		if ($id_em !== null) {
+			$respuesta = $datos->readEmpleadorolModel($id_em);
+			return $respuesta;
+		} else {
+			$respuesta = $datos->readEmpleadorolModel();
+			return $respuesta;
+		}
+	}
+
   // ------------------------ Read employes -------------------------
 
 
@@ -221,9 +245,61 @@ public function readveritemlEmpleadoController($telefono) {
 
 }
 
-
-
 // ------------------------ Checker unique------------------------
+
+
+// ------------------------ Selectors ------------------------
+
+// Lee y retorna los roles disponibles.
+public function readTprolController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTprolModel();
+    return $respuesta;
+}
+
+// Lee y retorna los tipos de RH disponibles.
+public function readTpthController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTprhModel();
+    return $respuesta;
+}
+
+// Lee y retorna los tipos de documento disponibles.
+public function readTpdocuController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTpdocuModel();
+    return $respuesta;
+}
+
+// Lee y retorna los tipos de EPS disponibles.
+public function readTpepsController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTpepsModel();
+    return $respuesta;
+}
+
+// Lee y retorna los tipos de CES disponibles.
+public function readTpcesController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTpcesModel();
+    return $respuesta;
+}
+
+// Lee y retorna los tipos de ARL disponibles.
+public function readTparlController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTparlModel();
+    return $respuesta;
+}
+
+// Lee y retorna los tipos de pensiones disponibles.
+public function readTppensController() {
+    $datos = new DatosEmpleado();
+    $respuesta = $datos->readTppensModel();
+    return $respuesta;
+}
+
+// ------------------------ Selectors ------------------------
 
 
 
