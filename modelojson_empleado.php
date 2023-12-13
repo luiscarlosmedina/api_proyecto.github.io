@@ -251,9 +251,6 @@ class DatosEmpleado extends Database
 			}
 		}
 		
-		
-
-
   // ------------------------ Update employe ------------------------
 
   // ------------------------ Read employes -------------------------
@@ -460,6 +457,24 @@ public function readveritemlEmpleadoModel($telefono){
     }
 }
 
+public function readveritemlEmpleadoaggModel($telefono){
+    $query = "SELECT * FROM empleado WHERE tel_em = :tel_em ";
+    $stmt = Database::getConnection()->prepare($query);
+
+    $stmt->bindParam(":tel_em", $telefono, PDO::PARAM_STR);
+
+    try {
+        if ($stmt->execute()) {
+            $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+            return empty($result); 
+        } else {
+            return true; 
+        }
+    } catch (PDOException $e) {
+        return true; 
+    }
+}
+
 
 // ------------------------ Checker unique------------------------
 
@@ -551,8 +566,6 @@ public function readTppensModel(){
 }
 
 // ------------------------ Selectors ------------------------
-
-
 
 }
 ?>	

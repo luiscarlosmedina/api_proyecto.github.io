@@ -245,6 +245,14 @@ public function readveritemlEmpleadoController($telefono) {
 
 }
 
+public function readveritemlEmpleadoaggController($telefono) {
+    $datos = new DatosEmpleado();
+    $TelefonoEncontrado = $datos->readveritemlEmpleadoaggModel($telefono) ;
+    
+    return !$TelefonoEncontrado; 
+
+}
+
 // ------------------------ Checker unique------------------------
 
 

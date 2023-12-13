@@ -560,6 +560,26 @@ case 'readverificarempleado':
           $response['message'] = 'Método de solicitud no válido';
       }
       break;
+
+      
+    case 'readtelcontactagg':
+      if ($_SERVER['REQUEST_METHOD'] === 'GET' && $apicall === 'readtelcontactagg') {
+          $db = new ControllerJson();
+          $telefono = $_GET['tel_em'];
+    
+          if (!empty($telefono) ) {
+              $TelefonoEncontrado = $db->readveritemlEmpleadoaggController($telefono);
+  
+              $response['error'] = false;
+              $response['message'] = 'Solicitud completada correctamente';
+              $response['encontrado'] = $TelefonoEncontrado; 
+          }
+      } else {
+          error_log('Método de solicitud no válido');
+          $response['error'] = true;
+          $response['message'] = 'Método de solicitud no válido';
+      }
+      break;
   
 
     
